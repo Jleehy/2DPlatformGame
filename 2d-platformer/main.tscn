@@ -8,6 +8,6 @@
 [node name="Music" type="AudioStreamPlayer2D" parent="."]
 
 [node name="Player" parent="." instance=ExtResource("1_u8ygx")]
-position = Vector2(64, 592)
+position = Vector2(60, 600)
 
 [node name="Level" parent="." instance=ExtResource("2_2ko01")]
