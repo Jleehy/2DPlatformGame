@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://cuxwbdbw6vgtd"]
+[gd_scene load_steps=30 format=3 uid="uid://cuxwbdbw6vgtd"]
 
 [ext_resource type="Texture2D" uid="uid://ly7gjfalgpl3" path="res://art/player/Fall (32x32).png" id="1_32vwx"]
 [ext_resource type="Texture2D" uid="uid://cgh23b8b7bxeg" path="res://art/player/Idle (32x32).png" id="2_xlrt0"]
@@ -195,9 +195,20 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_imjqn"]
+height = 26.0
+
 [node name="Player" type="Area2D"]
+position = Vector2(64, 64)
+scale = Vector2(3, 3)
 metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_yb0ll")
-animation = &"fall"
+animation = &"idle"
+frame = 6
+frame_progress = 0.738038
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 4)
+shape = SubResource("CapsuleShape2D_imjqn")

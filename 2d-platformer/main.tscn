@@ -1,5 +1,9 @@
-[gd_scene format=3 uid="uid://bh6jat6426m14"]
+[gd_scene load_steps=2 format=3 uid="uid://bh6jat6426m14"]
+
+[ext_resource type="PackedScene" uid="uid://cuxwbdbw6vgtd" path="res://player.tscn" id="1_u8ygx"]
 
 [node name="Main" type="Node"]
 
 [node name="Music" type="AudioStreamPlayer2D" parent="."]
+
+[node name="Player" parent="." instance=ExtResource("1_u8ygx")]
