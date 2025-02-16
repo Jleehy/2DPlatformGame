@@ -1,9 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://bh6jat6426m14"]
+[gd_scene load_steps=3 format=3 uid="uid://bh6jat6426m14"]
 
 [ext_resource type="PackedScene" uid="uid://cuxwbdbw6vgtd" path="res://player.tscn" id="1_u8ygx"]
+[ext_resource type="PackedScene" uid="uid://q7g5v0eojlrk" path="res://level.tscn" id="2_2ko01"]
 
 [node name="Main" type="Node"]
 
 [node name="Music" type="AudioStreamPlayer2D" parent="."]
 
 [node name="Player" parent="." instance=ExtResource("1_u8ygx")]
+position = Vector2(64, 592)
+
+[node name="Level" parent="." instance=ExtResource("2_2ko01")]
