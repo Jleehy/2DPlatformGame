@@ -152,6 +152,7 @@ texture = ExtResource("1_n32ws")
 19:10/0 = 0
 20:10/0 = 0
 4:2/0 = 0
+17:10/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_nnlik"]
 physics_layer_0/collision_layer = 1
