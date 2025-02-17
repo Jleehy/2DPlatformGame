@@ -26,3 +26,11 @@ Before running the game, ensure you have the following installed:
 
     Click the Play (▶️) button in the Godot editor
     Alternatively, press F5 to start the game
+
+# Exporting the Game
+
+To export the game as an executable:
+
+    In Godot, go to Project > Export
+    Select your desired platform (Windows, Linux, macOS, or Web)
+    Configure export settings and click Export Project
