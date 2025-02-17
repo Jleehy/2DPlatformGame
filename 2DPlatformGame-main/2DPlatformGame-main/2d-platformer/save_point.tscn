@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://jesl4vjjmivv"]
+
+[ext_resource type="Texture2D" uid="uid://c5te7rf8drtde" path="res://art/terrain/savepoint.png" id="1_1fkxb"]
+[ext_resource type="Script" path="res://area_2d_save.gd" id="2_yxopw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mo0yd"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-7.99995, -5.00001)
+scale = Vector2(0.146392, 0.216981)
+texture = ExtResource("1_1fkxb")
+
+[node name="Area2D" type="Area2D" parent="."]
+script = ExtResource("2_yxopw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_mo0yd")
