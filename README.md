@@ -1,5 +1,4 @@
 # 2DPlatformGame
-# Platformer Game  
 
 This is a 2D platformer game built using the **Godot Engine**. The game features fluid movement, physics-based interactions, and various obstacles inspired by platformers like **Celeste** and **Hollow Knight**.
 
