@@ -11,15 +11,15 @@ config_version=5
 [application]
 
 config/name="2D Platformer"
-run/main_scene="res://main.tscn"
+run/main_scene="res://scenes/main/main.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
-config/icon="res://icon.svg"
 
 [autoload]
 
-GameManager="*res://GameManager.gd"
-AudioManager="*res://AudioManager.gd"
-InputManager="*res://InputManager.gd"
+GameManager="*res://globals/GameManager.gd"
+AudioManager="*res://globals/AudioManager.gd"
+InputManager="*res://globals/InputManager.gd"
+CameraManager="*res://globals/CameraManager.gd"
 
 [display]
 
