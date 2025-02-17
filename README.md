@@ -12,8 +12,8 @@ Before running the game, ensure you have the following installed:
 ### Running the Game  
 1. **Clone the repository**:  
    ```bash
-   git clone https://github.com/your-username/platformer-game.git
-   cd platformer-game
+   git clone https://github.com/Jleehy/2DPlatformGame.git
+   cd 2DPlatformGame
 
 2. **Open the project in Godot**:
 
