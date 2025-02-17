@@ -268,17 +268,17 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_20ds8")
 }],
-"loop": true,
+"loop": false,
 "name": &"flag_out",
-"speed": 5.0
+"speed": 15.0
 }, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_i7d2s")
 }],
-"loop": true,
+"loop": false,
 "name": &"no_flag",
-"speed": 5.0
+"speed": 15.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7cj7c"]
@@ -288,7 +288,7 @@ size = Vector2(30, 46)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_1kllr")
-animation = &"flag_idle"
+animation = &"no_flag"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(2, 9)

@@ -3,7 +3,7 @@ extends Area2D
 # Called when another body enters the area
 func _on_Area2D_body_entered(body):
 	if body.name == "Player":  # Check if the body is the player by name
-		body.set_save()
+		GameManager.save_checkpoint(position)
 
 # Example usage
 func _ready():

@@ -1,14 +1,26 @@
 extends Camera2D
 
-@onready var player: Node = get_node("/root/Main/Player")
-var level_bounds: Rect2
+# Player and level bounds references
+var player: Node = null
+var level_bounds: Rect2 = Rect2()
 
+# Set the player dynamically
+func set_player(new_player: Node) -> void:
+	player = new_player
+
+# Set the level bounds dynamically
 func set_level_bounds(bounds: Rect2) -> void:
-	print(bounds)
 	level_bounds = bounds
 
 func _process(delta: float) -> void:
+	# If no player is set, default to main menu
 	if not player:
+		position = Vector2(1280/2, 720/2)
+		return
+	
+	# If no level bounds are set, default to following the player without clamping
+	if level_bounds == Rect2():
+		position = player.position
 		return
 	
 	# Get the player's target position
@@ -24,5 +36,3 @@ func _process(delta: float) -> void:
 	
 	# Set camera position
 	position = Vector2(clamped_x, clamped_y)
-	
-	
