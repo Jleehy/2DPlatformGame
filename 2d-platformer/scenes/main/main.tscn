@@ -16,14 +16,24 @@ script = ExtResource("1_rsahp")
 stream = ExtResource("1_ayqm8")
 
 [node name="Player" parent="." instance=ExtResource("2_ghwol")]
-position = Vector2(252, 596)
+position = Vector2(251, 608)
 
 [node name="Terrain" parent="." instance=ExtResource("3_q0u75")]
 
-[node name="Spikes" parent="." instance=ExtResource("4_skjwn")]
+[node name="Checkpoint" parent="." instance=ExtResource("5_73w6g")]
+position = Vector2(896, 560)
+script = ExtResource("7_4angy")
+
+[node name="Spikes" type="Node2D" parent="."]
+
+[node name="Spike1" parent="Spikes" instance=ExtResource("4_skjwn")]
 position = Vector2(660, 632)
 script = ExtResource("5_1fcqa")
 
-[node name="Checkpoint" parent="." instance=ExtResource("5_73w6g")]
-position = Vector2(397, 608)
-script = ExtResource("7_4angy")
+[node name="Spike2" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(690, 632)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike3" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(675, 632)
+script = ExtResource("5_1fcqa")

@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 # Player physics variables
 @export var speed: int = 300
-@export var jump_speed: int = -1200
+@export var jump_speed: int = -1000
 
 # Advanced physics variables
 @export var minimum_speed_percentage: float = 0.30
