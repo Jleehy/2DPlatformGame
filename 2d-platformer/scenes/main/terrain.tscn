@@ -1,8 +1,8 @@
-[gd_scene load_steps=4 format=4 uid="uid://q7g5v0eojlrk"]
+[gd_scene load_steps=4 format=4 uid="uid://b7nqpjvayalp6"]
 
 [ext_resource type="Texture2D" uid="uid://bi5gunsqrjsax" path="res://art/terrain/Terrain (16x16).png" id="1_n32ws"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_x20kl"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_d5beh"]
 texture = ExtResource("1_n32ws")
 0:0/0 = 0
 1:0/0 = 0
@@ -164,7 +164,7 @@ texture = ExtResource("1_n32ws")
 
 [sub_resource type="TileSet" id="TileSet_nnlik"]
 physics_layer_0/collision_layer = 1
-sources/0 = SubResource("TileSetAtlasSource_x20kl")
+sources/0 = SubResource("TileSetAtlasSource_d5beh")
 
 [node name="Terrain" type="Node"]
 

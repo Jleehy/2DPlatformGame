@@ -1,6 +1,8 @@
 extends Node
 
 # Game state variables
+var main_node: Node
+var current_level: Node
 var player_progress: Vector2
 var level_bounds: Rect2
 var death_height_offset: float = 500  # How far below the level bounds the player can fall before dying
@@ -14,11 +16,15 @@ func _ready() -> void:
 	instance = self  # Set the singleton instance
 
 # Initialize level bounds and other gameplay-specific data
-func initialize_level(level_node: Node) -> void:
+func initialize_level(level_id: String) -> void:
+	if current_level:
+		main_node.remove_child(current_level)
 
 	# Calculate level bounds
-	var terrain_node = level_node.get_node("Terrain")
-	var tilemap_layer = terrain_node.get_node("TileMapLayer")
+	var terrain_node = ResourceLoader.load("res://scenes/main/" + level_id + ".tscn")
+	current_level = terrain_node.instantiate()
+	main_node.add_child(current_level)
+	var tilemap_layer = current_level.get_node("TileMapLayer")
 	
 	if tilemap_layer:
 		level_bounds = tilemap_layer.get_used_rect()
@@ -34,7 +40,8 @@ func initialize_level(level_node: Node) -> void:
 			camera_manager.set_level_bounds(level_bounds)
 
 	# Play music
-	AudioManager.play_sound(level_node.get_node("Music"))
+	AudioManager.play_sound(main_node.get_node("Music"))
+	
 
 # Get level bounds
 func get_level_bounds() -> Rect2:

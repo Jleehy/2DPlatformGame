@@ -10,6 +10,11 @@ func _on_Area2D_body_entered(body: Node) -> void:
 		active_checkpoint = true
 		GameManager.save_checkpoint(position)
 		play_flag_animation()
+		
+		# Uncomment the lines below to transition to Level2 after reaching the first checkpoint.
+		# GameManager.player_progress = Vector2.ZERO
+		# GameManager.respawn_player(body)
+		# GameManager.initialize_level("level_2")
 
 # Plays the flag animation sequence
 func play_flag_animation() -> void:

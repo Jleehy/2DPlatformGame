@@ -1,9 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://bh6jat6426m14"]
+[gd_scene load_steps=8 format=3 uid="uid://bh6jat6426m14"]
 
 [ext_resource type="AudioStream" uid="uid://dybkwrn8ieb0v" path="res://music/temp_music_level.mp3" id="1_ayqm8"]
 [ext_resource type="Script" path="res://scenes/main/main.gd" id="1_rsahp"]
 [ext_resource type="PackedScene" uid="uid://cuxwbdbw6vgtd" path="res://entities/player/player.tscn" id="2_ghwol"]
-[ext_resource type="PackedScene" uid="uid://q7g5v0eojlrk" path="res://scenes/main/terrain.tscn" id="3_q0u75"]
 [ext_resource type="PackedScene" uid="uid://b6jwnr6gcgclj" path="res://entities/traps/spikes/spikes.tscn" id="4_skjwn"]
 [ext_resource type="Script" path="res://entities/traps/spikes/spikes.gd" id="5_1fcqa"]
 [ext_resource type="PackedScene" uid="uid://dma8c20v64gr1" path="res://entities/checkpoint/checkpoint.tscn" id="5_73w6g"]
@@ -18,8 +17,6 @@ stream = ExtResource("1_ayqm8")
 
 [node name="Player" parent="." instance=ExtResource("2_ghwol")]
 position = Vector2(121, 499)
-
-[node name="Terrain" parent="." instance=ExtResource("3_q0u75")]
 
 [node name="Checkpoint" parent="." instance=ExtResource("5_73w6g")]
 position = Vector2(1253, 72)
