@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bh6jat6426m14"]
+[gd_scene load_steps=10 format=3 uid="uid://bh6jat6426m14"]
 
 [ext_resource type="AudioStream" uid="uid://dybkwrn8ieb0v" path="res://music/temp_music_level.mp3" id="1_ayqm8"]
 [ext_resource type="Script" path="res://scenes/main/main.gd" id="1_rsahp"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" path="res://entities/traps/spikes/spikes.gd" id="5_1fcqa"]
 [ext_resource type="PackedScene" uid="uid://dma8c20v64gr1" path="res://entities/checkpoint/checkpoint.tscn" id="5_73w6g"]
 [ext_resource type="Script" path="res://entities/checkpoint/checkpoint.gd" id="7_4angy"]
+[ext_resource type="PackedScene" uid="uid://cj5snnc3he4eo" path="res://entities/level_ending/level_ending.tscn" id="8_j840j"]
+[ext_resource type="Script" path="res://entities/level_ending/level_ending.gd" id="9_bpdxq"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_rsahp")
@@ -30,8 +32,8 @@ script = ExtResource("7_4angy")
 position = Vector2(2071, -736)
 script = ExtResource("7_4angy")
 
-[node name="Checkpoint3" parent="Checkpoint" instance=ExtResource("5_73w6g")]
-position = Vector2(6236, -1632)
+[node name="Checkpoint4" parent="Checkpoint" instance=ExtResource("5_73w6g")]
+position = Vector2(-1071, 433)
 script = ExtResource("7_4angy")
 
 [node name="Spike17" parent="." instance=ExtResource("4_skjwn")]
@@ -208,3 +210,7 @@ script = ExtResource("5_1fcqa")
 [node name="Spike42" parent="Spikes" instance=ExtResource("4_skjwn")]
 position = Vector2(3682, 1596)
 script = ExtResource("5_1fcqa")
+
+[node name="LevelEnding" parent="." instance=ExtResource("8_j840j")]
+position = Vector2(7419, -1561)
+script = ExtResource("9_bpdxq")

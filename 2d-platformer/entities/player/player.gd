@@ -1,14 +1,14 @@
 extends CharacterBody2D
 
 # Player physics variables
-@export var speed: int = 300
-@export var jump_speed: int = -1000
+@export var speed: int = 325
+@export var jump_speed: int = -1050
 
 # Advanced physics variables
 @export var minimum_speed_percentage: float = 0.30
 @export var player_input_acceleration_percent: float = 0.25
 @export var friction_value: float = 0.84
-@export var air_control_loss: float = 0.30
+@export var air_control_loss: float = 0.35
 @export var facing_direction: String = "left"
 
 @export var death_timer: int = -1
@@ -40,7 +40,7 @@ func handle_movement() -> void:
 		handle_ground_movement()
 	else:
 		handle_air_movement()
-
+	
 func handle_ground_movement() -> void:
 	if abs(velocity.x) < speed * minimum_speed_percentage:
 		if not InputManager.is_move_left_pressed() and not InputManager.is_move_right_pressed():
@@ -112,3 +112,4 @@ func handle_death_animation() -> void:
 		$AnimatedSprite2D.rotation_degrees = 0
 		GameManager.respawn_player(self)
 		death_timer = -1
+		

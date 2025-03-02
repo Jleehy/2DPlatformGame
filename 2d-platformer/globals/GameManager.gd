@@ -7,7 +7,7 @@ var player_progress: Vector2
 var level_bounds: Rect2
 var death_height_offset: float = 500  # How far below the level bounds the player can fall before dying
 var gravity: int = 4000
-var terminal_velocity: int = 40000
+var terminal_velocity: int = 12000
 
 # Singleton setup
 static var instance: GameManager
