@@ -8,3 +8,6 @@ func is_move_left_pressed() -> bool:
 	
 func is_move_right_pressed() -> bool:
 	return Input.is_action_pressed("move_right")
+	
+func is_dash_pressed() -> bool:
+	return Input.is_action_just_pressed("dash")
