@@ -56,15 +56,23 @@ theme_override_constants/margin_bottom = 80
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="Title2" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Options Menu"
+horizontal_alignment = 1
+
+[node name="How to Play" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 2
-text = "Options"
+text = "How to play:
+Use WASD to navigate around the level
+Use Spacebar to Jump
+Use Shift to Dash the direction you are facing"
 
 [node name="Sound" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Music: On"
 
-[connection signal="pressed" from="MarginContainer/VBoxContainer/Sound" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Sound" to="." method="_on_sound_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Sound" to="." method="_on_start_pressed"]

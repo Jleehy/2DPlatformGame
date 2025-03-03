@@ -53,7 +53,7 @@ text = "Start Game"
 
 [node name="Options" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Options"
+text = "Options and Help"
 
 [node name="Exit" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
