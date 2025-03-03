@@ -11,7 +11,16 @@ extends CharacterBody2D
 @export var air_control_loss: float = 0.35
 @export var facing_direction: String = "left"
 
+# Dash variables
+@export var dash_speed: float = 500
+@export var dash_duration: float = 0.5
+@export var dash_cooldown: float = 0.5
+var is_dashing: bool = false
+var can_dash: bool = true
+
 @export var death_timer: int = -1
+
+@onready var dash_effect: Sprite2D = $DashEffect
 
 func _ready() -> void:
 	$AnimatedSprite2D.play()
@@ -22,6 +31,7 @@ func _physics_process(delta: float) -> void:
 		apply_gravity(delta)
 		handle_movement()
 		handle_jumping()
+		handle_dash()
 		handle_level_bounds()
 		update_animation()
 		move_and_slide()
@@ -40,7 +50,7 @@ func handle_movement() -> void:
 		handle_ground_movement()
 	else:
 		handle_air_movement()
-	
+
 func handle_ground_movement() -> void:
 	if abs(velocity.x) < speed * minimum_speed_percentage:
 		if not InputManager.is_move_left_pressed() and not InputManager.is_move_right_pressed():
@@ -71,6 +81,41 @@ func handle_jumping() -> void:
 	if InputManager.is_jump_pressed() and is_on_floor():
 		velocity.y = jump_speed
 
+func handle_dash() -> void:
+	if InputManager.is_dash_pressed() and can_dash and not is_dashing:
+		start_dash()
+
+func start_dash() -> void:
+	is_dashing = true
+	can_dash = false
+
+	# Copy the current frame of the player's animation to the dash effect
+	var frameIndex: int = $AnimatedSprite2D.get_frame()
+	var animationName: String = $AnimatedSprite2D.animation
+	var spriteFrames: SpriteFrames = $AnimatedSprite2D.get_sprite_frames()
+	var currentTexture: Texture2D = spriteFrames.get_frame_texture(animationName, frameIndex)
+	
+	dash_effect.texture = currentTexture
+	dash_effect.flip_h = $AnimatedSprite2D.flip_h
+	dash_effect.visible = true
+
+	# Set dash velocity based on facing direction
+	var dash_direction: Vector2 = Vector2.RIGHT if facing_direction == "right" else Vector2.LEFT
+	velocity += dash_direction * dash_speed
+
+	# Start dash duration timer
+	await get_tree().create_timer(dash_duration).timeout
+	end_dash()
+
+	# Start dash cooldown timer
+	await get_tree().create_timer(dash_cooldown).timeout
+	can_dash = true
+
+func end_dash() -> void:
+	is_dashing = false
+	velocity.x = 0
+	dash_effect.visible = false
+
 func handle_level_bounds() -> void:
 	var level_bounds = GameManager.get_level_bounds()
 	var death_height_offset = GameManager.get_death_height_offset()
@@ -99,17 +144,16 @@ func update_animation() -> void:
 				$AnimatedSprite2D.animation = "fall"
 	else:
 		$AnimatedSprite2D.animation = "idle"
-		
+
 func handle_death_animation() -> void:
 	if $AnimatedSprite2D.rotation_degrees < 90:
-		$AnimatedSprite2D.rotation_degrees += 5  # Rotate sprite
+		$AnimatedSprite2D.rotation_degrees += 5
 	else:
 		$AnimatedSprite2D.rotation_degrees = 90
 
-	death_timer -= 1 # Decrement the death timer
-	
+	death_timer -= 1
+
 	if death_timer == 0:
 		$AnimatedSprite2D.rotation_degrees = 0
 		GameManager.respawn_player(self)
 		death_timer = -1
-		
