@@ -1,0 +1,216 @@
+[gd_scene load_steps=10 format=3 uid="uid://bh6jat6426m14"]
+
+[ext_resource type="AudioStream" uid="uid://dybkwrn8ieb0v" path="res://music/temp_music_level.mp3" id="1_ayqm8"]
+[ext_resource type="Script" path="res://scenes/main/main.gd" id="1_rsahp"]
+[ext_resource type="PackedScene" uid="uid://cuxwbdbw6vgtd" path="res://entities/player/player.tscn" id="2_ghwol"]
+[ext_resource type="PackedScene" uid="uid://b6jwnr6gcgclj" path="res://entities/traps/spikes/spikes.tscn" id="4_skjwn"]
+[ext_resource type="Script" path="res://entities/traps/spikes/spikes.gd" id="5_1fcqa"]
+[ext_resource type="PackedScene" uid="uid://dma8c20v64gr1" path="res://entities/checkpoint/checkpoint.tscn" id="5_73w6g"]
+[ext_resource type="Script" path="res://entities/checkpoint/checkpoint.gd" id="7_4angy"]
+[ext_resource type="PackedScene" uid="uid://cj5snnc3he4eo" path="res://entities/level_ending/level_ending.tscn" id="8_j840j"]
+[ext_resource type="Script" path="res://entities/level_ending/level_ending.gd" id="9_bpdxq"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_rsahp")
+
+[node name="Music" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(-130, -109)
+stream = ExtResource("1_ayqm8")
+
+[node name="Player" parent="." instance=ExtResource("2_ghwol")]
+position = Vector2(121, 499)
+
+[node name="Checkpoint" parent="." instance=ExtResource("5_73w6g")]
+position = Vector2(1253, 72)
+script = ExtResource("7_4angy")
+
+[node name="Checkpoint" parent="Checkpoint" instance=ExtResource("5_73w6g")]
+position = Vector2(5193, -704)
+script = ExtResource("7_4angy")
+
+[node name="Checkpoint2" parent="Checkpoint" instance=ExtResource("5_73w6g")]
+position = Vector2(2071, -736)
+script = ExtResource("7_4angy")
+
+[node name="Checkpoint4" parent="Checkpoint" instance=ExtResource("5_73w6g")]
+position = Vector2(-1071, 433)
+script = ExtResource("7_4angy")
+
+[node name="Spike17" parent="." instance=ExtResource("4_skjwn")]
+position = Vector2(3532, 1487)
+script = ExtResource("5_1fcqa")
+
+[node name="Spikes" type="Node2D" parent="."]
+position = Vector2(-130, -109)
+
+[node name="Spike1" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(654, 636)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike2" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(684, 636)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike3" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(669, 636)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike4" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(776, 412)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike5" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(7498, 1356)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike6" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(5987, 1228)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike7" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(4762, -52)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike8" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(4746, -52)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike9" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(5966, 1228)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike10" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(6537, 1132)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike11" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(4730, -52)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike12" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(4961, 1068)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike16" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(3448, 972)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike13" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(5009, 1068)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike14" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(3818, 812)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike15" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(1552, 172)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike17" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(3667, 140)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike18" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(4122, 684)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike19" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(2450, 573)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike20" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(2857, -276)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike21" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(3667, 140)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike22" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(3812, -532)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike23" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(3767, -532)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike24" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(3563, -516)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike25" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(3790, -532)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike26" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(5824, -323)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike27" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(6457, -468)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike28" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(6050, -435)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike29" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(5696, -354)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike30" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(7171, -1347)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike31" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(7190, -1347)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike32" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(6747, -851)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike33" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(5074, -659)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike34" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(6969, -756)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike35" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(1690, 859)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike36" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(1457, 781)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike37" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(2771, 1148)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike38" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(2737, 1148)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike39" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(1711, 589)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike40" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(4441, 492)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike41" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(3702, 1596)
+script = ExtResource("5_1fcqa")
+
+[node name="Spike42" parent="Spikes" instance=ExtResource("4_skjwn")]
+position = Vector2(3682, 1596)
+script = ExtResource("5_1fcqa")
+
+[node name="LevelEnding" parent="." instance=ExtResource("8_j840j")]
+position = Vector2(7419, -1561)
+script = ExtResource("9_bpdxq")
