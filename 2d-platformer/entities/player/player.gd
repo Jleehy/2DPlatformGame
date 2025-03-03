@@ -12,8 +12,8 @@ extends CharacterBody2D
 @export var facing_direction: String = "left"
 
 # Dash variables
-@export var dash_speed: float = 500
-@export var dash_duration: float = 0.5
+@export var dash_speed: float = 2000
+@export var dash_duration: float = 0.25
 @export var dash_cooldown: float = 0.5
 var is_dashing: bool = false
 var can_dash: bool = true
@@ -28,7 +28,8 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if death_timer == -1:
-		apply_gravity(delta)
+		if not is_dashing:
+			apply_gravity(delta)
 		handle_movement()
 		handle_jumping()
 		handle_dash()
@@ -101,7 +102,7 @@ func start_dash() -> void:
 
 	# Set dash velocity based on facing direction
 	var dash_direction: Vector2 = Vector2.RIGHT if facing_direction == "right" else Vector2.LEFT
-	velocity += dash_direction * dash_speed
+	velocity = dash_direction * dash_speed
 
 	# Start dash duration timer
 	await get_tree().create_timer(dash_duration).timeout

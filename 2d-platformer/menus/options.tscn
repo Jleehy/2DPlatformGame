@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://vx5uikwe7fsc"]
+[gd_scene load_steps=2 format=3 uid="uid://b7xrn5dtacv0k"]
 
 [sub_resource type="GDScript" id="GDScript_yi2dt"]
 script/source = "extends Control
@@ -20,9 +20,9 @@ func _on_sound_pressed() -> void:
 
 func update_button_label() -> void:
 	if sound_on:
-		button.text = \"Sound: On\"
+		button.text = \"Music: On\"
 	else:
-		button.text = \"Sound: Off\"
+		button.text = \"Music: Off\"
 "
 
 [node name="Control" type="Control"]
@@ -60,20 +60,11 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 2
-text = "2D Platformer Game"
-
-[node name="Start" type="Button" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Start Game"
-
-[node name="Options" type="Button" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
 text = "Options"
 
-[node name="Exit" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="Sound" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Exit"
+text = "Music: On"
 
-[connection signal="pressed" from="MarginContainer/VBoxContainer/Start" to="." method="_on_start_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/Options" to="." method="_on_options_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/Exit" to="." method="_on_exit_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Sound" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Sound" to="." method="_on_sound_pressed"]

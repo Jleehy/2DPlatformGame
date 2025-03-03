@@ -9,6 +9,10 @@ func _on_start_pressed() -> void:
 
 func _on_exit_pressed() -> void:
 	get_tree().quit()
+
+
+func _on_options_pressed() -> void:
+	get_tree().change_scene_to_file(\"res://menus/options.tscn\")
 "
 
 [node name="Control" type="Control"]
@@ -56,4 +60,5 @@ layout_mode = 2
 text = "Exit"
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Options" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Exit" to="." method="_on_exit_pressed"]

@@ -20,6 +20,8 @@ GameManager="*res://globals/GameManager.gd"
 AudioManager="*res://globals/AudioManager.gd"
 InputManager="*res://globals/InputManager.gd"
 CameraManager="*res://globals/CameraManager.gd"
+LevelManager="*res://globals/LevelManager.gd"
+PlayerManager="*res://globals/PlayerManager.gd"
 
 [display]
 
