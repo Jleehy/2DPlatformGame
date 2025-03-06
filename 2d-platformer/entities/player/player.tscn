@@ -213,6 +213,7 @@ frame_progress = 0.380844
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.5, 3.5)
+scale = Vector2(0.8, 0.8)
 shape = SubResource("RectangleShape2D_w647c")
 
 [node name="DashEffect" type="Sprite2D" parent="."]

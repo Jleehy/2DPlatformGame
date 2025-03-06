@@ -11,12 +11,14 @@ extends CharacterBody2D
 @export var air_control_loss: float = 0.35
 @export var facing_direction: String = "left"
 
-# Dash variables
+# Dash and other Movement variables
 @export var dash_speed: float = 2000
 @export var dash_duration: float = 0.25
 @export var dash_cooldown: float = 0.5
 var is_dashing: bool = false
 var can_dash: bool = true
+@export var current_jump_cooldown: int = 0;
+@export var jump_cooldown: int = 8;
 
 @export var death_timer: int = -1
 
@@ -79,10 +81,20 @@ func apply_horizontal_movement(control_factor: float) -> void:
 		facing_direction = "right"
 
 func handle_jumping() -> void:
-	if InputManager.is_jump_pressed() and is_on_floor():
+	if (current_jump_cooldown != 0):
+		current_jump_cooldown -= 1
+		
+	if InputManager.is_jump_pressed() and is_on_floor() and current_jump_cooldown == 0:
 		velocity.y = jump_speed
+		current_jump_cooldown = jump_cooldown
 
 func handle_dash() -> void:
+	if not can_dash:
+		modulate = Color(0.5, 0.5, 1, 1)
+		
+	else:
+		modulate = Color(1, 1, 1, 1)
+		
 	if InputManager.is_dash_pressed() and can_dash and not is_dashing:
 		start_dash()
 
