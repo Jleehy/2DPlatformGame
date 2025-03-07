@@ -11,14 +11,18 @@ extends CharacterBody2D
 @export var air_control_loss: float = 0.35
 @export var facing_direction: String = "left"
 
+#crouching variables
+@export var crouch_speed_reduction: float = 0.50
+@export var is_crouching: bool = false
+@export var original_collision_size: Vector2
+@export var crouch_squish_amount: float = 0.65
+
 # Dash and other Movement variables
 @export var dash_speed: float = 2000
 @export var dash_duration: float = 0.25
 @export var dash_cooldown: float = 0.5
 var is_dashing: bool = false
 var can_dash: bool = true
-@export var current_jump_cooldown: int = 0;
-@export var jump_cooldown: int = 8;
 
 @export var death_timer: int = -1
 
@@ -27,17 +31,22 @@ var can_dash: bool = true
 func _ready() -> void:
 	$AnimatedSprite2D.play()
 	GameManager.save_checkpoint(self.position)
+	
+	original_collision_size = $CollisionShape2D.shape.size
 
 func _physics_process(delta: float) -> void:
 	if death_timer == -1:
 		if not is_dashing:
 			apply_gravity(delta)
+		handle_crouching()
 		handle_movement()
 		handle_jumping()
 		handle_dash()
 		handle_level_bounds()
 		update_animation()
 		move_and_slide()
+		handle_self_die()
+		dev_checkpoint_handle()
 	else:
 		handle_death_animation()
 
@@ -81,12 +90,8 @@ func apply_horizontal_movement(control_factor: float) -> void:
 		facing_direction = "right"
 
 func handle_jumping() -> void:
-	if (current_jump_cooldown != 0):
-		current_jump_cooldown -= 1
-		
-	if InputManager.is_jump_pressed() and is_on_floor() and current_jump_cooldown == 0:
+	if InputManager.is_jump_pressed() and is_on_floor():
 		velocity.y = jump_speed
-		current_jump_cooldown = jump_cooldown
 
 func handle_dash() -> void:
 	if not can_dash:
@@ -170,3 +175,38 @@ func handle_death_animation() -> void:
 		$AnimatedSprite2D.rotation_degrees = 0
 		GameManager.respawn_player(self)
 		death_timer = -1
+
+func handle_crouching() -> void:
+	if InputManager.is_crouch_pressed():
+		if is_crouching:
+			pass
+			
+		else:
+			is_crouching = true
+			speed *= crouch_speed_reduction
+			jump_speed *= crouch_speed_reduction
+			$AnimatedSprite2D.scale = Vector2(1, crouch_squish_amount) 
+			$CollisionShape2D.shape.set_deferred("size", Vector2(original_collision_size.x, original_collision_size.y * crouch_squish_amount))
+			self.global_position.y -= original_collision_size.y * (1 - crouch_squish_amount)
+	else:
+		if is_crouching:
+			is_crouching = false
+			speed /= crouch_speed_reduction
+			jump_speed /= crouch_speed_reduction
+			$AnimatedSprite2D.scale = Vector2(1, 1) 
+			$CollisionShape2D.shape.set_deferred("size", Vector2(original_collision_size.x, original_collision_size.y))
+			self.global_position.y += original_collision_size.y * (1 - crouch_squish_amount)
+			
+		else:
+			pass
+
+func handle_self_die() -> void:
+	if InputManager.is_self_death_pressed():
+		GameManager.kill_player(self)
+
+func dev_checkpoint_handle() -> void:
+	if InputManager.is_dev_teleport_backwards_pressed():
+		GameManager.prev_checkpoint_teleport(self)
+		
+	if InputManager.is_dev_teleport_forwards_pressed():
+		GameManager.next_checkpoint_teleport(self)

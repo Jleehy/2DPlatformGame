@@ -8,4 +8,5 @@ func play_sound(audio_player: AudioStreamPlayer2D) -> void:
 	
 	print("Playing sound: ", audio_player)
 	# Connect the 'finished' signal to free the player after playback
-	audio_player.finished.connect(audio_player.queue_free) 
+	if audio_player != null:
+		audio_player.finished.connect(audio_player.queue_free) 

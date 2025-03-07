@@ -24,6 +24,18 @@ position = Vector2(121, 499)
 position = Vector2(1253, 72)
 script = ExtResource("7_4angy")
 
+[node name="Checkpoint" parent="Checkpoint" instance=ExtResource("5_73w6g")]
+position = Vector2(5193, -704)
+script = ExtResource("7_4angy")
+
+[node name="Checkpoint2" parent="Checkpoint" instance=ExtResource("5_73w6g")]
+position = Vector2(2071, -736)
+script = ExtResource("7_4angy")
+
+[node name="Checkpoint4" parent="Checkpoint" instance=ExtResource("5_73w6g")]
+position = Vector2(-1071, 433)
+script = ExtResource("7_4angy")
+
 [node name="Spike17" parent="." instance=ExtResource("4_skjwn")]
 position = Vector2(3532, 1487)
 script = ExtResource("5_1fcqa")
@@ -202,15 +214,3 @@ script = ExtResource("5_1fcqa")
 [node name="LevelEnding" parent="." instance=ExtResource("8_j840j")]
 position = Vector2(7419, -1561)
 script = ExtResource("9_bpdxq")
-
-[node name="Checkpoint2" parent="." instance=ExtResource("5_73w6g")]
-position = Vector2(6446, -632)
-script = ExtResource("7_4angy")
-
-[node name="Checkpoint3" parent="." instance=ExtResource("5_73w6g")]
-position = Vector2(3324, -664)
-script = ExtResource("7_4angy")
-
-[node name="Checkpoint4" parent="." instance=ExtResource("5_73w6g")]
-position = Vector2(182, 505)
-script = ExtResource("7_4angy")

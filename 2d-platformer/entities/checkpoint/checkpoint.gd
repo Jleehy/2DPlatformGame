@@ -7,9 +7,11 @@ extends Area2D
 # Called when another body enters the area
 func _on_Area2D_body_entered(body: Node) -> void:
 	if body.name == "Player" and not active_checkpoint:  # Check if the body is the player by name
-		active_checkpoint = true
+		if not active_checkpoint:
+			active_checkpoint = true
+			play_flag_animation()
+		
 		GameManager.save_checkpoint(Vector2(global_position.x, global_position.y))
-		play_flag_animation()
 		
 # Plays the flag animation sequence
 func play_flag_animation() -> void:
@@ -28,3 +30,6 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+	
+func ret_pos() -> Vector2:
+	return self.global_position
