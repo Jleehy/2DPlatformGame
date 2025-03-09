@@ -15,10 +15,10 @@ extends CharacterBody2D
 @export var crouch_speed_reduction: float = 0.50
 @export var is_crouching: bool = false
 @export var original_collision_size: Vector2
-@export var crouch_squish_amount: float = 0.65
+@export var crouch_squish_amount: float = 0.75
 
 # Dash and other Movement variables
-@export var dash_speed: float = 2000
+@export var dash_speed: float = 1500
 @export var dash_duration: float = 0.25
 @export var dash_cooldown: float = 0.5
 var is_dashing: bool = false
@@ -178,27 +178,37 @@ func handle_death_animation() -> void:
 
 func handle_crouching() -> void:
 	if InputManager.is_crouch_pressed():
-		if is_crouching:
-			pass
-			
-		else:
+		if not is_crouching:
 			is_crouching = true
 			speed *= crouch_speed_reduction
 			jump_speed *= crouch_speed_reduction
-			$AnimatedSprite2D.scale = Vector2(1, crouch_squish_amount) 
-			$CollisionShape2D.shape.set_deferred("size", Vector2(original_collision_size.x, original_collision_size.y * crouch_squish_amount))
-			self.global_position.y -= original_collision_size.y * (1 - crouch_squish_amount)
+			
+			# Calculate the new size and position
+			var new_size = Vector2(original_collision_size.x, original_collision_size.y * crouch_squish_amount)
+			var size_difference = original_collision_size.y - new_size.y
+			
+			# Apply the new size and adjust the position
+			$CollisionShape2D.shape.set_deferred("size", new_size)
+			self.global_position.y += size_difference / 2
+			
+			# Scale the sprite
+			$AnimatedSprite2D.scale = Vector2(1, crouch_squish_amount)
 	else:
 		if is_crouching:
 			is_crouching = false
 			speed /= crouch_speed_reduction
 			jump_speed /= crouch_speed_reduction
-			$AnimatedSprite2D.scale = Vector2(1, 1) 
-			$CollisionShape2D.shape.set_deferred("size", Vector2(original_collision_size.x, original_collision_size.y))
-			self.global_position.y += original_collision_size.y * (1 - crouch_squish_amount)
 			
-		else:
-			pass
+			# Calculate the original size and position
+			var new_size = original_collision_size
+			var size_difference = new_size.y - $CollisionShape2D.shape.size.y
+			
+			# Apply the original size and adjust the position
+			$CollisionShape2D.shape.set_deferred("size", new_size)
+			self.global_position.y -= size_difference / 2
+			
+			# Reset the sprite scale
+			$AnimatedSprite2D.scale = Vector2(1, 1)
 
 func handle_self_die() -> void:
 	if InputManager.is_self_death_pressed():

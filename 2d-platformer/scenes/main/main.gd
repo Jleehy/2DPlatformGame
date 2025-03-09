@@ -5,5 +5,4 @@ extends Node
 func _ready() -> void:
 	# Initialize the GameManager with the current level
 	CameraManager.set_player(player)
-	GameManager.main_node = self
-	GameManager.initialize_level("terrain")
+	GameManager.initialize_level("level_1")

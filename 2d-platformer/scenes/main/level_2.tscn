@@ -166,7 +166,7 @@ texture = ExtResource("1_m4388")
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_gx65u")
 
-[node name="Level2" type="Node"]
+[node name="level_2" type="Node"]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 position = Vector2(-129, -169)
