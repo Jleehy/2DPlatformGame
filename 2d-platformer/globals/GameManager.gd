@@ -18,6 +18,9 @@ var checkpoints_list: Array = [
 	[Vector2(182, 505), Vector2(1253, 72), Vector2(6446, -632), Vector2(3324, -664)]
 ]
 
+#some "cutscene" (very minor ones) and dialogue box related stuff
+@export var enabled_deaths: bool = true
+
 func _ready() -> void:
 	instance = self  # Set the singleton instance
 
@@ -85,8 +88,9 @@ func save_checkpoint(position_in: Vector2) -> void:
 
 # Kill the player
 func kill_player(player) -> void:
-	player.death_timer = 30
-	player.velocity = Vector2.ZERO
+	if (enabled_deaths):
+		player.death_timer = 30
+		player.velocity = Vector2.ZERO
 
 # Respawn the player
 func respawn_player(player) -> void:
@@ -118,3 +122,9 @@ func prev_checkpoint_teleport(player) -> void:
 	#now teleport the player
 	player.global_position = checkpoints_list[current_level_number][current_checkpoint_number - 1]
 	current_checkpoint_number -= 1
+
+func enable_deaths() -> void:
+	enabled_deaths = true
+	
+func disable_deaths() -> void:
+	enabled_deaths = false
