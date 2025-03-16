@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="2D Platformer"
-run/main_scene="res://menus/opening_menu.tscn"
+run/main_scene="res://menus/main_menu.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 
 [autoload]

@@ -23,7 +23,7 @@ func _ready() -> void:
 
 # Initialize level bounds and other gameplay-specific data
 func initialize_level(level_id: String) -> void:
-
+	
 	# Calculate level bounds
 	current_level = get_node("/root/" + level_id)
 	var tilemap_layer = current_level.get_node("TileMapLayer")
