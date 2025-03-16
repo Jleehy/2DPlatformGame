@@ -74,5 +74,5 @@ Use Shift to Dash the direction you are facing"
 layout_mode = 2
 text = "Music: On"
 
-[connection signal="pressed" from="MarginContainer/VBoxContainer/Sound" to="." method="_on_sound_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Sound" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Sound" to="." method="_on_sound_pressed"]

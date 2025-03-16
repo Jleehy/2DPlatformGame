@@ -206,6 +206,7 @@ script = ExtResource("1_qwl6p")
 metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 1
 sprite_frames = SubResource("SpriteFrames_yb0ll")
 animation = &"idle"
 

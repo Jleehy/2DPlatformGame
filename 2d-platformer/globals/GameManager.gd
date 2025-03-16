@@ -4,7 +4,7 @@ extends Node
 var current_level: Node
 var player_progress: Vector2
 var level_bounds: Rect2
-var death_height_offset: float = 500  # How far below the level bounds the player can fall before dying
+var death_height_offset: float = 100  # How far below the level bounds the player can fall before dying
 var gravity: int = 4000
 var terminal_velocity: int = 12000
 

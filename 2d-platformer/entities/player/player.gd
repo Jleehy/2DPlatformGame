@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 # Player physics variables
-@export var speed: int = 325
+@export var speed: int = 250
 @export var jump_speed: int = -1050
 
 # Advanced physics variables
@@ -170,8 +170,10 @@ func handle_death_animation() -> void:
 		$AnimatedSprite2D.rotation_degrees = 90
 
 	death_timer -= 1
-
+	modulate = Color(1, 0, 0, 1)
+	
 	if death_timer == 0:
+		modulate = Color(1, 1, 1, 1)
 		$AnimatedSprite2D.rotation_degrees = 0
 		GameManager.respawn_player(self)
 		death_timer = -1
