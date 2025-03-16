@@ -4,6 +4,10 @@ extends CharacterBody2D
 @export var speed: int = 250
 @export var jump_speed: int = -1050
 
+# Sound effects
+@onready var sfx_dash = $sfx_dash
+@onready var sfx_jump  = $sfx_jump
+
 # Advanced physics variables
 @export var minimum_speed_percentage: float = 0.30
 @export var player_input_acceleration_percent: float = 0.25
@@ -26,13 +30,15 @@ var can_dash: bool = true
 
 @export var death_timer: int = -1
 
+@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var dash_effect: Sprite2D = $DashEffect
 
 func _ready() -> void:
-	$AnimatedSprite2D.play()
+	animated_sprite.play()
 	GameManager.save_checkpoint(self.position)
 	
-	original_collision_size = $CollisionShape2D.shape.size
+	original_collision_size = collision_shape.shape.size
 
 func _physics_process(delta: float) -> void:
 	if death_timer == -1:
@@ -91,6 +97,7 @@ func apply_horizontal_movement(control_factor: float) -> void:
 
 func handle_jumping() -> void:
 	if InputManager.is_jump_pressed() and is_on_floor():
+		sfx_jump.play()
 		velocity.y = jump_speed
 
 func handle_dash() -> void:
@@ -101,6 +108,7 @@ func handle_dash() -> void:
 		modulate = Color(1, 1, 1, 1)
 		
 	if InputManager.is_dash_pressed() and can_dash and not is_dashing:
+		sfx_dash.play()
 		start_dash()
 
 func start_dash() -> void:
@@ -108,13 +116,13 @@ func start_dash() -> void:
 	can_dash = false
 
 	# Copy the current frame of the player's animation to the dash effect
-	var frameIndex: int = $AnimatedSprite2D.get_frame()
-	var animationName: String = $AnimatedSprite2D.animation
-	var spriteFrames: SpriteFrames = $AnimatedSprite2D.get_sprite_frames()
+	var frameIndex: int = animated_sprite.get_frame()
+	var animationName: String = animated_sprite.animation
+	var spriteFrames: SpriteFrames = animated_sprite.get_sprite_frames()
 	var currentTexture: Texture2D = spriteFrames.get_frame_texture(animationName, frameIndex)
 	
 	dash_effect.texture = currentTexture
-	dash_effect.flip_h = $AnimatedSprite2D.flip_h
+	dash_effect.flip_h = animated_sprite.flip_h
 	dash_effect.visible = true
 
 	# Set dash velocity based on facing direction
@@ -152,29 +160,29 @@ func handle_level_bounds() -> void:
 
 func update_animation() -> void:
 	if velocity.x != 0 or velocity.y != 0:
-		$AnimatedSprite2D.flip_h = facing_direction == "left"
+		animated_sprite.flip_h = facing_direction == "left"
 		if is_on_floor():
-			$AnimatedSprite2D.animation = "run"
+			animated_sprite.animation = "run"
 		else:
 			if velocity.y < 0:
-				$AnimatedSprite2D.animation = "jump"
+				animated_sprite.animation = "jump"
 			else:
-				$AnimatedSprite2D.animation = "fall"
+				animated_sprite.animation = "fall"
 	else:
-		$AnimatedSprite2D.animation = "idle"
+		animated_sprite.animation = "idle"
 
 func handle_death_animation() -> void:
-	if $AnimatedSprite2D.rotation_degrees < 90:
-		$AnimatedSprite2D.rotation_degrees += 5
+	if animated_sprite.rotation_degrees < 90:
+		animated_sprite.rotation_degrees += 5
 	else:
-		$AnimatedSprite2D.rotation_degrees = 90
+		animated_sprite.rotation_degrees = 90
 
 	death_timer -= 1
 	modulate = Color(1, 0, 0, 1)
 	
 	if death_timer == 0:
 		modulate = Color(1, 1, 1, 1)
-		$AnimatedSprite2D.rotation_degrees = 0
+		animated_sprite.rotation_degrees = 0
 		GameManager.respawn_player(self)
 		death_timer = -1
 
@@ -190,11 +198,11 @@ func handle_crouching() -> void:
 			var size_difference = original_collision_size.y - new_size.y
 			
 			# Apply the new size and adjust the position
-			$CollisionShape2D.shape.set_deferred("size", new_size)
+			collision_shape.shape.set_deferred("size", new_size)
 			self.global_position.y += size_difference / 2
 			
 			# Scale the sprite
-			$AnimatedSprite2D.scale = Vector2(1, crouch_squish_amount)
+			animated_sprite.scale = Vector2(1, crouch_squish_amount)
 	else:
 		if is_crouching:
 			is_crouching = false
@@ -203,14 +211,14 @@ func handle_crouching() -> void:
 			
 			# Calculate the original size and position
 			var new_size = original_collision_size
-			var size_difference = new_size.y - $CollisionShape2D.shape.size.y
+			var size_difference = new_size.y - collision_shape.shape.size.y
 			
 			# Apply the original size and adjust the position
-			$CollisionShape2D.shape.set_deferred("size", new_size)
+			collision_shape.shape.set_deferred("size", new_size)
 			self.global_position.y -= size_difference / 2
 			
 			# Reset the sprite scale
-			$AnimatedSprite2D.scale = Vector2(1, 1)
+			animated_sprite.scale = Vector2(1, 1)
 
 func handle_self_die() -> void:
 	if InputManager.is_self_death_pressed():

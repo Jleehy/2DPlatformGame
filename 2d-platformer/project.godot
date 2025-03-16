@@ -17,7 +17,6 @@ config/features=PackedStringArray("4.3", "Forward Plus")
 [autoload]
 
 GameManager="*res://globals/GameManager.gd"
-AudioManager="*res://globals/AudioManager.gd"
 InputManager="*res://globals/InputManager.gd"
 CameraManager="*res://globals/CameraManager.gd"
 

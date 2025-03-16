@@ -1,10 +1,12 @@
-[gd_scene load_steps=31 format=3 uid="uid://cuxwbdbw6vgtd"]
+[gd_scene load_steps=33 format=3 uid="uid://cuxwbdbw6vgtd"]
 
 [ext_resource type="Texture2D" uid="uid://ly7gjfalgpl3" path="res://art/player/Fall (32x32).png" id="1_32vwx"]
 [ext_resource type="Script" path="res://entities/player/player.gd" id="1_qwl6p"]
 [ext_resource type="Texture2D" uid="uid://cgh23b8b7bxeg" path="res://art/player/Idle (32x32).png" id="2_xlrt0"]
 [ext_resource type="Texture2D" uid="uid://bl8wm26ii6o71" path="res://art/player/Jump (32x32).png" id="3_es8qw"]
 [ext_resource type="Texture2D" uid="uid://6q46hsd00c4b" path="res://art/player/Run (32x32).png" id="4_aqxjp"]
+[ext_resource type="AudioStream" uid="uid://dcw2lnx6krf0q" path="res://sounds/dash.wav" id="6_1lh60"]
+[ext_resource type="AudioStream" uid="uid://gbr6sbf6pgeg" path="res://sounds/jump.wav" id="7_tk0ac"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c14bf"]
 atlas = ExtResource("2_xlrt0")
@@ -217,3 +219,9 @@ shape = SubResource("RectangleShape2D_evaxq")
 
 [node name="DashEffect" type="Sprite2D" parent="."]
 modulate = Color(1, 1, 1, 0.121569)
+
+[node name="sfx_dash" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_1lh60")
+
+[node name="sfx_jump" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_tk0ac")
