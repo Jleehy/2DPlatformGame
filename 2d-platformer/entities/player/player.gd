@@ -10,6 +10,10 @@ extends CharacterBody2D
 @export var friction_value: float = 0.84
 @export var air_control_loss: float = 0.35
 @export var facing_direction: String = "left"
+@export var step_height: int = 8
+var can_be_falling: bool
+@export var recent_X_speeds: Array = [0, 0, 0, 0, 0, 0, 0]
+@export var recent_X_speeds_array_index: int = 0
 
 #crouching variables
 @export var crouch_speed_reduction: float = 0.50
@@ -36,6 +40,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if death_timer == -1:
+		handle_step_data()
 		if not is_dashing:
 			apply_gravity(delta)
 		handle_crouching()
@@ -85,12 +90,21 @@ func apply_horizontal_movement(control_factor: float) -> void:
 	if InputManager.is_move_left_pressed():
 		velocity.x += -speed * control_factor * player_input_acceleration_percent
 		facing_direction = "left"
+		if is_on_wall() and not is_on_ceiling():
+			position.y -= step_height
+			can_be_falling = false
+			velocity.x = get_max_recent_speed()
+			
 	if InputManager.is_move_right_pressed():
 		velocity.x += speed * control_factor * player_input_acceleration_percent
 		facing_direction = "right"
+		if is_on_wall() and not is_on_ceiling():
+			position.y -= step_height
+			can_be_falling = false
+			velocity.x = get_max_recent_speed()
 
 func handle_jumping() -> void:
-	if InputManager.is_jump_pressed() and is_on_floor():
+	if InputManager.is_jump_pressed() and (is_on_floor() or not can_be_falling):
 		velocity.y = jump_speed
 
 func handle_dash() -> void:
@@ -156,7 +170,7 @@ func update_animation() -> void:
 		if is_on_floor():
 			$AnimatedSprite2D.animation = "run"
 		else:
-			if velocity.y < 0:
+			if velocity.y < 0 or not can_be_falling:
 				$AnimatedSprite2D.animation = "jump"
 			else:
 				$AnimatedSprite2D.animation = "fall"
@@ -220,3 +234,19 @@ func dev_checkpoint_handle() -> void:
 		
 	if InputManager.is_dev_teleport_forwards_pressed():
 		GameManager.next_checkpoint_teleport(self)
+		
+func handle_step_data() -> void:
+	can_be_falling = true
+	if not is_dashing:
+		recent_X_speeds[recent_X_speeds_array_index] = velocity.x
+	recent_X_speeds_array_index += 1
+	if recent_X_speeds_array_index >= len(recent_X_speeds):
+		recent_X_speeds_array_index = 0
+	
+func get_max_recent_speed() -> int:
+	var cur_max = recent_X_speeds[0]
+	for speed_ in recent_X_speeds:
+		if abs(speed_) > abs(cur_max):
+			cur_max = speed_
+			
+	return cur_max
