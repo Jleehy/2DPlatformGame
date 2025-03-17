@@ -1,5 +1,4 @@
-[gd_scene load_steps=15 format=4 uid="uid://bh6jat6426m14"]
-
+[gd_scene load_steps=16 format=4 uid="uid://bh6jat6426m14"]
 
 [ext_resource type="Script" path="res://scenes/levels/level_1.gd" id="1_4fcmp"]
 [ext_resource type="AudioStream" uid="uid://dybkwrn8ieb0v" path="res://sounds/level_theme.mp3" id="2_k0b6t"]
@@ -11,10 +10,9 @@
 [ext_resource type="PackedScene" uid="uid://bhkbamrvp2xcu" path="res://entities/start/start.tscn" id="10_5t3ea"]
 [ext_resource type="Texture2D" uid="uid://cb7ot5abnye5n" path="res://art/background/Green.png" id="10_hjcqw"]
 [ext_resource type="Texture2D" uid="uid://bi5gunsqrjsax" path="res://art/terrain/Terrain (16x16).png" id="10_nfvxd"]
-
 [ext_resource type="PackedScene" uid="uid://coskoq2jla2rx" path="res://entities/moving_platform/moving_platform.tscn" id="11_dxfag"]
 [ext_resource type="PackedScene" uid="uid://v117ln176i3e" path="res://entities/enemies/chicken/chicken.tscn" id="12_xpd6c"]
-
+[ext_resource type="PackedScene" uid="uid://c4xufs5sto4u3" path="res://menus/pause_menu.tscn" id="13_xhitp"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iir4c"]
 texture = ExtResource("10_nfvxd")
@@ -436,3 +434,7 @@ position = Vector2(7594, -1563)
 
 [node name="Chicken9" parent="." instance=ExtResource("12_xpd6c")]
 position = Vector2(7731, -1563)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("13_xhitp")]

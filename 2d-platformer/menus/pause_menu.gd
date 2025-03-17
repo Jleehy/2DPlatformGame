@@ -6,8 +6,8 @@ extends Control
 var is_paused: bool = false
 
 # Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	visible = false  # Hide pause menu on start
+func _ready() -> void: 
+	hide()
 	set_process_input(true)
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
@@ -20,21 +20,13 @@ func _process(delta: float) -> void:
 func _input(event):
 	if InputManager.is_pause_pressed():
 		print("pause pressed")
-		toggle_pause()
-
-func toggle_pause():
-	print("pause")
-	if is_paused:
-		get_tree().paused = false
-		visible = false
-		is_paused = false
-	else:
 		get_tree().paused = true
-		visible = true
-		is_paused = true
+		show()
+
 
 func _on_resume_pressed() -> void:
-	toggle_pause()
+	hide()
+	get_tree().paused = false
 
 
 func _on_main_menu_pressed() -> void:
