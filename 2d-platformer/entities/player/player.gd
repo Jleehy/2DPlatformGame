@@ -1,12 +1,13 @@
 extends CharacterBody2D
 
 # Player physics variables
-@export var speed: int = 250
+@export var speed: int = 325
 @export var jump_speed: int = -1050
 
 # Sound effects
 @onready var sfx_dash = $sfx_dash
 @onready var sfx_jump  = $sfx_jump
+@onready var sfx_death  = $sfx_death
 
 # Advanced physics variables
 @export var minimum_speed_percentage: float = 0.30
@@ -156,6 +157,7 @@ func handle_level_bounds() -> void:
 			velocity.x = 0
 
 	if self.position.y > level_bounds.position.y + level_bounds.size.y + death_height_offset:
+		sfx_death.play()
 		GameManager.kill_player(self)
 
 func update_animation() -> void:
@@ -179,6 +181,7 @@ func handle_death_animation() -> void:
 
 	death_timer -= 1
 	modulate = Color(1, 0, 0, 1)
+	
 	
 	if death_timer == 0:
 		modulate = Color(1, 1, 1, 1)

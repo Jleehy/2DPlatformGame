@@ -1,6 +1,6 @@
-[gd_scene load_steps=13 format=4 uid="uid://bh6jat6426m14"]
+[gd_scene load_steps=14 format=4 uid="uid://bh6jat6426m14"]
 
-[ext_resource type="Script" path="res://scenes/main/level_1.gd" id="1_4fcmp"]
+[ext_resource type="Script" path="res://scenes/levels/level_1.gd" id="1_4fcmp"]
 [ext_resource type="AudioStream" uid="uid://dybkwrn8ieb0v" path="res://sounds/level_theme.mp3" id="2_k0b6t"]
 [ext_resource type="PackedScene" uid="uid://cuxwbdbw6vgtd" path="res://entities/player/player.tscn" id="3_2qxxt"]
 [ext_resource type="PackedScene" uid="uid://dma8c20v64gr1" path="res://entities/checkpoint/checkpoint.tscn" id="4_kjmom"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://bhkbamrvp2xcu" path="res://entities/start/start.tscn" id="10_5t3ea"]
 [ext_resource type="Texture2D" uid="uid://cb7ot5abnye5n" path="res://art/background/Green.png" id="10_hjcqw"]
 [ext_resource type="Texture2D" uid="uid://bi5gunsqrjsax" path="res://art/terrain/Terrain (16x16).png" id="10_nfvxd"]
+[ext_resource type="PackedScene" uid="uid://coskoq2jla2rx" path="res://entities/moving_platform/moving_platform.tscn" id="11_dxfag"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iir4c"]
 texture = ExtResource("10_nfvxd")
@@ -183,7 +184,7 @@ tile_map_data = PackedByteArray("AAAgACAAAAAHAAIAAAAhACAAAAAHAAIAAAAiACAAAAAHAAE
 tile_set = SubResource("TileSet_p4ww3")
 
 [node name="Player" parent="." instance=ExtResource("3_2qxxt")]
-position = Vector2(121, 503)
+position = Vector2(139, 503)
 
 [node name="Spikes" type="Node2D" parent="."]
 position = Vector2(-130, -109)
@@ -364,7 +365,7 @@ script = ExtResource("7_74b53")
 position = Vector2(7531, -1561)
 
 [node name="StartPoint" parent="." instance=ExtResource("10_5t3ea")]
-position = Vector2(189, 503)
+position = Vector2(218, 503)
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 
@@ -400,3 +401,6 @@ position = Vector2(6446, -632)
 
 [node name="Checkpoint3" parent="." instance=ExtResource("4_kjmom")]
 position = Vector2(3324, -664)
+
+[node name="MovingPlatformUpDown" parent="." instance=ExtResource("11_dxfag")]
+position = Vector2(5254, -174)
