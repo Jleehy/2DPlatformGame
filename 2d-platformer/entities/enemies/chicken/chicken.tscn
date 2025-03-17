@@ -1,5 +1,6 @@
-[gd_scene load_steps=38 format=3 uid="uid://v117ln176i3e"]
+[gd_scene load_steps=39 format=3 uid="uid://v117ln176i3e"]
 
+[ext_resource type="Script" path="res://entities/enemies/chicken/chicken.gd" id="1_7sfj2"]
 [ext_resource type="Texture2D" uid="uid://bs3lrkcb5x8hk" path="res://art/enemies/chicken/Hit (32x34).png" id="1_iru03"]
 [ext_resource type="Texture2D" uid="uid://bgomt1y4htk44" path="res://art/enemies/chicken/Idle (32x34).png" id="2_kb4jj"]
 [ext_resource type="Texture2D" uid="uid://dlcrh4lhf20hb" path="res://art/enemies/chicken/Run (32x34).png" id="3_g1q8o"]
@@ -252,13 +253,22 @@ size = Vector2(36.25, 41.25)
 [node name="Chicken" type="CharacterBody2D"]
 position = Vector2(64, 64)
 scale = Vector2(2, 2)
+script = ExtResource("1_7sfj2")
 metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_yb0ll")
-animation = &"run"
+animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.5, 0.5)
 scale = Vector2(0.8, 0.8)
 shape = SubResource("RectangleShape2D_evaxq")
+
+[node name="KillZone" type="Area2D" parent="."]
+
+[node name="KillBox" type="CollisionShape2D" parent="KillZone"]
+position = Vector2(-0.5, -16.5)
+scale = Vector2(0.8, 0.01)
+shape = SubResource("RectangleShape2D_evaxq")
+debug_color = Color(0.905463, 0.215344, 0.54421, 0.42)
