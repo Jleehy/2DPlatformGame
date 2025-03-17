@@ -26,6 +26,7 @@ extends CharacterBody2D
 @export var dash_speed: float = 1500
 @export var dash_duration: float = 0.25
 @export var dash_cooldown: float = 0.5
+@export var dash_unlocked: bool = false
 var is_dashing: bool = false
 var can_dash: bool = true
 
@@ -132,6 +133,8 @@ func handle_jumping() -> void:
 		velocity.y = jump_speed
 
 func handle_dash() -> void:
+	if not dash_unlocked:
+		return  # Prevent dashing if not unlocked
 	if not can_dash:
 		modulate = Color(0.5, 0.5, 1, 1)
 	else:
