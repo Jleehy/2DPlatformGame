@@ -6,3 +6,6 @@ func _on_play_pressed() -> void:
 
 func _on_settings_pressed() -> void:
 	get_tree().change_scene_to_file("res://menus/options.tscn")
+
+func _on_levels_pressed() -> void:
+	get_tree().change_scene_to_file("res://menus/level_select.tscn")

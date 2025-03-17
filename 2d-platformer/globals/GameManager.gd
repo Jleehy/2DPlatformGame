@@ -11,6 +11,9 @@ var terminal_velocity: int = 12000
 # Singleton setup
 static var instance: GameManager
 
+# Levels Unlocked
+var level2_unlocked: bool = false
+
 #Some variables that are used internally to handle the dev teleportation
 @export var current_level_number: int = 0
 @export var current_checkpoint_number: int = 0
