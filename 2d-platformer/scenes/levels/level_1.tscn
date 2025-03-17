@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 [gd_scene load_steps=13 format=4 uid="uid://bh6jat6426m14"]
+=======
+[gd_scene load_steps=15 format=4 uid="uid://bh6jat6426m14"]
+>>>>>>> d7a4a5fc0d1e8fd44ef51c861050a5ed4b43f34f
 
 [ext_resource type="Script" path="res://scenes/levels/level_1.gd" id="1_4fcmp"]
 [ext_resource type="AudioStream" uid="uid://dybkwrn8ieb0v" path="res://sounds/level_theme.mp3" id="2_k0b6t"]
@@ -10,6 +14,11 @@
 [ext_resource type="PackedScene" uid="uid://bhkbamrvp2xcu" path="res://entities/start/start.tscn" id="10_5t3ea"]
 [ext_resource type="Texture2D" uid="uid://cb7ot5abnye5n" path="res://art/background/Green.png" id="10_hjcqw"]
 [ext_resource type="Texture2D" uid="uid://bi5gunsqrjsax" path="res://art/terrain/Terrain (16x16).png" id="10_nfvxd"]
+<<<<<<< HEAD
+=======
+[ext_resource type="PackedScene" uid="uid://coskoq2jla2rx" path="res://entities/moving_platform/moving_platform.tscn" id="11_dxfag"]
+[ext_resource type="PackedScene" uid="uid://v117ln176i3e" path="res://entities/enemies/chicken/chicken.tscn" id="12_xpd6c"]
+>>>>>>> d7a4a5fc0d1e8fd44ef51c861050a5ed4b43f34f
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iir4c"]
 texture = ExtResource("10_nfvxd")
@@ -361,7 +370,7 @@ position = Vector2(3662, 1596)
 script = ExtResource("7_74b53")
 
 [node name="EndPoint" parent="." instance=ExtResource("9_6rgwf")]
-position = Vector2(7531, -1561)
+position = Vector2(7874, -1561)
 
 [node name="StartPoint" parent="." instance=ExtResource("10_5t3ea")]
 position = Vector2(218, 503)
@@ -400,3 +409,37 @@ position = Vector2(6446, -632)
 
 [node name="Checkpoint3" parent="." instance=ExtResource("4_kjmom")]
 position = Vector2(3324, -664)
+<<<<<<< HEAD
+=======
+
+[node name="MovingPlatformUpDown" parent="." instance=ExtResource("11_dxfag")]
+position = Vector2(5254, -174)
+
+[node name="Chicken" parent="." instance=ExtResource("12_xpd6c")]
+position = Vector2(1117, 501)
+
+[node name="Chicken2" parent="." instance=ExtResource("12_xpd6c")]
+position = Vector2(1752, 405)
+
+[node name="Chicken3" parent="." instance=ExtResource("12_xpd6c")]
+position = Vector2(2669, 357)
+
+[node name="Chicken4" parent="." instance=ExtResource("12_xpd6c")]
+position = Vector2(3343, 1125)
+
+[node name="Chicken5" parent="." instance=ExtResource("12_xpd6c")]
+position = Vector2(4591, 901)
+
+[node name="Chicken6" parent="." instance=ExtResource("12_xpd6c")]
+position = Vector2(5253, -220)
+patrol_distance = 0
+
+[node name="Chicken7" parent="." instance=ExtResource("12_xpd6c")]
+position = Vector2(7468, -1563)
+
+[node name="Chicken8" parent="." instance=ExtResource("12_xpd6c")]
+position = Vector2(7594, -1563)
+
+[node name="Chicken9" parent="." instance=ExtResource("12_xpd6c")]
+position = Vector2(7731, -1563)
+>>>>>>> d7a4a5fc0d1e8fd44ef51c861050a5ed4b43f34f

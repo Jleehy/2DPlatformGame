@@ -16,7 +16,7 @@ extends CharacterBody2D
 @export var air_control_loss: float = 0.35
 @export var facing_direction: String = "left"
 
-#crouching variables
+# Crouching variables
 @export var crouch_speed_reduction: float = 0.50
 @export var is_crouching: bool = false
 @export var original_collision_size: Vector2
@@ -32,14 +32,18 @@ var can_dash: bool = true
 
 @export var death_timer: int = -1
 
+# Animation variables
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var dash_effect: Sprite2D = $DashEffect
 
+# Hurt state
+var is_hurt: bool = false
+var can_take_damage: bool = true  # Cooldown to prevent rapid damage
+
 func _ready() -> void:
 	animated_sprite.play()
 	GameManager.save_checkpoint(self.position)
-	
 	original_collision_size = collision_shape.shape.size
 
 func _physics_process(delta: float) -> void:
@@ -107,7 +111,6 @@ func handle_dash() -> void:
 		return  # Prevent dashing if not unlocked
 	if not can_dash:
 		modulate = Color(0.5, 0.5, 1, 1)
-		
 	else:
 		modulate = Color(1, 1, 1, 1)
 		
@@ -164,17 +167,19 @@ func handle_level_bounds() -> void:
 		GameManager.kill_player(self)
 
 func update_animation() -> void:
+	if is_hurt:
+		return  # Don't change animation if the player is hurt
 	if velocity.x != 0 or velocity.y != 0:
 		animated_sprite.flip_h = facing_direction == "left"
 		if is_on_floor():
-			animated_sprite.animation = "run"
+			animated_sprite.play("run")
 		else:
 			if velocity.y < 0:
-				animated_sprite.animation = "jump"
+				animated_sprite.play("jump")
 			else:
-				animated_sprite.animation = "fall"
+				animated_sprite.play("fall")
 	else:
-		animated_sprite.animation = "idle"
+		animated_sprite.play("idle")
 
 func handle_death_animation() -> void:
 	if animated_sprite.rotation_degrees < 90:
@@ -184,7 +189,6 @@ func handle_death_animation() -> void:
 
 	death_timer -= 1
 	modulate = Color(1, 0, 0, 1)
-	
 	
 	if death_timer == 0:
 		modulate = Color(1, 1, 1, 1)
@@ -225,6 +229,21 @@ func handle_crouching() -> void:
 			
 			# Reset the sprite scale
 			animated_sprite.scale = Vector2(1, 1)
+
+func bounce() -> void:
+	velocity.y = -800 
+
+func take_damage() -> void:
+	if not can_take_damage:
+		return  # Ignore damage if cooldown is active
+	can_take_damage = false
+	is_hurt = true
+	animated_sprite.play("hit")
+	print("STARTING")
+	await animated_sprite.animation_finished  # Wait for the "hit" animation to finish
+	print("FINISHED")
+	is_hurt = false
+	can_take_damage = true  # Reset cooldown
 
 func handle_self_die() -> void:
 	if InputManager.is_self_death_pressed():
