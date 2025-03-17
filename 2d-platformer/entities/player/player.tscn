@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://cuxwbdbw6vgtd"]
+[gd_scene load_steps=43 format=3 uid="uid://cuxwbdbw6vgtd"]
 
 [ext_resource type="Texture2D" uid="uid://ly7gjfalgpl3" path="res://art/player/Fall (32x32).png" id="1_32vwx"]
 [ext_resource type="Script" path="res://entities/player/player.gd" id="1_qwl6p"]
@@ -9,6 +9,7 @@
 [ext_resource type="AudioStream" uid="uid://dcw2lnx6krf0q" path="res://sounds/dash.wav" id="6_1lh60"]
 [ext_resource type="AudioStream" uid="uid://gbr6sbf6pgeg" path="res://sounds/jump.wav" id="7_tk0ac"]
 [ext_resource type="AudioStream" uid="uid://bf7bo0n7oako5" path="res://sounds/(added as a joke)lego-yoda-death-sound-effect.mp3" id="8_8pnob"]
+[ext_resource type="Texture2D" uid="uid://dmdfxytts15fs" path="res://art/hearts/heart.png" id="10_hwkwa"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4wuyl"]
 atlas = ExtResource("3_0n0f8")
@@ -284,3 +285,24 @@ stream = ExtResource("7_tk0ac")
 
 [node name="sfx_death" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("8_8pnob")
+
+[node name="health_bar" type="CanvasLayer" parent="."]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="health_bar"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TextureRect" type="TextureRect" parent="health_bar/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("10_hwkwa")
+expand_mode = 3
+
+[node name="TextureRect2" type="TextureRect" parent="health_bar/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("10_hwkwa")
+expand_mode = 3
+
+[node name="TextureRect3" type="TextureRect" parent="health_bar/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("10_hwkwa")
+expand_mode = 3

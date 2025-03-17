@@ -26,7 +26,6 @@ extends CharacterBody2D
 @export var dash_speed: float = 1500
 @export var dash_duration: float = 0.25
 @export var dash_cooldown: float = 0.5
-@export var dash_unlocked: bool = false
 var is_dashing: bool = false
 var can_dash: bool = true
 
@@ -39,14 +38,39 @@ var can_dash: bool = true
 
 # Hurt state
 var is_hurt: bool = false
-var can_take_damage: bool = true  # Cooldown to prevent rapid damage
+var can_take_damage: bool = true  # Not used now since cooldown is via damage_cooldown_timer
+
+# --- Heart Damage System Variables ---
+var hearts_list: Array[TextureRect] = []
+var health: int = 3
+
+# --- Damage Cooldown Tracking ---
+var damage_cooldown_timer: float = 2.0   # starts at 2 seconds so damage is allowed immediately
+const DAMAGE_COOLDOWN: float = 2.0         # 2 seconds cooldown
 
 func _ready() -> void:
 	animated_sprite.play()
 	GameManager.save_checkpoint(self.position)
 	original_collision_size = collision_shape.shape.size
+	
+	# Initialize heart icons from a health bar (assumes a node at "$health_bar/HBoxContainer")
+	var hearts_parent = $health_bar/HBoxContainer
+	for child in hearts_parent.get_children():
+		hearts_list.append(child)
+	print("Hearts List:", hearts_list)
+
+# Damage cooldown and invulnerability variables
+var invuln_timer: float = 0.0              # additional invulnerability timer
+const INVULNERABILITY_DURATION: float = 0.5  # 0.5 seconds of invulnerability after respawn
 
 func _physics_process(delta: float) -> void:
+	# Update the damage cooldown timer each frame.
+	damage_cooldown_timer = min(damage_cooldown_timer + delta, DAMAGE_COOLDOWN)
+	
+	# Update the invulnerability timer, if active.
+	if invuln_timer > 0:
+		invuln_timer = max(invuln_timer - delta, 0)
+	
 	if death_timer == -1:
 		if not is_dashing:
 			apply_gravity(delta)
@@ -61,6 +85,7 @@ func _physics_process(delta: float) -> void:
 		dev_checkpoint_handle()
 	else:
 		handle_death_animation()
+
 
 func apply_gravity(delta: float) -> void:
 	var gravity = GameManager.get_gravity()
@@ -107,8 +132,6 @@ func handle_jumping() -> void:
 		velocity.y = jump_speed
 
 func handle_dash() -> void:
-	if not dash_unlocked:
-		return  # Prevent dashing if not unlocked
 	if not can_dash:
 		modulate = Color(0.5, 0.5, 1, 1)
 	else:
@@ -168,7 +191,7 @@ func handle_level_bounds() -> void:
 
 func update_animation() -> void:
 	if is_hurt:
-		return  # Don't change animation if the player is hurt
+		return  # Do not change animation if hurt
 	if velocity.x != 0 or velocity.y != 0:
 		animated_sprite.flip_h = facing_direction == "left"
 		if is_on_floor():
@@ -193,6 +216,7 @@ func handle_death_animation() -> void:
 	if death_timer == 0:
 		modulate = Color(1, 1, 1, 1)
 		animated_sprite.rotation_degrees = 0
+		reset_hearts()  # Reset hearts on respawn
 		GameManager.respawn_player(self)
 		death_timer = -1
 
@@ -234,16 +258,46 @@ func bounce() -> void:
 	velocity.y = -800 
 
 func take_damage() -> void:
-	if not can_take_damage:
-		return  # Ignore damage if cooldown is active
-	can_take_damage = false
+	# Do not take damage if we're still in the invulnerability period.
+	if invuln_timer > 0:
+		return
+	# Use the damage cooldown timer to ensure damage is only applied once every 2 seconds.
+	if damage_cooldown_timer < DAMAGE_COOLDOWN:
+		return
+	# Reset the cooldown timer.
+	damage_cooldown_timer = 0.0
+	
+	# Decrement health and update the heart display.
+	health -= 1
+	update_heart_display()
+	
+	# If no hearts remain, kill the player immediately.
+	if health <= 0:
+		GameManager.kill_player(self)
+		return
+	
+	# Play the hit animation and enforce a brief hurt state.
 	is_hurt = true
 	animated_sprite.play("hit")
-	print("STARTING")
-	await animated_sprite.animation_finished  # Wait for the "hit" animation to finish
-	print("FINISHED")
+	await animated_sprite.animation_finished
 	is_hurt = false
-	can_take_damage = true  # Reset cooldown
+
+# Reset hearts back to full health (3 hearts) upon respawn,
+# allow damage again, and grant temporary invulnerability.
+
+
+func update_heart_display() -> void:
+	# Update each heart's visibility based on current health
+	for i in range(hearts_list.size()):
+		hearts_list[i].visible = i < health
+
+# Reset hearts back to full health (3 hearts) upon respawn and allow damage again
+func reset_hearts() -> void:
+	health = 3
+	update_heart_display()
+	damage_cooldown_timer = DAMAGE_COOLDOWN
+	is_hurt = false
+	invuln_timer = INVULNERABILITY_DURATION
 
 func handle_self_die() -> void:
 	if InputManager.is_self_death_pressed():
