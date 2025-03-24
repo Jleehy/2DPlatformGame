@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bf7bo0n7oako5"
+path="res://.godot/imported/(added as a joke)lego-yoda-death-sound-effect.mp3-afe896c9818281eea55962b5f60c4534.mp3str"
+
+[deps]
+
+source_file="res://sounds/(added as a joke)lego-yoda-death-sound-effect.mp3"
+dest_files=["res://.godot/imported/(added as a joke)lego-yoda-death-sound-effect.mp3-afe896c9818281eea55962b5f60c4534.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

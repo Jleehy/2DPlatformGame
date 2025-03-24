@@ -1,0 +1,87 @@
+[gd_scene load_steps=13 format=3 uid="uid://di84ttvv08n4l"]
+
+[ext_resource type="Texture2D" uid="uid://brx2wj3f6pjle" path="res://art/trampoline/Idle.png" id="1_dlbvi"]
+[ext_resource type="Texture2D" uid="uid://d2a0plqq3k050" path="res://art/trampoline/Jump (28x28).png" id="2_dtox6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_74bk8"]
+atlas = ExtResource("1_dlbvi")
+region = Rect2(0, 0, 28, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3dsv3"]
+atlas = ExtResource("2_dtox6")
+region = Rect2(0, 0, 28, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cwuto"]
+atlas = ExtResource("2_dtox6")
+region = Rect2(28, 0, 28, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1ed3y"]
+atlas = ExtResource("2_dtox6")
+region = Rect2(56, 0, 28, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xhjw5"]
+atlas = ExtResource("2_dtox6")
+region = Rect2(84, 0, 28, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lsgxe"]
+atlas = ExtResource("2_dtox6")
+region = Rect2(112, 0, 28, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mks3t"]
+atlas = ExtResource("2_dtox6")
+region = Rect2(140, 0, 28, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_elefb"]
+atlas = ExtResource("2_dtox6")
+region = Rect2(168, 0, 28, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_raoq8"]
+atlas = ExtResource("2_dtox6")
+region = Rect2(196, 0, 28, 28)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xc8nv"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_74bk8")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3dsv3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cwuto")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1ed3y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xhjw5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lsgxe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mks3t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_elefb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_raoq8")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 15.0
+}]
+
+[node name="Trampoline" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_xc8nv")
+animation = &"jump"
+frame_progress = 0.667723

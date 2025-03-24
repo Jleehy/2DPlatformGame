@@ -25,6 +25,9 @@ func is_self_death_pressed() -> bool:
 	
 	return false
 	
+func is_pause_pressed() -> bool:
+	return Input.is_action_just_pressed("pause")
+	
 func is_dev_teleport_forwards_pressed() -> bool:
 	if dev_teleport_enabled:
 		return Input.is_action_just_pressed("dev_next_checkpoint")

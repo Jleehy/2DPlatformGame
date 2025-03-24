@@ -1,0 +1,117 @@
+[gd_scene load_steps=6 format=3 uid="uid://c4xufs5sto4u3"]
+
+[ext_resource type="Script" path="res://menus/pause_menu.gd" id="1_f3o7m"]
+[ext_resource type="Theme" path="res://menus/title.tres" id="2_xeo07"]
+[ext_resource type="Texture2D" uid="uid://cb7ot5abnye5n" path="res://art/background/Green.png" id="3_22h66"]
+[ext_resource type="Texture2D" uid="uid://bj3vv0ed7gkfu" path="res://art/menu/buttons/Play.png" id="4_2nvod"]
+[ext_resource type="Texture2D" uid="uid://c52elq6oy8fjs" path="res://art/menu/buttons/Back.png" id="5_awjv5"]
+
+[node name="PauseMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_f3o7m")
+
+[node name="Title" type="RichTextLabel" parent="."]
+z_index = 1
+z_as_relative = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -345.0
+offset_top = -139.0
+offset_right = 346.0
+offset_bottom = -41.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_xeo07")
+bbcode_enabled = true
+text = "[center]PAUSE[/center]"
+
+[node name="Background" type="TextureRect" parent="."]
+z_index = -1
+z_as_relative = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -640.0
+offset_top = -360.0
+offset_right = 640.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_22h66")
+stretch_mode = 1
+
+[node name="Buttons" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -165.5
+offset_top = -15.5
+offset_right = 165.5
+offset_bottom = 79.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Resume" type="Button" parent="Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+flat = true
+icon_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Buttons/Resume"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_2nvod")
+stretch_mode = 5
+
+[node name="Main Menu" type="Button" parent="Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+flat = true
+icon_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Buttons/Main Menu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_awjv5")
+stretch_mode = 5
+
+[connection signal="pressed" from="Buttons/Resume" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="Buttons/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Buttons/Main Menu" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="Buttons/Main Menu" to="." method="_on_main_menu_pressed"]

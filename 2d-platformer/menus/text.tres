@@ -1,0 +1,7 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://buiut7dn2mucs"]
+
+[ext_resource type="FontFile" uid="uid://dik5au5snmypu" path="res://art/menu/text/Text (White) (8x10).png" id="1_4erew"]
+
+[resource]
+default_font = ExtResource("1_4erew")
+default_font_size = 32

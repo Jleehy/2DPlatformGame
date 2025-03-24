@@ -1,0 +1,146 @@
+[gd_scene load_steps=8 format=3 uid="uid://doelptx53xv85"]
+
+[ext_resource type="Script" path="res://menus/main_menu.gd" id="1_kl2ei"]
+[ext_resource type="Theme" path="res://menus/title.tres" id="2_7tgrj"]
+[ext_resource type="Texture2D" uid="uid://cb7ot5abnye5n" path="res://art/background/Green.png" id="2_aps4i"]
+[ext_resource type="Texture2D" uid="uid://ndy6gl7i6krc" path="res://art/menu/buttons/Settings.png" id="3_6eox0"]
+[ext_resource type="Texture2D" uid="uid://bj3vv0ed7gkfu" path="res://art/menu/buttons/Play.png" id="3_qht5e"]
+[ext_resource type="Texture2D" uid="uid://big5yk5qjrupv" path="res://art/menu/buttons/Levels.png" id="4_tsy5y"]
+[ext_resource type="AudioStream" uid="uid://d0xiyyvgna8v0" path="res://sounds/menu_theme.mp3" id="7_e1dqc"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_kl2ei")
+
+[node name="Title" type="RichTextLabel" parent="."]
+z_index = 1
+z_as_relative = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -345.0
+offset_top = -139.0
+offset_right = 346.0
+offset_bottom = -41.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_7tgrj")
+bbcode_enabled = true
+text = "[center]HOPPER[/center]"
+
+[node name="Background" type="TextureRect" parent="."]
+z_index = -1
+z_as_relative = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -640.0
+offset_top = -360.0
+offset_right = 640.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_aps4i")
+stretch_mode = 1
+
+[node name="Buttons" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -165.5
+offset_top = -15.5
+offset_right = 165.5
+offset_bottom = 79.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Play" type="Button" parent="Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+flat = true
+icon_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Buttons/Play"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_qht5e")
+stretch_mode = 5
+
+[node name="Settings" type="Button" parent="Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+flat = true
+icon_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Buttons/Settings"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_6eox0")
+stretch_mode = 5
+
+[node name="Levels" type="Button" parent="Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+flat = true
+icon_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Buttons/Levels"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_tsy5y")
+stretch_mode = 5
+
+[node name="Music" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(-130, -109)
+stream = ExtResource("7_e1dqc")
+volume_db = -5.0
+autoplay = true
+
+[connection signal="pressed" from="Buttons/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="Buttons/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="Buttons/Levels" to="." method="_on_levels_pressed"]
