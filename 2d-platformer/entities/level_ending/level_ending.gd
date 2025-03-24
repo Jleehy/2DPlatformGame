@@ -6,7 +6,9 @@ func _on_Area2D_body_entered(body: Node) -> void:
 		GameManager.player_progress = Vector2.ZERO
 		GameManager.current_level_number += 1
 		GameManager.respawn_player(body)
-		GameManager.initialize_level("level_2")
+		GameManager.initialize_level("level_" + str(GameManager.current_level_number + 1))
+		GameManager.current_checkpoint_number = 0
+		GameManager.checkpoints_list = []
 	
 func _ready() -> void:
 	connect("body_entered", Callable(self, "_on_Area2D_body_entered"))

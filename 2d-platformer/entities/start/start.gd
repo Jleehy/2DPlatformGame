@@ -3,6 +3,7 @@ extends Area2D
 # Reference to the AnimatedSprite2D node
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @export var active_checkpoint: bool = false
+var checkpoint_saved: bool = false
 
 # Called when another body enters the area
 func _on_Area2D_body_entered(body: Node) -> void:
@@ -29,7 +30,9 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	if not checkpoint_saved:
+		GameManager.checkpoints_list.append(Vector2(self.global_position.x, self.global_position.y))
+		checkpoint_saved = true
 	
 func ret_pos() -> Vector2:
 	return self.global_position

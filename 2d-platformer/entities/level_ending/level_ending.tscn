@@ -1,6 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://cj5snnc3he4eo"]
-
-[ext_resource type="Texture2D" uid="uid://jtg72lbyk50l" path="res://art/level_ending/idle.png" id="1_hocvs"]
+[gd_scene load_steps=2 format=3 uid="uid://cj5snnc3he4eo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rbw6u"]
 size = Vector2(68, 53)
@@ -13,4 +11,3 @@ shape = SubResource("RectangleShape2D_rbw6u")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(2.38419e-07, 0)
 scale = Vector2(0.0561889, 0.0525735)
-texture = ExtResource("1_hocvs")

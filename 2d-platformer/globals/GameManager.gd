@@ -17,9 +17,7 @@ var level2_unlocked: bool = false
 #Some variables that are used internally to handle the dev teleportation
 @export var current_level_number: int = 0
 @export var current_checkpoint_number: int = 0
-var checkpoints_list: Array = [
-	[Vector2(182, 505), Vector2(1253, 72), Vector2(6446, -632), Vector2(3324, -664)]
-]
+@export var checkpoints_list: Array = []
 
 #some "cutscene" (very minor ones) and dialogue box related stuff
 @export var enabled_deaths: bool = true
@@ -29,6 +27,7 @@ func _ready() -> void:
 
 # Initialize level bounds and other gameplay-specific data
 func initialize_level(level_id: String) -> void:
+	#set up for dev tool automation thing
 	
 	# Calculate level bounds
 	current_level = get_node("/root/" + level_id)
@@ -75,14 +74,14 @@ func save_checkpoint(position_in: Vector2) -> void:
 	#save the player's current checkpoint. Kinda janky implementation here
 	#idk maybe fix later. It is a dev tool tho so idk.
 	#see if player's current level is within the levels catalogued for checkpoints.
-	if current_level_number < 0 or current_level_number >= len(checkpoints_list):
+	if current_level_number < 0 or len(checkpoints_list) == 0:
 		return
 		
 	#ok, go through to find the checkpoint of matching position.
 	var checkpoint_check_index = -1
-	while checkpoint_check_index < len(checkpoints_list):
+	while checkpoint_check_index < len(checkpoints_list) - 1:
 		checkpoint_check_index += 1
-		var position_check = checkpoints_list[current_level_number][checkpoint_check_index]
+		var position_check = checkpoints_list[checkpoint_check_index]
 		
 		if position_check == position_in:
 			current_checkpoint_number = checkpoint_check_index
@@ -103,19 +102,19 @@ func respawn_player(player) -> void:
 
 func next_checkpoint_teleport(player) -> void:
 	#if invalid setup for current level, then do nothing.
-	if current_level_number < 0 or current_level_number >= len(checkpoints_list):
+	if current_level_number < 0 or len(checkpoints_list) == 0:
 		return
 
 	#next see if at the last checkpoint. If so, do nothing.
-	if current_checkpoint_number == len(checkpoints_list[current_level_number]) - 1:
+	if current_checkpoint_number == len(checkpoints_list) - 1:
 		return
 		
-	player.global_position = checkpoints_list[current_level_number][current_checkpoint_number + 1]
+	player.global_position = checkpoints_list[current_checkpoint_number + 1]
 	current_checkpoint_number += 1
 	
 func prev_checkpoint_teleport(player) -> void:
 	#if invalid setup for current level, then do nothing.
-	if current_level_number < 0 or current_level_number >= len(checkpoints_list):
+	if current_level_number < 0 or len(checkpoints_list) == 0:
 		return
 
 	#next see if at the first checkpoint. If so, do nothing.
@@ -123,7 +122,7 @@ func prev_checkpoint_teleport(player) -> void:
 		return
 		
 	#now teleport the player
-	player.global_position = checkpoints_list[current_level_number][current_checkpoint_number - 1]
+	player.global_position = checkpoints_list[current_checkpoint_number - 1]
 	current_checkpoint_number -= 1
 
 func enable_deaths() -> void:
