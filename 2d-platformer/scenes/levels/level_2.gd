@@ -13,3 +13,4 @@ func _process(delta: float) -> void:
 	for child in get_children():
 		if is_instance_of(child, Plant):
 			child.set_direction(player.position.x - child.position.x)
+			child.set_shoot(abs(player.position.y - child.position.y) < 100)
