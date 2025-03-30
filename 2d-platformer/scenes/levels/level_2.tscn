@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=4 uid="uid://ch70qeudcu3a"]
+[gd_scene load_steps=12 format=4 uid="uid://ch70qeudcu3a"]
 
 [ext_resource type="Script" path="res://scenes/levels/level_2.gd" id="1_gn46l"]
 [ext_resource type="PackedScene" uid="uid://cuxwbdbw6vgtd" path="res://entities/player/player.tscn" id="2_bx6t5"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://b6q08ygap11wn" path="res://art/background/Gray.png" id="6_yyhyt"]
 [ext_resource type="AudioStream" uid="uid://dybkwrn8ieb0v" path="res://sounds/level_theme.mp3" id="7_gy18u"]
 [ext_resource type="PackedScene" uid="uid://c4xufs5sto4u3" path="res://menus/pause_menu.tscn" id="8_hygfu"]
+[ext_resource type="PackedScene" uid="uid://wgdumoploxxj" path="res://entities/enemies/plant/plant.tscn" id="9_ioxrd"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gx65u"]
 texture = ExtResource("3_24mc2")
@@ -362,5 +363,10 @@ volume_db = -20.0
 autoplay = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("8_hygfu")]
+
+[node name="Plant" parent="." instance=ExtResource("9_ioxrd")]
+position = Vector2(795, 351)
+metadata/_edit_group_ = true
