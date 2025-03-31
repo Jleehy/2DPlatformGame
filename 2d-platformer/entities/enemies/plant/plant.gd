@@ -22,6 +22,8 @@ func _on_hit_area_body_entered(body: Node) -> void:
 		body.bounce()
 
 func _on_animated_sprite_2d_animation_looped() -> void:
+	# Fire on animation loops to keep the plants and
+	# bullets visually in sync.
 	if animated_sprite.animation == "attack":
 		shoot_bullet()
 

@@ -20,6 +20,10 @@ func _process(delta: float) -> void:
 	if is_dead:
 		return
 
+	# Bats patrol in a counterclockwise square patters.
+	# To create a bat that moves only horizontally or
+	# vertically set the y or x patrol value to 0,
+	# respectively.
 	if velocity.x != 0:
 		if position.x > start_position.x:
 			position.x = start_position.x
