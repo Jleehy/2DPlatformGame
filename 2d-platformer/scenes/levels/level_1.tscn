@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=4 uid="uid://bh6jat6426m14"]
+[gd_scene load_steps=17 format=4 uid="uid://bh6jat6426m14"]
 
 [ext_resource type="Script" path="res://scenes/levels/level_1.gd" id="1_4fcmp"]
 [ext_resource type="AudioStream" uid="uid://dybkwrn8ieb0v" path="res://sounds/level_theme.mp3" id="2_k0b6t"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://coskoq2jla2rx" path="res://entities/moving_platforms/moving_platform.tscn" id="11_dxfag"]
 [ext_resource type="PackedScene" uid="uid://v117ln176i3e" path="res://entities/enemies/chicken/chicken.tscn" id="12_xpd6c"]
 [ext_resource type="PackedScene" uid="uid://c4xufs5sto4u3" path="res://menus/pause_menu.tscn" id="13_xhitp"]
+[ext_resource type="PackedScene" uid="uid://du15uquucp0tg" path="res://entities/enemies/bat/bat.tscn" id="14_8ue2q"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iir4c"]
 texture = ExtResource("10_nfvxd")
@@ -438,3 +439,9 @@ position = Vector2(7731, -1563)
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("13_xhitp")]
+
+[node name="Bat" parent="." instance=ExtResource("14_8ue2q")]
+position = Vector2(1890, -120)
+motion_mode = 1
+patrol = Vector2(200, 250)
+metadata/_edit_group_ = true
