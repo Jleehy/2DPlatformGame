@@ -326,5 +326,7 @@ func player():
 var double_damage: bool = false  # Flag to check if double damage is active
 
 # Called when double damage is activated or deactivated
-func activate_double_damage(is_active: bool) -> void:
-	double_damage = is_active
+func activate_double_damage(duration: float) -> void:
+	double_damage = true
+	await get_tree().create_timer(duration).timeout
+	double_damage = false
