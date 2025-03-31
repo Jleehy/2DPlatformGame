@@ -3,7 +3,11 @@ extends CharacterBody2D
 # Enemy variables
 @export var speed: int = 100
 @export var gravity: int = 2000
-@export var patrol_distance: int = 100  # How far the chicken patrols before turning around
+@export var patrol_distance: int = 100  # How far the enemy patrols before turning around
+
+# Health variables
+@export var max_health: int = 2  # Number of hits required to defeat the enemy
+var current_health: int
 
 # Animation variables
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -18,19 +22,20 @@ var can_hurt_player: bool = true  # Cooldown to prevent rapid damage to the play
 
 func _ready() -> void:
 	start_position = position
+	current_health = max_health  # Set health to max
 	animated_sprite.play("idle")
 	kill_zone.body_entered.connect(_on_kill_zone_body_entered)
 
 func _physics_process(delta: float) -> void:
 	if is_dead:
-		return  # Stop processing if the chicken is dead
+		return  # Stop processing if the enemy is dead
 
 	apply_gravity(delta)
 	handle_movement()
 	handle_animation()
 	move_and_slide()
 
-	# Check if the player is colliding with the chicken (for hurting the player)
+	# Check if the player is colliding with the enemy (for hurting the player)
 	check_player_collision()
 
 func apply_gravity(delta: float) -> void:
@@ -68,17 +73,32 @@ func check_player_collision() -> void:
 
 func _on_kill_zone_body_entered(body: Node) -> void:
 	if body.is_in_group("player") and not is_dead:
-		kill_chicken()
-		body.bounce()  # Make the player bounce after killing the chicken
+		take_damage(body)  # Pass the player to the take_damage function
+		body.bounce()  # Make the player bounce after hitting the enemy
 
-func kill_chicken() -> void:
-	print("Chicken killed!")
+# Modified take_damage() function
+func take_damage(player: Node) -> void:
+	# If the player has double_damage enabled, the enemy will take instant damage
+	if player.double_damage:
+		current_health = 0  # Set health to 0 to kill the enemy instantly
+		print("Double damage! Enemy defeated instantly!")
+	else:
+		current_health -= 1  # Normal damage
+		print("Enemy hit! Health left:", current_health)
+
+	if current_health <= 0:
+		kill_enemy()
+	else:
+		animated_sprite.play("hurt")  # Play hurt animation if available
+
+func kill_enemy() -> void:
+	print("Enemy defeated!")
 	is_dead = true
 	velocity = Vector2.ZERO  # Stop movement
 	collision_shape.set_deferred("disabled", true)  # Disable collision
 	animated_sprite.play("hit")
 	await get_tree().create_timer(0.5).timeout  # Wait for animation to finish
-	queue_free()  # Remove the chicken from the scene
+	queue_free()  # Remove the enemy from the scene
 
 func hurt_player(player: Node) -> void:
 	if not is_dead:
