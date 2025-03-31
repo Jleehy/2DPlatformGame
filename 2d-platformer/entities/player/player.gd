@@ -313,3 +313,18 @@ func dev_checkpoint_handle() -> void:
 		
 	if InputManager.is_dev_teleport_forwards_pressed():
 		GameManager.next_checkpoint_teleport(self)
+
+func apply_speed_boost(amount: int, duration: float) -> void:
+	speed += amount
+	await get_tree().create_timer(duration).timeout
+	speed -= amount
+
+func player():
+	pass
+
+#---------------
+var double_damage: bool = false  # Flag to check if double damage is active
+
+# Called when double damage is activated or deactivated
+func activate_double_damage(is_active: bool) -> void:
+	double_damage = is_active
