@@ -39,3 +39,6 @@ func is_dev_teleport_backwards_pressed() -> bool:
 		return Input.is_action_just_pressed("dev_previous_checkpoint")
 		
 	return false
+	
+func is_grapple_pressed() -> bool:
+	return Input.is_action_just_pressed("grapple")

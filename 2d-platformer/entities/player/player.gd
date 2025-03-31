@@ -50,6 +50,11 @@ var health: int = 3
 var damage_cooldown_timer: float = 2.0   # starts at 2 seconds so damage is allowed immediately
 const DAMAGE_COOLDOWN: float = 2.0         # 2 seconds cooldown
 
+# Grapple Stuff
+@export var can_grapple: bool = true
+@export var grapple_length: int = 200
+var grapple_cooldown: int = -1
+
 func _ready() -> void:
 	animated_sprite.play()
 	GameManager.save_checkpoint(self.position)
@@ -78,6 +83,7 @@ func _physics_process(delta: float) -> void:
 			apply_gravity(delta)
 		handle_crouching()
 		handle_movement()
+		handle_grapple()
 		handle_jumping()
 		handle_dash()
 		handle_level_bounds()
@@ -132,6 +138,44 @@ func handle_jumping() -> void:
 	if InputManager.is_jump_pressed() and is_on_floor():
 		sfx_jump.play()
 		velocity.y = jump_speed
+		
+func handle_grapple() -> void:
+	if InputManager.is_grapple_pressed() and can_grapple and grapple_cooldown == -1:
+		#can_grapple = false
+		var x_dir
+		
+		if facing_direction == "left":
+			x_dir = grapple_length * -1
+			
+		elif facing_direction == "right":
+			x_dir = grapple_length
+		
+		#check if the destination is inside a wall
+		#1. move to it.
+		#2. See if in wall, save the result
+		#3. move out
+		var old_collision_shape = collision_shape
+		collision_shape.translate(Vector2(x_dir, -1 * grapple_length))
+		
+		var is_in_wall: bool = is_on_wall() or is_on_floor()
+		
+		collision_shape.translate(Vector2(-1 * x_dir, grapple_length))
+		
+		if is_in_wall:
+			velocity.x = x_dir * 3
+			velocity.y = -1 * grapple_length * 3
+			grapple_cooldown = 10
+			
+		else:
+			#just pause in midair as you fail
+			velocity.x = 0
+			velocity.y = -5
+			
+	if grapple_cooldown != -1:
+		grapple_cooldown -= 1
+		velocity.x = grapple_length * [1, -1][int(facing_direction == "left")] * 3
+		velocity.y = -1 * grapple_length * 3
+		
 
 func handle_dash() -> void:
 	if not dash_unlocked:
