@@ -498,7 +498,7 @@ patrol = Vector2(100, 100)
 metadata/_edit_group_ = true
 
 [node name="Bat9" parent="." instance=ExtResource("11_wrpmt")]
-position = Vector2(18874, -407)
+position = Vector2(18802, -445)
 motion_mode = 1
 patrol = Vector2(5, 0)
 metadata/_edit_group_ = true
