@@ -14,6 +14,9 @@ func _on_Area2D_body_entered(body: Node) -> void:
 		
 		GameManager.save_checkpoint(Vector2(global_position.x, global_position.y))
 		
+	if body.has_method("reset_hearts"):
+		body.reset_hearts()
+		
 # Plays the flag animation sequence
 func play_flag_animation() -> void:
 	animated_sprite.animation = "moving"

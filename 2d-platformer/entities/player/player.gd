@@ -16,6 +16,7 @@ extends CharacterBody2D
 @export var friction_value: float = 0.84
 @export var air_control_loss: float = 0.35
 @export var facing_direction: String = "left"
+@export var step_height: float = 0.75
 
 # Crouching variables
 @export var crouch_speed_reduction: float = 0.50
@@ -89,6 +90,7 @@ func _physics_process(delta: float) -> void:
 		handle_level_bounds()
 		update_animation()
 		move_and_slide()
+		climb_ledges()
 		handle_self_die()
 		dev_checkpoint_handle()
 	else:
@@ -374,3 +376,14 @@ func activate_double_damage(duration: float) -> void:
 	double_damage = true
 	await get_tree().create_timer(duration).timeout
 	double_damage = false
+
+func climb_ledges() -> void:
+	#if we notice that now the player is not moving, yet not against a wall, 
+	#yet they are pushing in a direction, then we know they hit a wall.
+	#move them up then move the player once more
+	if (velocity.x == 0 and is_on_wall() and is_on_floor()):
+		#for right
+		if (InputManager.is_move_left_pressed() or InputManager.is_move_right_pressed()):
+			velocity.y += jump_speed * step_height
+			apply_horizontal_movement(1.0)
+			
