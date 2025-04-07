@@ -22,8 +22,22 @@ var level2_unlocked: bool = false
 #some "cutscene" (very minor ones) and dialogue box related stuff
 @export var enabled_deaths: bool = true
 
+#some variables used by enemies. They access this to have a 
+#central counter for some stuffs.
+@export var enemy_timer_max: int = 1000
+@export var enemy_timer_current: int = 0
+
+@export var dead_position: Vector2 = Vector2(-1000, -1000)
+
 func _ready() -> void:
 	instance = self  # Set the singleton instance
+	enemy_timer_current = 0
+
+func _physics_process(delta: float) -> void:
+	#just a loop to handle the counter
+	enemy_timer_current += 1
+	if enemy_timer_current > enemy_timer_max:
+		enemy_timer_current = 0
 
 # Initialize level bounds and other gameplay-specific data
 func initialize_level(level_id: String) -> void:
@@ -31,7 +45,7 @@ func initialize_level(level_id: String) -> void:
 	
 	# Calculate level bounds
 	current_level = get_node("/root/" + level_id)
-	var tilemap_layer = current_level.get_node("TileMapLayer")
+	var tilemap_layer = current_level.get_node("TileMapLayjer")
 	
 	if tilemap_layer:
 		level_bounds = tilemap_layer.get_used_rect()
@@ -93,6 +107,17 @@ func kill_player(player) -> void:
 	if (enabled_deaths):
 		player.death_timer = 30
 		player.velocity = Vector2.ZERO
+		
+	#go through all bodies and call a reset on them if applicable.
+	for node in get_tree().current_scene.get_children():
+		if node.has_method("heal_and_respawn"):
+			node.heal_and_respawn()
+			
+		if node.has_method("reset_position"):
+			node.reset_position()
+			
+		if node.has_method("despawn"):
+			node.despawn()
 
 # Respawn the player
 func respawn_player(player) -> void:

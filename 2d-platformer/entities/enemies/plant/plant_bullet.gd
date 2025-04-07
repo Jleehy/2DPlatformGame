@@ -17,3 +17,8 @@ func _on_body_entered(body: Node2D) -> void:
 	if is_instance_of(body, Player):
 		body.take_damage()
 		queue_free()
+		
+func despawn() -> void:
+	#the function called when the player dies, to despawn all things
+	#like the bullets
+	queue_free()

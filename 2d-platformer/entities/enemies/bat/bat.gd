@@ -3,16 +3,22 @@ extends CharacterBody2D
 @export var speed: int = 100
 @export var patrol: Vector2
 
+@export var max_health: int = 2  # Number of hits required to defeat the enemy
+var current_health: int
+var redval: float
+
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var hit_area: Area2D = $HitArea
 
 var is_dead: bool = false
-var start_position: Vector2
+var starting_position: Vector2
 
 func _ready() -> void:
-	start_position = position
+	starting_position = position
 	velocity = Vector2(-speed, 0)
+	current_health = max_health
+	redval = 0
 	animated_sprite.play("flying")
 	hit_area.body_entered.connect(_on_hit_area_body_entered)
 
@@ -25,23 +31,23 @@ func _process(delta: float) -> void:
 	# vertically set the y or x patrol value to 0,
 	# respectively.
 	if velocity.x != 0:
-		if position.x > start_position.x:
-			position.x = start_position.x
+		if position.x > starting_position.x:
+			position.x = starting_position.x
 			velocity.x = 0
 			velocity.y = -speed
 			animated_sprite.flip_h = false
-		elif position.x <= start_position.x - patrol.x:
-			position.x = start_position.x - patrol.x
+		elif position.x <= starting_position.x - patrol.x:
+			position.x = starting_position.x - patrol.x
 			velocity.x = 0
 			velocity.y = speed
 	elif velocity.y != 0:
-		if position.y > start_position.y + patrol.y:
-			position.y = start_position.y + patrol.y
+		if position.y > starting_position.y + patrol.y:
+			position.y = starting_position.y + patrol.y
 			velocity.x = speed
 			velocity.y = 0
 			animated_sprite.flip_h = true
-		elif position.y <= start_position.y:
-			position.y = start_position.y
+		elif position.y <= starting_position.y:
+			position.y = starting_position.y
 			velocity.x = -speed
 			velocity.y = 0
 
@@ -51,11 +57,59 @@ func _process(delta: float) -> void:
 		var collider = get_slide_collision(i)
 		if collider.get_collider().is_in_group("player"):
 			collider.get_collider().take_damage()
+			
+	flash_red_show_hp()
+	
+func flash_red_show_hp() -> void:
+	#this is a function to make the enemy flash with a frequency
+	#proportional to their ratio of max HP to their missing HP
+	#if they are missing any HP. This is to make enemies communicvate this information
+	#to the player.
+	var missing_hp = max_health - current_health
+	var missable_hp = max_health - 1
+	
+	var cur_timer = GameManager.enemy_timer_current
+	
+	if missing_hp == 0 or current_health == 0:
+		redval = 0.0
+	
+	elif (cur_timer % int((100 * ((1.0 * current_health) / (1.0 * max_health)))) <= 15) and (redval <= 0.001):
+		#see if the enemy should be currently flashing
+		redval = 0.1
+	
+	elif (cur_timer % int((100 * ((1.0 * current_health) / (1.0 * max_health)))) <= 15):
+		redval *= 1.5
+	
+	else:
+		redval = 0.0
+		
+	var temp_num = 1 - redval
+	
+	if temp_num >= 1:
+		temp_num = 1
+	elif temp_num <= 0:
+		temp_num = 0
+		
+	modulate = Color(1, temp_num, temp_num, 1)
 
 func _on_hit_area_body_entered(body: Node):
 	if body.is_in_group("player") and not is_dead:
-		kill_bat()
+		take_damage(body)
 		body.bounce()
+
+func take_damage(player: Node) -> void:
+	# If the player has double_damage enabled, the enemy will take instant damage
+	if player.double_damage:
+		current_health = 0  # Set health to 0 to kill the enemy instantly
+		print("Double damage! Enemy defeated instantly!")
+	else:
+		current_health -= 1  # Normal damage
+		print("Enemy hit! Health left:", current_health)
+
+	if current_health <= 0:
+		kill_bat()
+	else:
+		animated_sprite.play("hurt")  # Play hurt animation if available
 
 func kill_bat() -> void:
 	print("Bat killed!")
@@ -63,4 +117,15 @@ func kill_bat() -> void:
 	collision_shape.set_deferred("disabled", true)
 	animated_sprite.play("hit")
 	await get_tree().create_timer(0.5).timeout
-	queue_free()
+	#OK!
+	#We cannot have the bat be removed, as it must be able to be resummoned later
+	#so teleport it to the dead realm, far away
+	#it will come back if revived.
+	position = GameManager.dead_position
+
+func heal_and_respawn() -> void:
+	#does what it says. caLLed by gamemanager on player death.
+	current_health = max_health
+	position = starting_position
+	is_dead = false
+	collision_shape.set_deferred("disabled", false)

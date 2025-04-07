@@ -9,7 +9,6 @@ func _on_Area2D_body_entered(body: Node) -> void:
 		GameManager.initialize_level("level_" + str(GameManager.current_level_number + 1))
 		GameManager.current_checkpoint_number = 0
 		GameManager.checkpoints_list = []
-		body.can_grapple
 	
 func _ready() -> void:
 	connect("body_entered", Callable(self, "_on_Area2D_body_entered"))

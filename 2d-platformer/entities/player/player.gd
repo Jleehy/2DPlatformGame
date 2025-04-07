@@ -359,6 +359,22 @@ func dev_checkpoint_handle() -> void:
 		
 	if InputManager.is_dev_teleport_forwards_pressed():
 		GameManager.next_checkpoint_teleport(self)
+		
+	if InputManager.is_dev_next_level_pressed():
+		GameManager.player_progress = Vector2.ZERO
+		GameManager.current_level_number += 1
+		GameManager.respawn_player(self)
+		GameManager.initialize_level("level_" + str(GameManager.current_level_number + 1))
+		GameManager.current_checkpoint_number = 0
+		GameManager.checkpoints_list = []
+		
+	if InputManager.is_dev_prev_level_pressed():
+		GameManager.player_progress = Vector2.ZERO
+		GameManager.current_level_number += 1
+		GameManager.respawn_player(self)
+		GameManager.initialize_level("level_" + str(GameManager.current_level_number - 1))
+		GameManager.current_checkpoint_number = 0
+		GameManager.checkpoints_list = []
 
 func apply_speed_boost(amount: int, duration: float) -> void:
 	speed += amount

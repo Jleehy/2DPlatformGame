@@ -6,8 +6,9 @@ extends CharacterBody2D
 @export var patrol_distance: int = 100  # How far the enemy patrols before turning around
 
 # Health variables
-@export var max_health: int = 2  # Number of hits required to defeat the enemy
+@export var max_health: int = 3  # Number of hits required to defeat the enemy
 var current_health: int
+var redval: float
 
 # Animation variables
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -17,12 +18,13 @@ var current_health: int
 # State variables
 var is_dead: bool = false
 var direction: int = -1  # -1 for left, 1 for right
-var start_position: Vector2
+var starting_position: Vector2
 var can_hurt_player: bool = true  # Cooldown to prevent rapid damage to the player
 
 func _ready() -> void:
-	start_position = position
+	starting_position = position
 	current_health = max_health  # Set health to max
+	redval = 0
 	animated_sprite.play("idle")
 	kill_zone.body_entered.connect(_on_kill_zone_body_entered)
 
@@ -37,6 +39,40 @@ func _physics_process(delta: float) -> void:
 
 	# Check if the player is colliding with the enemy (for hurting the player)
 	check_player_collision()
+	
+	flash_red_show_hp()
+	
+func flash_red_show_hp() -> void:
+	#this is a function to make the enemy flash with a frequency
+	#proportional to their ratio of max HP to their missing HP
+	#if they are missing any HP. This is to make enemies communicvate this information
+	#to the player.
+	var missing_hp = max_health - current_health
+	var missable_hp = max_health - 1
+	
+	var cur_timer = GameManager.enemy_timer_current
+	
+	if missing_hp == 0 or current_health == 0:
+		redval = 0.0
+	
+	elif (cur_timer % int((100 * ((1.0 * current_health) / (1.0 * max_health)))) <= 15) and (redval <= 0.001):
+		#see if the enemy should be currently flashing
+		redval = 0.1
+	
+	elif (cur_timer % int((100 * ((1.0 * current_health) / (1.0 * max_health)))) <= 15):
+		redval *= 1.5
+	
+	else:
+		redval = 0.0
+		
+	var temp_num = 1 - redval
+	
+	if temp_num >= 1:
+		temp_num = 1
+	elif temp_num <= 0:
+		temp_num = 0
+		
+	modulate = Color(1, temp_num, temp_num, 1)
 
 func apply_gravity(delta: float) -> void:
 	if not is_on_floor():
@@ -48,9 +84,9 @@ func handle_movement() -> void:
 	if is_on_floor() and not is_dead:
 		# Simple patrol logic
 		if patrol_distance > 0:
-			if abs(position.x - start_position.x) >= patrol_distance:
+			if abs(position.x - starting_position.x) >= patrol_distance:
 				direction *= -1  # Reverse direction
-				start_position = position  # Reset start position
+				starting_position = position  # Reset start position
 
 			velocity.x = direction * speed
 	else:
@@ -87,18 +123,22 @@ func take_damage(player: Node) -> void:
 		print("Enemy hit! Health left:", current_health)
 
 	if current_health <= 0:
-		kill_enemy()
+		kill_chicken()
 	else:
 		animated_sprite.play("hurt")  # Play hurt animation if available
 
-func kill_enemy() -> void:
+func kill_chicken() -> void:
 	print("Enemy defeated!")
 	is_dead = true
 	velocity = Vector2.ZERO  # Stop movement
 	collision_shape.set_deferred("disabled", true)  # Disable collision
 	animated_sprite.play("hit")
 	await get_tree().create_timer(0.5).timeout  # Wait for animation to finish
-	queue_free()  # Remove the enemy from the scene
+	#OK!
+	#We cannot have the thing be removed, as it must be able to be resummoned later
+	#so teleport it to the dead realm, far away
+	#it will come back if revived.
+	position = GameManager.dead_position
 
 func hurt_player(player: Node) -> void:
 	if not is_dead:
@@ -108,3 +148,10 @@ func hurt_player(player: Node) -> void:
 		can_hurt_player = false
 		await get_tree().create_timer(0.5).timeout  # Cooldown before hurting again
 		can_hurt_player = true
+
+func heal_and_respawn() -> void:
+	#does what it says. caLLed by gamemanager on player death.
+	current_health = max_health
+	position = starting_position
+	is_dead = false
+	collision_shape.set_deferred("disabled", false)
