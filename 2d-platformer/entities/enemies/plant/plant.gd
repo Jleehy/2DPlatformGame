@@ -68,8 +68,9 @@ func _on_hit_area_body_entered(body: Node) -> void:
 func take_damage(player: Node) -> void:
 	# If the player has double_damage enabled, the enemy will take instant damage
 	if player.double_damage:
-		current_health = 0  # Set health to 0 to kill the enemy instantly
-		print("Double damage! Enemy defeated instantly!")
+		print("Double damage!")
+		current_health -= 2
+		print("Enemy hit! Health left:", current_health)
 	else:
 		current_health -= 1  # Normal damage
 		print("Enemy hit! Health left:", current_health)

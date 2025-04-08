@@ -116,8 +116,9 @@ func _on_kill_zone_body_entered(body: Node) -> void:
 func take_damage(player: Node) -> void:
 	# If the player has double_damage enabled, the enemy will take instant damage
 	if player.double_damage:
-		current_health = 0  # Set health to 0 to kill the enemy instantly
-		print("Double damage! Enemy defeated instantly!")
+		print("Double damage!")
+		current_health -= 2
+		print("Enemy hit! Health left:", current_health)
 	else:
 		current_health -= 1  # Normal damage
 		print("Enemy hit! Health left:", current_health)
@@ -142,7 +143,7 @@ func kill_chicken() -> void:
 
 func hurt_player(player: Node) -> void:
 	if not is_dead:
-		player.take_damage()  # Call a method on the player to handle damage
+		player.take_damage(1)  # Call a method on the player to handle damage
 		
 		# Cooldown to prevent rapid damage
 		can_hurt_player = false

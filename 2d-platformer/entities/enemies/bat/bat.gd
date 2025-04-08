@@ -56,7 +56,7 @@ func _process(delta: float) -> void:
 	for i in get_slide_collision_count():
 		var collider = get_slide_collision(i)
 		if collider.get_collider().is_in_group("player"):
-			collider.get_collider().take_damage()
+			collider.get_collider().take_damage(1)
 			
 	flash_red_show_hp()
 	
@@ -100,8 +100,9 @@ func _on_hit_area_body_entered(body: Node):
 func take_damage(player: Node) -> void:
 	# If the player has double_damage enabled, the enemy will take instant damage
 	if player.double_damage:
-		current_health = 0  # Set health to 0 to kill the enemy instantly
-		print("Double damage! Enemy defeated instantly!")
+		print("Double damage!")
+		current_health -= 2
+		print("Enemy hit! Health left:", current_health)
 	else:
 		current_health -= 1  # Normal damage
 		print("Enemy hit! Health left:", current_health)

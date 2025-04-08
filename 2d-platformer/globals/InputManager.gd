@@ -3,7 +3,7 @@ extends Node
 #Some variables that are used to configure optional controls.
 @export var self_death_enabled: bool = true
 @export var dev_teleport_enabled: bool = true #use y and u to go back and forward
-@export var dev_level_skip_enabled: bool = false #WIP DO NOT USE!! #use h and j to use
+@export var dev_level_skip_enabled: bool = true #i to use
 
 func is_jump_pressed() -> bool:
 	return Input.is_action_just_pressed("jump")
@@ -47,11 +47,5 @@ func is_grapple_pressed() -> bool:
 func is_dev_next_level_pressed() -> bool:
 	if dev_level_skip_enabled:
 		return Input.is_action_just_pressed("dev_next_level")
-		
-	return false
-	
-func is_dev_prev_level_pressed() -> bool:
-	if dev_level_skip_enabled:
-		return Input.is_action_just_pressed("dev_previous_level")
 		
 	return false

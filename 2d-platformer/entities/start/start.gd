@@ -36,6 +36,7 @@ func _process(delta: float) -> void:
 	if not checkpoint_saved:
 		GameManager.checkpoints_list.append(Vector2(self.global_position.x, self.global_position.y))
 		checkpoint_saved = true
+		GameManager.player_progress = global_position
 	
 func ret_pos() -> Vector2:
 	return self.global_position

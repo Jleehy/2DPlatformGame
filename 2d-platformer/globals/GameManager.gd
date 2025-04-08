@@ -6,7 +6,7 @@ var player_progress: Vector2
 var level_bounds: Rect2
 var death_height_offset: float = 100  # How far below the level bounds the player can fall before dying
 var gravity: int = 3500
-var terminal_velocity: int = 12000
+var terminal_velocity: int = 2000
 
 # Singleton setup
 static var instance: GameManager
@@ -45,7 +45,7 @@ func initialize_level(level_id: String) -> void:
 	
 	# Calculate level bounds
 	current_level = get_node("/root/" + level_id)
-	var tilemap_layer = current_level.get_node("TileMapLayjer")
+	var tilemap_layer = current_level.get_node("TileMapLayer")
 	
 	if tilemap_layer:
 		level_bounds = tilemap_layer.get_used_rect()

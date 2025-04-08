@@ -2,7 +2,7 @@ class_name Player
 extends CharacterBody2D
 
 # Player physics variables
-@export var speed: int = 325
+@export var speed: int = 400
 @export var jump_speed: int = -1050
 
 # Sound effects
@@ -11,10 +11,10 @@ extends CharacterBody2D
 @onready var sfx_death  = $sfx_death
 
 # Advanced physics variables
-@export var minimum_speed_percentage: float = 0.30
-@export var player_input_acceleration_percent: float = 0.25
-@export var friction_value: float = 0.84
-@export var air_control_loss: float = 0.35
+@export var minimum_speed_percentage: float = 0.25
+@export var player_input_acceleration_percent: float = 0.5
+@export var friction_value: float = 0.6
+@export var air_control_loss: float = 0.2
 @export var facing_direction: String = "left"
 @export var step_height: float = 0.75
 
@@ -101,6 +101,10 @@ func apply_gravity(delta: float) -> void:
 	var gravity = GameManager.get_gravity()
 	if not is_on_floor():
 		velocity.y += gravity * delta
+		
+		if velocity.y >= GameManager.get_terminal_velocity():
+			velocity.y = GameManager.get_terminal_velocity()
+		
 	elif velocity.y > 0:
 		velocity.y = 0
 
@@ -307,7 +311,7 @@ func handle_crouching() -> void:
 func bounce() -> void:
 	velocity.y = -800 
 
-func take_damage() -> void:
+func take_damage(amount_damage: int) -> void:
 	# Do not take damage if we're still in the invulnerability period.
 	if invuln_timer > 0:
 		return
@@ -318,7 +322,11 @@ func take_damage() -> void:
 	damage_cooldown_timer = 0.0
 	
 	# Decrement health and update the heart display.
-	health -= 1
+	health -= amount_damage
+	
+	if health < 0:
+		health = 0
+	
 	update_heart_display()
 	
 	# If no hearts remain, kill the player immediately.
@@ -361,20 +369,10 @@ func dev_checkpoint_handle() -> void:
 		GameManager.next_checkpoint_teleport(self)
 		
 	if InputManager.is_dev_next_level_pressed():
-		GameManager.player_progress = Vector2.ZERO
-		GameManager.current_level_number += 1
-		GameManager.respawn_player(self)
-		GameManager.initialize_level("level_" + str(GameManager.current_level_number + 1))
-		GameManager.current_checkpoint_number = 0
-		GameManager.checkpoints_list = []
-		
-	if InputManager.is_dev_prev_level_pressed():
-		GameManager.player_progress = Vector2.ZERO
-		GameManager.current_level_number += 1
-		GameManager.respawn_player(self)
-		GameManager.initialize_level("level_" + str(GameManager.current_level_number - 1))
-		GameManager.current_checkpoint_number = 0
-		GameManager.checkpoints_list = []
+		for node in get_tree().current_scene.get_children():
+			if node.name == "EndPoint":
+				position = node.position
+				break
 
 func apply_speed_boost(amount: int, duration: float) -> void:
 	speed += amount
@@ -397,9 +395,9 @@ func climb_ledges() -> void:
 	#if we notice that now the player is not moving, yet not against a wall, 
 	#yet they are pushing in a direction, then we know they hit a wall.
 	#move them up then move the player once more
-	if (velocity.x == 0 and is_on_wall() and is_on_floor()):
+	if (velocity.x == 0 and is_on_wall() and is_on_floor() and damage_cooldown_timer >= DAMAGE_COOLDOWN):
 		#for right
-		if (InputManager.is_move_left_pressed() or InputManager.is_move_right_pressed()):
+		if ((InputManager.is_move_left_pressed() or InputManager.is_move_right_pressed())) and (not InputManager.is_jump_pressed()):
 			velocity.y += jump_speed * step_height
 			apply_horizontal_movement(1.0)
 			

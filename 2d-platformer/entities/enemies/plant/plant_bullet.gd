@@ -15,7 +15,7 @@ func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
 
 func _on_body_entered(body: Node2D) -> void:
 	if is_instance_of(body, Player):
-		body.take_damage()
+		body.take_damage(1)
 		queue_free()
 		
 func despawn() -> void:
