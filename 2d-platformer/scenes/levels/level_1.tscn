@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=4 uid="uid://bh6jat6426m14"]
+[gd_scene load_steps=20 format=4 uid="uid://bh6jat6426m14"]
 
 [ext_resource type="Script" path="res://scenes/levels/level_1.gd" id="1_4fcmp"]
 [ext_resource type="AudioStream" uid="uid://dybkwrn8ieb0v" path="res://sounds/level_theme.mp3" id="2_k0b6t"]
@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://du15uquucp0tg" path="res://entities/enemies/bat/bat.tscn" id="14_8ue2q"]
 [ext_resource type="PackedScene" uid="uid://d4hf3h0bk5t6a" path="res://entities/pickups/speed_coin.tscn" id="15_v5ftn"]
 [ext_resource type="PackedScene" uid="uid://bc16rec55cn1a" path="res://entities/pickups/damage_coin.tscn" id="16_lrg46"]
+[ext_resource type="PackedScene" uid="uid://13fnbqyoirum" path="res://entities/sign/sign.tscn" id="17_im8l8"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iir4c"]
 texture = ExtResource("10_nfvxd")
@@ -446,3 +447,12 @@ position = Vector2(5064, 900)
 
 [node name="damage_coin" parent="." instance=ExtResource("16_lrg46")]
 position = Vector2(7255, -1530)
+
+[node name="Sign" parent="." instance=ExtResource("17_im8l8")]
+position = Vector2(1491, 485)
+
+[node name="Sign" parent="Sign" instance=ExtResource("17_im8l8")]
+position = Vector2(4746, 499)
+
+[node name="Sign2" parent="." instance=ExtResource("17_im8l8")]
+position = Vector2(3852, -632)

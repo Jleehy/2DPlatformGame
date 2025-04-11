@@ -4,10 +4,13 @@ extends Area2D
 
 @onready var sprite: Sprite2D = $Sprite  # Assuming you have a Sprite2D node for the pickup
 
+var start_position
+
 # Signal to notify when the pickup is collected
 signal double_damage_activated
 
 func _ready() -> void:
+	start_position = global_position
 	connect("body_entered", Callable(self, "_on_body_entered"))
 
 # Called when another body enters the area
@@ -18,4 +21,9 @@ func _on_body_entered(body: Node) -> void:
 		GameManager.display_text = "Double Damage Activated!"
 		GameManager.display_text_timer = 100
 		
-		queue_free()  # Remove the pickup from the scene after being collected
+		#allow respawns, so these can be used in puzzles
+		position = GameManager.dead_position
+
+func reset_position() -> void:
+	#resets the player's position upon the player's death.
+	position = start_position

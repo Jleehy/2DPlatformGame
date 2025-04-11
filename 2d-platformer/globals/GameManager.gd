@@ -30,9 +30,18 @@ var level2_unlocked: bool = false
 @export var dead_position: Vector2 = Vector2(-1000, -1000)
 
 #variables related to the displayed text
-@export var display_text_timer: int = 5000
-@export var display_text = "Test Text 1!"
-@export var MIN_BOTTOM_SCREEN_TEXT_GAP: int = 10000
+@export var display_text_timer: int = 500
+@export var display_text = ""
+
+#a list that contains start-of-level messages
+@export var start_level_messages: Array = ["Level 1 Start Text.", "Level 2 Start Text.", "Level 3 Start Text."]
+#a list of lists that handle specific sign messages within levels
+@export var sign_messages_list: Array = [
+	["A sign is making this!", "And one is making this!", "They are all the same object \nbut a list can make them say\n unique stuff."],
+	[],
+	[]
+]
+@export var sign_manager_counter: int = 0
 
 func _ready() -> void:
 	instance = self  # Set the singleton instance
@@ -55,6 +64,9 @@ func initialize_level(level_id: String) -> void:
 	current_level = get_node("/root/" + level_id)
 	var tilemap_layer = current_level.get_node("TileMapLayer")
 	
+	#reset sign counter
+	sign_manager_counter = 0
+	
 	if tilemap_layer:
 		level_bounds = tilemap_layer.get_used_rect()
 		var cell_size = 16
@@ -67,6 +79,10 @@ func initialize_level(level_id: String) -> void:
 		var camera_manager = get_node("/root/CameraManager")
 		if camera_manager:
 			camera_manager.set_level_bounds(level_bounds)
+
+	#display start text
+	display_text_timer = 225
+	display_text = start_level_messages[current_level_number]
 
 	# Play music
 	#AudioManager.play_sound(main_node.get_node("Music"))
@@ -172,6 +188,7 @@ func handle_text_display() -> void:
 		
 	if not current_level:
 		#menu no text
+		CameraManager.display_display_text(false, display_text)
 		return
 		
 	if display_text_timer <= 0:
