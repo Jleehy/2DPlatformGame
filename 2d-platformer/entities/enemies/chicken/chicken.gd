@@ -134,6 +134,11 @@ func kill_chicken() -> void:
 	velocity = Vector2.ZERO  # Stop movement
 	collision_shape.set_deferred("disabled", true)  # Disable collision
 	animated_sprite.play("hit")
+	
+	#message
+	GameManager.display_text = "Defeated Chicken!"
+	GameManager.display_text_timer = 100
+	
 	await get_tree().create_timer(0.5).timeout  # Wait for animation to finish
 	#OK!
 	#We cannot have the thing be removed, as it must be able to be resummoned later

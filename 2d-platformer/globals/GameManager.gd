@@ -29,6 +29,11 @@ var level2_unlocked: bool = false
 
 @export var dead_position: Vector2 = Vector2(-1000, -1000)
 
+#variables related to the displayed text
+@export var display_text_timer: int = 5000
+@export var display_text = "Test Text 1!"
+@export var MIN_BOTTOM_SCREEN_TEXT_GAP: int = 10000
+
 func _ready() -> void:
 	instance = self  # Set the singleton instance
 	enemy_timer_current = 0
@@ -38,6 +43,9 @@ func _physics_process(delta: float) -> void:
 	enemy_timer_current += 1
 	if enemy_timer_current > enemy_timer_max:
 		enemy_timer_current = 0
+		
+	#display any text
+	handle_text_display()
 
 # Initialize level bounds and other gameplay-specific data
 func initialize_level(level_id: String) -> void:
@@ -108,16 +116,18 @@ func kill_player(player) -> void:
 		player.death_timer = 30
 		player.velocity = Vector2.ZERO
 		
-	#go through all bodies and call a reset on them if applicable.
-	for node in get_tree().current_scene.get_children():
-		if node.has_method("heal_and_respawn"):
-			node.heal_and_respawn()
+		display_text_timer = 0
+		
+		#go through all bodies and call a reset on them if applicable.
+		for node in get_tree().current_scene.get_children():
+			if node.has_method("heal_and_respawn"):
+				node.heal_and_respawn()
 			
-		if node.has_method("reset_position"):
-			node.reset_position()
+			if node.has_method("reset_position"):
+				node.reset_position()
 			
-		if node.has_method("despawn"):
-			node.despawn()
+			if node.has_method("despawn"):
+				node.despawn()
 
 # Respawn the player
 func respawn_player(player) -> void:
@@ -155,3 +165,21 @@ func enable_deaths() -> void:
 	
 func disable_deaths() -> void:
 	enabled_deaths = false
+	
+func handle_text_display() -> void:
+	#handle the text display
+	#first update variables
+		
+	if not current_level:
+		#menu no text
+		return
+		
+	if display_text_timer <= 0:
+		#a check to make a flare of the text work
+		CameraManager.display_display_text(false, display_text)
+		display_text_timer = 0
+			
+	else:
+		CameraManager.display_display_text(true, display_text)
+		display_text_timer -= 1
+	

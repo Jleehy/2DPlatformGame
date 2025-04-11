@@ -117,6 +117,11 @@ func kill_bat() -> void:
 	is_dead = true
 	collision_shape.set_deferred("disabled", true)
 	animated_sprite.play("hit")
+	
+	#message
+	GameManager.display_text = "Defeated Bat!"
+	GameManager.display_text_timer = 100
+	
 	await get_tree().create_timer(0.5).timeout
 	#OK!
 	#We cannot have the bat be removed, as it must be able to be resummoned later

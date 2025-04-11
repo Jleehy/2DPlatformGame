@@ -113,6 +113,11 @@ func kill_plant() -> void:
 	is_dead = true
 	collision_shape.set_deferred("disabled", true)
 	animated_sprite.play("hit")
+	
+	#message
+	GameManager.display_text = "Defeated Plant!"
+	GameManager.display_text_timer = 100
+	
 	await get_tree().create_timer(0.5).timeout
 	#OK!
 	#We cannot have the thing be removed, as it must be able to be resummoned later

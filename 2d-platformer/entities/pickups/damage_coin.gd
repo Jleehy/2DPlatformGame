@@ -14,4 +14,8 @@ func _ready() -> void:
 func _on_body_entered(body: Node) -> void:
 	if body is CharacterBody2D and body.has_method("activate_double_damage"):
 		body.activate_double_damage(duration)
+		#message
+		GameManager.display_text = "Double Damage Activated!"
+		GameManager.display_text_timer = 100
+		
 		queue_free()  # Remove the pickup from the scene after being collected
