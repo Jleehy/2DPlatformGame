@@ -8,6 +8,9 @@ func _ready() -> void:
 	GameManager.initialize_level("level_2")
 	player.dash_unlocked = true
 	GameManager.level2_unlocked = true
+	for child in get_children():
+		if is_instance_of(child, Skull):
+			child.attach_player(player)
 
 func _process(delta: float) -> void:
 	for child in get_children():

@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=4 uid="uid://ch70qeudcu3a"]
+[gd_scene load_steps=18 format=4 uid="uid://ch70qeudcu3a"]
 
 [ext_resource type="Script" path="res://scenes/levels/level_2.gd" id="1_gn46l"]
 [ext_resource type="PackedScene" uid="uid://cuxwbdbw6vgtd" path="res://entities/player/player.tscn" id="2_bx6t5"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://d4hf3h0bk5t6a" path="res://entities/pickups/speed_coin.tscn" id="12_6v26u"]
 [ext_resource type="PackedScene" uid="uid://bc16rec55cn1a" path="res://entities/pickups/damage_coin.tscn" id="13_dskp1"]
 [ext_resource type="PackedScene" uid="uid://coskoq2jla2rx" path="res://entities/moving_platforms/moving_platform.tscn" id="14_amqj5"]
+[ext_resource type="PackedScene" uid="uid://dh0jx8rjpfgq3" path="res://entities/enemies/skull/skull.tscn" id="15_ihoyq"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gx65u"]
 texture = ExtResource("3_24mc2")
@@ -550,3 +551,6 @@ position = Vector2(1793, -422)
 
 [node name="MovingPlatformUpDown3" parent="." instance=ExtResource("14_amqj5")]
 position = Vector2(1768, 125)
+
+[node name="Skull" parent="." instance=ExtResource("15_ihoyq")]
+position = Vector2(5566, 1229)
