@@ -451,8 +451,8 @@ position = Vector2(7255, -1530)
 [node name="Sign" parent="." instance=ExtResource("17_im8l8")]
 position = Vector2(1491, 485)
 
-[node name="Sign" parent="Sign" instance=ExtResource("17_im8l8")]
-position = Vector2(4746, 499)
-
 [node name="Sign2" parent="." instance=ExtResource("17_im8l8")]
 position = Vector2(3852, -632)
+
+[node name="Sign3" parent="." instance=ExtResource("17_im8l8")]
+position = Vector2(6237, 984)

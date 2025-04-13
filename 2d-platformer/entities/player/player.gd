@@ -52,7 +52,7 @@ var damage_cooldown_timer: float = 2.0   # starts at 2 seconds so damage is allo
 const DAMAGE_COOLDOWN: float = 2.0         # 2 seconds cooldown
 
 # Grapple Stuff
-@export var can_grapple: bool = true
+@export var can_grapple: bool = false
 @export var grapple_length: int = 200
 var grapple_cooldown: int = -1
 
@@ -146,6 +146,9 @@ func handle_jumping() -> void:
 		velocity.y = jump_speed
 		
 func handle_grapple() -> void:
+	if not can_grapple:
+		return
+	
 	if InputManager.is_grapple_pressed() and can_grapple and grapple_cooldown == -1:
 		#can_grapple = false
 		var x_dir
