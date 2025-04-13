@@ -236,7 +236,6 @@ scale = Vector2(2, 2)
 motion_mode = 1
 floor_max_angle = 0.0
 script = ExtResource("1_j4myt")
-vision_radius = 300
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_f50bi")

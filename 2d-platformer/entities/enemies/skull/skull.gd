@@ -1,13 +1,18 @@
 class_name Skull
 extends CharacterBody2D
 
+var bullet_scene: Resource = preload("res://entities/enemies/plant/plant_bullet.tscn")
+
 @export var max_health:int = 5
 @export var speed:int = 150
-@export var vision_radius:int = 150
+@export var shot_speed:int = 100
+@export var chase_radius:int = 150
+@export var shot_radius:int = 300
 
 var player_reference:CharacterBody2D
 var current_health:int
 var start_position:Vector2
+var shoot:bool = false
 var recenter:bool = false
 var is_dead:bool = false
 
@@ -21,12 +26,16 @@ func _ready() -> void:
 func _process(delta:float) -> void:
 	var distance_to_player = position.distance_to(player_reference.position)
 	var distance_to_center = position.distance_to(start_position)
-	if distance_to_player < vision_radius and distance_to_center < vision_radius and !recenter:
+	if distance_to_player < chase_radius and distance_to_center < chase_radius and !recenter:
+		shoot = false
 		velocity.x = speed * (player_reference.position.x - position.x) / distance_to_player
 		velocity.y = speed * (player_reference.position.y - position.y) / distance_to_player
 		if $AnimatedSprite2D.animation == "idle_ranged":
 			$AnimatedSprite2D.play("idle_melee")
+	elif distance_to_player < shot_radius and !recenter:
+		shoot = true
 	elif distance_to_center > speed / 20:
+		shoot = false
 		recenter = true
 		velocity.x = speed * (start_position.x - position.x) / distance_to_center
 		velocity.y = speed * (start_position.y - position.y) / distance_to_center
@@ -65,6 +74,12 @@ func _on_hit_area_body_entered(body: Node2D) -> void:
 
 
 func _on_animated_sprite_2d_animation_looped() -> void:
+	if $AnimatedSprite2D.animation == "idle_ranged" and shoot and !recenter:
+		var bullet:Variant = bullet_scene.instantiate()
+		var x_dir:float = (player_reference.position.x - position.x) / position.distance_to(player_reference.position)
+		var y_dir:float = (player_reference.position.y - position.y) / position.distance_to(player_reference.position)
+		bullet.set_direction(Vector2(x_dir, y_dir))
+		add_child(bullet)
 	if $AnimatedSprite2D.animation == "hit_melee" or $AnimatedSprite2D.animation == "hit_ranged":
 		$AnimatedSprite2D.animation = "idle_ranged"
 

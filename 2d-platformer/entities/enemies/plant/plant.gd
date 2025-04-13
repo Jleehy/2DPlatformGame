@@ -105,7 +105,7 @@ func set_shoot(shoot: bool) -> void:
 
 func shoot_bullet() -> void:
 	var bullet = bullet_scene.instantiate()
-	bullet.set_direction(direction)
+	bullet.set_direction(Vector2(direction, 0))
 	add_child(bullet)
 
 func kill_plant() -> void:

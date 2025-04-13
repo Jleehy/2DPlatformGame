@@ -1,14 +1,16 @@
 extends Area2D
 
-var speed: int = 150
-var direction: int
+var speed:int = 150
+var direction:Vector2 = Vector2.ZERO
 
 func _process(delta: float) -> void:
-	position.x += speed * direction * delta
+	position.x += speed * direction.x * delta
+	position.y += speed * direction.y * delta
 
-func set_direction(new_direction: int) -> void:
-	direction = -1 if new_direction < 0 else 1
-	position.x += 25 * direction
+func set_direction(new_direction: Vector2) -> void:
+	direction = new_direction
+	position.x += 25 * direction.x
+	position.y += 25 * direction.y
 
 func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
 	queue_free()
