@@ -1,6 +1,6 @@
 # 2DPlatformGame
 
-This is a 2D platformer game built using the **Godot Engine**. The game features fluid movement, physics-based interactions, and various obstacles inspired by platformers like **Celeste** and **Hollow Knight**.
+This is a 2D platformer called **Hopper**. The game is built using the **Godot Engine**. The game features fluid movement, physics-based interactions, and various obstacles inspired by platformers like **Celeste** and **Hollow Knight**. It has 3 levels, a variety of enemies, and a final boss.
 
 ## How to Run the Game  
 
