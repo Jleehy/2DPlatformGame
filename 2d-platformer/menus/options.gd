@@ -7,6 +7,7 @@ var muted: bool = false
 var WASD: bool 
 var sound_on_icon = preload("res://art/menu/buttons/Volume.png")
 var sound_off_icon = preload("res://art/menu/buttons/VolumeMuted.png")
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	var events = InputMap.action_get_events("move_left")
@@ -22,7 +23,10 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	if GameManager.display_text_timer > 0:
+		GameManager.display_text_timer -= 1
+		if GameManager.display_text_timer <= 0:
+			GameManager.display_text = ""
 
 func is_using_wasd() -> bool:
 	var events = InputMap.action_get_events("move_left")
@@ -68,6 +72,7 @@ func _on_keybind_pressed() -> void:
 
 		WASD = false
 		print("wasd off")
+		GameManager.display_text = "WASD is OFF"
 	else:
 		var left_event = InputEventKey.new()
 		left_event.keycode = KEY_A
@@ -82,3 +87,5 @@ func _on_keybind_pressed() -> void:
 		InputMap.action_add_event("crouch", down_event)
 		WASD = true
 		print("wasd on")
+		GameManager.display_text = "WASD is ON"
+	GameManager.display_text_timer = 100
