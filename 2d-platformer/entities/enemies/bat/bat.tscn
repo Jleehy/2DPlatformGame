@@ -1,8 +1,9 @@
-[gd_scene load_steps=19 format=3 uid="uid://du15uquucp0tg"]
+[gd_scene load_steps=20 format=3 uid="uid://du15uquucp0tg"]
 
 [ext_resource type="Script" path="res://entities/enemies/bat/bat.gd" id="1_ve8fp"]
 [ext_resource type="Texture2D" uid="uid://d4lo6ca56eqc6" path="res://art/enemies/bat/Flying (46x30).png" id="1_xyj7w"]
 [ext_resource type="Texture2D" uid="uid://d1lbhvm68uj6h" path="res://art/enemies/bat/Hit (46x30).png" id="2_hbf20"]
+[ext_resource type="AudioStream" uid="uid://c3kmooewq6yhe" path="res://sounds/hurt.mp3" id="4_vj6u6"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jkgdy"]
 atlas = ExtResource("1_xyj7w")
@@ -104,8 +105,8 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_478ci"]
 size = Vector2(24, 24)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_utivg"]
-size = Vector2(48.5, 1)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_25h83"]
+size = Vector2(36.25, 41.25)
 
 [node name="Bat" type="CharacterBody2D"]
 scale = Vector2(2, 2)
@@ -120,9 +121,14 @@ frame = 1
 position = Vector2(0, 1)
 shape = SubResource("RectangleShape2D_478ci")
 
-[node name="HitArea" type="Area2D" parent="."]
+[node name="KillZone" type="Area2D" parent="."]
 
-[node name="HitBox" type="CollisionShape2D" parent="HitArea"]
-position = Vector2(-0.25, -12)
-shape = SubResource("RectangleShape2D_utivg")
-debug_color = Color(0.828309, 0.298385, 0.660597, 0.42)
+[node name="KillBox" type="CollisionShape2D" parent="KillZone"]
+position = Vector2(-0.5, -11.5)
+scale = Vector2(1.25, 0.01)
+shape = SubResource("RectangleShape2D_25h83")
+debug_color = Color(0.905463, 0.215344, 0.54421, 0.42)
+
+[node name="sfx_hurt" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_vj6u6")
+pitch_scale = 1.5

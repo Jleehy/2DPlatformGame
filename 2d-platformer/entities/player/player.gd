@@ -1,6 +1,11 @@
 class_name Player
 extends CharacterBody2D
 
+@onready var jump_particles = $JumpParticles
+@onready var land_particles = $LandingParticles
+
+var was_on_floor: bool = false  # Track if the player was on the floor last frame
+
 # Player physics variables
 @export var speed: int = 400
 @export var crouch_fall_speed: int = 400
@@ -10,6 +15,8 @@ extends CharacterBody2D
 @onready var sfx_dash = $sfx_dash
 @onready var sfx_jump  = $sfx_jump
 @onready var sfx_death  = $sfx_death
+@onready var sfx_hurt  = $sfx_hurt
+@onready var sfx_land  = $sfx_land
 
 # Advanced physics variables
 @export var minimum_speed_percentage: float = 0.25
@@ -80,6 +87,14 @@ func _physics_process(delta: float) -> void:
 	if invuln_timer > 0:
 		invuln_timer = max(invuln_timer - delta, 0)
 	
+	if is_on_floor() and not was_on_floor:
+		#sfx_land.play()
+		land_particles.restart()
+		land_particles.emitting = true
+	
+	# Update was_on_floor for next frame
+	was_on_floor = is_on_floor()
+	
 	if death_timer == -1:
 		if not is_dashing:
 			apply_gravity(delta)
@@ -144,6 +159,8 @@ func apply_horizontal_movement(control_factor: float) -> void:
 func handle_jumping() -> void:
 	if InputManager.is_jump_pressed() and is_on_floor():
 		sfx_jump.play()
+		jump_particles.restart()
+		jump_particles.emitting = true
 		velocity.y = jump_speed
 		
 func handle_grapple() -> void:
@@ -343,6 +360,7 @@ func take_damage(amount_damage: int) -> void:
 	# Play the hit animation and enforce a brief hurt state.
 	is_hurt = true
 	animated_sprite.play("hit")
+	sfx_hurt.play()
 	await animated_sprite.animation_finished
 	is_hurt = false
 
@@ -406,6 +424,9 @@ func climb_ledges() -> void:
 		if ((InputManager.is_move_left_pressed() or InputManager.is_move_right_pressed())) and (not InputManager.is_jump_pressed()):
 			var climbable = is_wall_climbable()
 			if climbable:
+				sfx_jump.play()
+				jump_particles.restart()
+				jump_particles.emitting = true
 				velocity.y += jump_speed * step_height
 				apply_horizontal_movement(1.0)
 			

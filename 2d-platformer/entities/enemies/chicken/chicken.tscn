@@ -1,9 +1,10 @@
-[gd_scene load_steps=39 format=3 uid="uid://v117ln176i3e"]
+[gd_scene load_steps=40 format=3 uid="uid://v117ln176i3e"]
 
 [ext_resource type="Script" path="res://entities/enemies/chicken/chicken.gd" id="1_7sfj2"]
 [ext_resource type="Texture2D" uid="uid://bs3lrkcb5x8hk" path="res://art/enemies/chicken/Hit (32x34).png" id="1_iru03"]
 [ext_resource type="Texture2D" uid="uid://bgomt1y4htk44" path="res://art/enemies/chicken/Idle (32x34).png" id="2_kb4jj"]
 [ext_resource type="Texture2D" uid="uid://dlcrh4lhf20hb" path="res://art/enemies/chicken/Run (32x34).png" id="3_g1q8o"]
+[ext_resource type="AudioStream" uid="uid://c3kmooewq6yhe" path="res://sounds/hurt.mp3" id="5_x8qx5"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pkeaq"]
 atlas = ExtResource("1_iru03")
@@ -272,3 +273,7 @@ position = Vector2(-0.5, -16.5)
 scale = Vector2(0.8, 0.01)
 shape = SubResource("RectangleShape2D_evaxq")
 debug_color = Color(0.905463, 0.215344, 0.54421, 0.42)
+
+[node name="sfx_hurt" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_x8qx5")
+pitch_scale = 1.5

@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://cuxwbdbw6vgtd"]
+[gd_scene load_steps=53 format=3 uid="uid://cuxwbdbw6vgtd"]
 
 [ext_resource type="Texture2D" uid="uid://ly7gjfalgpl3" path="res://art/player/Fall (32x32).png" id="1_32vwx"]
 [ext_resource type="Script" path="res://entities/player/player.gd" id="1_qwl6p"]
@@ -10,6 +10,9 @@
 [ext_resource type="AudioStream" uid="uid://gbr6sbf6pgeg" path="res://sounds/jump.wav" id="7_tk0ac"]
 [ext_resource type="AudioStream" uid="uid://bf7bo0n7oako5" path="res://sounds/(added as a joke)lego-yoda-death-sound-effect.mp3" id="8_8pnob"]
 [ext_resource type="Texture2D" uid="uid://dmdfxytts15fs" path="res://art/hearts/heart.png" id="10_hwkwa"]
+[ext_resource type="AudioStream" uid="uid://cm34y2epnn7fr" path="res://sounds/landing.wav" id="10_m1vv1"]
+[ext_resource type="Texture2D" uid="uid://cdxwxa0si3bp2" path="res://art/other/Dust Particle.png" id="11_ls1yx"]
+[ext_resource type="AudioStream" uid="uid://c3kmooewq6yhe" path="res://sounds/hurt.mp3" id="11_yyodj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4wuyl"]
 atlas = ExtResource("3_0n0f8")
@@ -261,6 +264,42 @@ size = Vector2(28.75, 31.25)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_atnih"]
 size = Vector2(38, 3.5)
 
+[sub_resource type="Gradient" id="Gradient_5txpp"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_xvv2x"]
+gradient = SubResource("Gradient_5txpp")
+
+[sub_resource type="Curve" id="Curve_0k7fl"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_1xvqr"]
+curve = SubResource("Curve_0k7fl")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_fyvef"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(10, 1, 1)
+angle_min = -90.0
+angle_max = 90.0
+gravity = Vector3(0, 98, 0)
+scale_max = 1.5
+scale_curve = SubResource("CurveTexture_1xvqr")
+color_ramp = SubResource("GradientTexture1D_xvv2x")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2p63x"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(12.5, 2, 1)
+angle_min = -90.0
+angle_max = 90.0
+gravity = Vector3(0, 98, 0)
+scale_min = 1.5
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_1xvqr")
+color_ramp = SubResource("GradientTexture1D_xvv2x")
+
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 position = Vector2(64, 64)
 scale = Vector2(2, 2)
@@ -289,6 +328,14 @@ stream = ExtResource("7_tk0ac")
 [node name="sfx_death" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("8_8pnob")
 
+[node name="sfx_land" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("10_m1vv1")
+pitch_scale = 0.5
+
+[node name="sfx_hurt" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("11_yyodj")
+pitch_scale = 1.25
+
 [node name="health_bar" type="CanvasLayer" parent="."]
 
 [node name="HBoxContainer" type="HBoxContainer" parent="health_bar"]
@@ -315,3 +362,27 @@ expand_mode = 3
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ClimbCheckArea"]
 position = Vector2(0, -11)
 shape = SubResource("RectangleShape2D_atnih")
+
+[node name="JumpParticles" type="GPUParticles2D" parent="."]
+z_index = 100
+position = Vector2(0, 14)
+emitting = false
+amount = 15
+process_material = SubResource("ParticleProcessMaterial_fyvef")
+texture = ExtResource("11_ls1yx")
+lifetime = 0.3
+one_shot = true
+explosiveness = 0.5
+randomness = 0.5
+
+[node name="LandingParticles" type="GPUParticles2D" parent="."]
+z_index = 100
+position = Vector2(0, 14)
+emitting = false
+amount = 10
+process_material = SubResource("ParticleProcessMaterial_2p63x")
+texture = ExtResource("11_ls1yx")
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+randomness = 0.5
