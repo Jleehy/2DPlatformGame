@@ -1,0 +1,47 @@
+[gd_scene load_steps=4 format=3 uid="uid://coskoq2jla2rx"]
+
+[ext_resource type="Texture2D" uid="uid://brj7xptsddtft" path="res://art/moving_platform/Off.png" id="2_kg8ks"]
+
+[sub_resource type="GDScript" id="GDScript_6scrg"]
+script/source = "extends Node2D
+var cycle_full_time = 800
+var start_position
+var cycle_progress
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	cycle_progress = 0
+	start_position = global_position
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	var x_mod = 0
+	var y_mod = (800 / cycle_full_time) * abs((cycle_full_time / 2) - cycle_progress)
+	
+	global_position.x = start_position.x + x_mod
+	global_position.y = start_position.y - y_mod
+	
+	cycle_progress += 1
+	if cycle_progress == cycle_full_time:
+		cycle_progress = 0
+		
+func reset_position() -> void:
+	#resets the player's position upon the player's death.
+	position = start_position
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gifyx"]
+size = Vector2(70, 23)
+
+[node name="MovingPlatformUpDown" type="Node2D"]
+script = SubResource("GDScript_6scrg")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -2.38419e-07)
+scale = Vector2(2.125, 2.3)
+texture = ExtResource("2_kg8ks")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+shape = SubResource("RectangleShape2D_gifyx")

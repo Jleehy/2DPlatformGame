@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://cuxwbdbw6vgtd"]
+[gd_scene load_steps=44 format=3 uid="uid://cuxwbdbw6vgtd"]
 
 [ext_resource type="Texture2D" uid="uid://ly7gjfalgpl3" path="res://art/player/Fall (32x32).png" id="1_32vwx"]
 [ext_resource type="Script" path="res://entities/player/player.gd" id="1_qwl6p"]
@@ -258,6 +258,9 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_evaxq"]
 size = Vector2(28.75, 31.25)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_atnih"]
+size = Vector2(38, 3.5)
+
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 position = Vector2(64, 64)
 scale = Vector2(2, 2)
@@ -306,3 +309,9 @@ expand_mode = 3
 layout_mode = 2
 texture = ExtResource("10_hwkwa")
 expand_mode = 3
+
+[node name="ClimbCheckArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClimbCheckArea"]
+position = Vector2(0, -11)
+shape = SubResource("RectangleShape2D_atnih")

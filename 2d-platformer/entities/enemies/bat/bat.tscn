@@ -101,11 +101,11 @@ animations = [{
 "speed": 15.0
 }]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2lwt3"]
-height = 24.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_478ci"]
+size = Vector2(24, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_utivg"]
-size = Vector2(20, 1)
+size = Vector2(48.5, 1)
 
 [node name="Bat" type="CharacterBody2D"]
 scale = Vector2(2, 2)
@@ -113,14 +113,16 @@ script = ExtResource("1_ve8fp")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_tp4xj")
-animation = &"hit"
+animation = &"flying"
+frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CapsuleShape2D_2lwt3")
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_478ci")
 
 [node name="HitArea" type="Area2D" parent="."]
 
 [node name="HitBox" type="CollisionShape2D" parent="HitArea"]
-position = Vector2(0, -12.5)
+position = Vector2(-0.25, -12)
 shape = SubResource("RectangleShape2D_utivg")
 debug_color = Color(0.828309, 0.298385, 0.660597, 0.42)

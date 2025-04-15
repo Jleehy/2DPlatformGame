@@ -119,7 +119,7 @@ func kill_bat() -> void:
 	animated_sprite.play("hit")
 	
 	#message
-	GameManager.display_text = "Defeated Bat!"
+	GameManager.display_text = "DEFEATED BAT!"
 	GameManager.display_text_timer = 100
 	
 	await get_tree().create_timer(0.5).timeout

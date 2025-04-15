@@ -115,7 +115,7 @@ func kill_plant() -> void:
 	animated_sprite.play("hit")
 	
 	#message
-	GameManager.display_text = "Defeated Plant!"
+	GameManager.display_text = "DEFEATED PLANT!"
 	GameManager.display_text_timer = 100
 	
 	await get_tree().create_timer(0.5).timeout

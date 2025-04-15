@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://bhkbamrvp2xcu" path="res://entities/start/start.tscn" id="10_5t3ea"]
 [ext_resource type="Texture2D" uid="uid://cb7ot5abnye5n" path="res://art/background/Green.png" id="10_hjcqw"]
 [ext_resource type="Texture2D" uid="uid://bi5gunsqrjsax" path="res://art/terrain/Terrain (16x16).png" id="10_nfvxd"]
-[ext_resource type="PackedScene" uid="uid://coskoq2jla2rx" path="res://entities/moving_platforms/moving_platform.tscn" id="11_dxfag"]
+[ext_resource type="PackedScene" uid="uid://coskoq2jla2rx" path="res://entities/moving_platform/moving_platform.tscn" id="11_dxfag"]
 [ext_resource type="PackedScene" uid="uid://v117ln176i3e" path="res://entities/enemies/chicken/chicken.tscn" id="12_xpd6c"]
 [ext_resource type="PackedScene" uid="uid://c4xufs5sto4u3" path="res://menus/pause_menu.tscn" id="13_xhitp"]
 [ext_resource type="PackedScene" uid="uid://du15uquucp0tg" path="res://entities/enemies/bat/bat.tscn" id="14_8ue2q"]
@@ -342,7 +342,6 @@ position = Vector2(7874, -1561)
 position = Vector2(218, 503)
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
-visible = false
 
 [node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
 motion_scale = Vector2(0.5, 0.5)

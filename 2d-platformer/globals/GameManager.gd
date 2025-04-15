@@ -34,13 +34,31 @@ var level2_unlocked: bool = false
 @export var display_text = ""
 
 #a list that contains start-of-level messages
-@export var start_level_messages: Array = ["[TODO] Frog wants to go on a quest to defeat\nthe evil animal kingdom to the north.", "[TODO] Frog is revealed to be the prince\nof his kingdom, and isn't supposed to quest.", "[TODO]"]
+@export var start_level_messages: Array = [  
+	"FROG SEEKS TO EMBARK ON A QUEST TO DEFEAT THE EVIL ANIMAL KINGDOM IN THE NORTH",  
+	"FROG DISCOVERS HE IS THE PRINCE OF HIS KINGDOM AND SHOULD NOT BE ADVENTURING",  
+	"TODO"  
+]  
 #a list of lists that handle specific sign messages within levels
-@export var sign_messages_list: Array = [
-	["Welcome to the Northern Animal\nKingdom! Visitors Unallowed.", "[leader's] headquarters, straight ahead.", "It seems smudged out. That will not\nstop your quest, however.", "4", "5", "6"],
-	["Every tadpole has an inspiration to do something\nwhen they become a frog. This is yours.", "This is a road-sign. You must be deep in the city\nnow. The leader must be close.", "It says this is the royal academy. Odd, that's\nquite similar to the one you went to.", "The royal residence, straight ahead.\nGood, this is the right way.", "5", "6"],
-	[]
-]
+@export var sign_messages_list: Array = [  
+	[  
+		"WELCOME TO THE NORTHERN ANIMAL KINGDOM\nTRESPASSERS WILL BE EXPELLED",  
+		"THE LEADERS HEADQUARTERS LIE STRAIGHT AHEAD",  
+		"THE SIGN IS SMUDGED BUT THAT WONT STOP YOUR QUEST",  
+		"4",  
+		"5",  
+		"6"  
+	],  
+	[  
+		"EVERY TADPOLE DREAMS OF GREATNESS WHEN THEY BECOME A FROG\nTHIS IS YOUR DESTINY",  
+		"THIS ROAD SIGN MARKS THE CITY CENTER\nTHE LEADER MUST BE NEAR",  
+		"THIS IS THE ROYAL ACADEMY\nSTRANGELY SIMILAR TO YOUR OWN",  
+		"THE ROYAL RESIDENCE IS AHEAD\nYOU ARE ON THE RIGHT PATH",  
+		"5",  
+		"6"  
+	],  
+	[]  
+]  
 @export var sign_manager_counter: int = 0
 
 func _ready() -> void:
@@ -81,7 +99,7 @@ func initialize_level(level_id: String) -> void:
 			camera_manager.set_level_bounds(level_bounds)
 
 	#display start text
-	display_text_timer = 225
+	display_text_timer = 350
 	display_text = start_level_messages[current_level_number]
 
 	# Play music

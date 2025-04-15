@@ -3,6 +3,7 @@ extends CharacterBody2D
 
 # Player physics variables
 @export var speed: int = 400
+@export var crouch_fall_speed: int = 400
 @export var jump_speed: int = -1050
 
 # Sound effects
@@ -294,6 +295,8 @@ func handle_crouching() -> void:
 			
 			# Scale the sprite
 			animated_sprite.scale = Vector2(1, crouch_squish_amount)
+			
+			velocity.y += crouch_fall_speed
 	else:
 		if is_crouching:
 			is_crouching = false
@@ -401,6 +404,11 @@ func climb_ledges() -> void:
 	if (velocity.x == 0 and is_on_wall() and is_on_floor() and damage_cooldown_timer >= DAMAGE_COOLDOWN):
 		#for right
 		if ((InputManager.is_move_left_pressed() or InputManager.is_move_right_pressed())) and (not InputManager.is_jump_pressed()):
-			velocity.y += jump_speed * step_height
-			apply_horizontal_movement(1.0)
+			var climbable = is_wall_climbable()
+			if climbable:
+				velocity.y += jump_speed * step_height
+				apply_horizontal_movement(1.0)
+			
+func is_wall_climbable() -> bool:
+	return $ClimbCheckArea.get_overlapping_bodies().size() == 0
 			

@@ -10,7 +10,7 @@ func _on_Area2D_body_entered(body: Node) -> void:
 	if body.name == "Player" and not active_checkpoint:  # Check if the body is the player by name
 		if not active_checkpoint:
 			#message
-			GameManager.display_text = "Checkpoint Acheived!"
+			GameManager.display_text = "CHECKPOINT ACHIEVED!"
 			GameManager.display_text_timer = 100
 			
 			active_checkpoint = true

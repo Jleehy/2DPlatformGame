@@ -136,7 +136,7 @@ func kill_chicken() -> void:
 	animated_sprite.play("hit")
 	
 	#message
-	GameManager.display_text = "Defeated Chicken!"
+	GameManager.display_text = "DEFEATED CHICKEN!"
 	GameManager.display_text_timer = 100
 	
 	await get_tree().create_timer(0.5).timeout  # Wait for animation to finish

@@ -15,7 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://du15uquucp0tg" path="res://entities/enemies/bat/bat.tscn" id="11_wrpmt"]
 [ext_resource type="PackedScene" uid="uid://d4hf3h0bk5t6a" path="res://entities/pickups/speed_coin.tscn" id="12_6v26u"]
 [ext_resource type="PackedScene" uid="uid://bc16rec55cn1a" path="res://entities/pickups/damage_coin.tscn" id="13_dskp1"]
-[ext_resource type="PackedScene" uid="uid://coskoq2jla2rx" path="res://entities/moving_platforms/moving_platform.tscn" id="14_amqj5"]
+[ext_resource type="PackedScene" uid="uid://coskoq2jla2rx" path="res://entities/moving_platform/moving_platform.tscn" id="14_amqj5"]
 [ext_resource type="PackedScene" uid="uid://13fnbqyoirum" path="res://entities/sign/sign.tscn" id="16_64ahm"]
 [ext_resource type="PackedScene" uid="uid://ch70k0iiqpoxu" path="res://entities/end/end.tscn" id="19_g0ubm"]
 
