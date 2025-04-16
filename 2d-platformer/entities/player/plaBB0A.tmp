@@ -325,6 +325,27 @@ anim_speed_max = 1.0
 position = Vector2(64, 64)
 scale = Vector2(2, 2)
 script = ExtResource("1_qwl6p")
+speed = null
+crouch_fall_speed = null
+jump_speed = null
+minimum_speed_percentage = null
+player_input_acceleration_percent = null
+friction_value = null
+air_control_loss = null
+facing_direction = null
+step_height = null
+crouch_speed_reduction = null
+is_crouching = null
+original_collision_size = null
+crouch_squish_amount = null
+crouch_used = null
+dash_speed = null
+dash_duration = null
+dash_cooldown = null
+dash_unlocked = null
+death_timer = null
+can_grapple = null
+grapple_length = null
 metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

@@ -1,7 +1,8 @@
-[gd_scene load_steps=20 format=4 uid="uid://bh6jat6426m14"]
+[gd_scene load_steps=21 format=4 uid="uid://bh6jat6426m14"]
 
 [ext_resource type="Script" path="res://scenes/levels/level_1.gd" id="1_4fcmp"]
 [ext_resource type="AudioStream" uid="uid://dybkwrn8ieb0v" path="res://sounds/level_theme.mp3" id="2_k0b6t"]
+[ext_resource type="PackedScene" uid="uid://cvqsp2mxomk62" path="res://menus/transition.tscn" id="2_v51eg"]
 [ext_resource type="PackedScene" uid="uid://cuxwbdbw6vgtd" path="res://entities/player/player.tscn" id="3_2qxxt"]
 [ext_resource type="PackedScene" uid="uid://dma8c20v64gr1" path="res://entities/checkpoint/checkpoint.tscn" id="4_kjmom"]
 [ext_resource type="PackedScene" uid="uid://b6jwnr6gcgclj" path="res://entities/traps/spikes/spikes.tscn" id="6_bn3jg"]
@@ -183,6 +184,14 @@ sources/0 = SubResource("TileSetAtlasSource_iir4c")
 
 [node name="level_1" type="Node"]
 script = ExtResource("1_4fcmp")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("13_xhitp")]
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+
+[node name="Transition" parent="CanvasLayer2" instance=ExtResource("2_v51eg")]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 position = Vector2(-130, -169)
@@ -416,10 +425,6 @@ position = Vector2(7594, -1563)
 
 [node name="Chicken9" parent="." instance=ExtResource("12_xpd6c")]
 position = Vector2(7731, -1563)
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("13_xhitp")]
 
 [node name="Bat" parent="." instance=ExtResource("14_8ue2q")]
 position = Vector2(3678, 628)

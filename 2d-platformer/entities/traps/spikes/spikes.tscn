@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://b6jwnr6gcgclj"]
+[gd_scene load_steps=4 format=3 uid="uid://b6jwnr6gcgclj"]
 
 [ext_resource type="Texture2D" uid="uid://lexuu6ugoxlb" path="res://art/traps/spikes/Idle.png" id="1_c1ih8"]
+[ext_resource type="AudioStream" uid="uid://c3kmooewq6yhe" path="res://sounds/hurt.mp3" id="2_8youl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xan68"]
 size = Vector2(32, 14)
@@ -15,3 +16,7 @@ shape = SubResource("RectangleShape2D_xan68")
 position = Vector2(0, -8)
 scale = Vector2(2.125, 2.125)
 texture = ExtResource("1_c1ih8")
+
+[node name="sfx_hurt" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_8youl")
+pitch_scale = 1.25

@@ -3,6 +3,7 @@ extends CharacterBody2D
 
 @onready var jump_particles = $JumpParticles
 @onready var land_particles = $LandingParticles
+@onready var movement_ghost = $MovementGhost
 
 var was_on_floor: bool = false  # Track if the player was on the floor last frame
 
@@ -31,6 +32,7 @@ var was_on_floor: bool = false  # Track if the player was on the floor last fram
 @export var is_crouching: bool = false
 @export var original_collision_size: Vector2
 @export var crouch_squish_amount: float = 0.75
+@export var crouch_used: bool = false
 
 # Dash and other Movement variables
 @export var dash_speed: float = 1500
@@ -45,7 +47,6 @@ var can_dash: bool = true
 # Animation variables
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
-@onready var dash_effect: Sprite2D = $DashEffect
 
 # Hurt state
 var is_hurt: bool = false
@@ -63,6 +64,9 @@ const DAMAGE_COOLDOWN: float = 2.0         # 2 seconds cooldown
 @export var can_grapple: bool = false
 @export var grapple_length: int = 200
 var grapple_cooldown: int = -1
+
+signal player_died
+signal player_respawned
 
 func _ready() -> void:
 	animated_sprite.play()
@@ -91,6 +95,7 @@ func _physics_process(delta: float) -> void:
 		#sfx_land.play()
 		land_particles.restart()
 		land_particles.emitting = true
+		crouch_used = false
 	
 	# Update was_on_floor for next frame
 	was_on_floor = is_on_floor()
@@ -151,9 +156,11 @@ func handle_air_movement() -> void:
 func apply_horizontal_movement(control_factor: float) -> void:
 	if InputManager.is_move_left_pressed():
 		velocity.x += -speed * control_factor * player_input_acceleration_percent
+		movement_ghost.scale.x = -1
 		facing_direction = "left"
 	if InputManager.is_move_right_pressed():
 		velocity.x += speed * control_factor * player_input_acceleration_percent
+		movement_ghost.scale.x = 1
 		facing_direction = "right"
 
 func handle_jumping() -> void:
@@ -208,9 +215,11 @@ func handle_dash() -> void:
 	if not dash_unlocked:
 		return  # Prevent dashing if not unlocked
 	if not can_dash:
-		modulate = Color(0.5, 0.5, 1, 1)
+		var tween = create_tween()
+		tween.tween_property(self, "modulate", Color(0.1, 0.1, 0.1, 0.5), 0.1)
 	else:
-		modulate = Color(1, 1, 1, 1)
+		var tween = create_tween()
+		tween.tween_property(self, "modulate", Color(1, 1, 1, 1), 0.15)
 		
 	if InputManager.is_dash_pressed() and can_dash and not is_dashing:
 		sfx_dash.play()
@@ -219,16 +228,6 @@ func handle_dash() -> void:
 func start_dash() -> void:
 	is_dashing = true
 	can_dash = false
-
-	# Copy the current frame of the player's animation to the dash effect
-	var frameIndex: int = animated_sprite.get_frame()
-	var animationName: String = animated_sprite.animation
-	var spriteFrames: SpriteFrames = animated_sprite.get_sprite_frames()
-	var currentTexture: Texture2D = spriteFrames.get_frame_texture(animationName, frameIndex)
-	
-	dash_effect.texture = currentTexture
-	dash_effect.flip_h = animated_sprite.flip_h
-	dash_effect.visible = true
 
 	# Set dash velocity based on facing direction
 	var dash_direction: Vector2 = Vector2.RIGHT if facing_direction == "right" else Vector2.LEFT
@@ -245,7 +244,6 @@ func start_dash() -> void:
 func end_dash() -> void:
 	is_dashing = false
 	velocity.x = 0
-	dash_effect.visible = false
 
 func handle_level_bounds() -> void:
 	var level_bounds = GameManager.get_level_bounds()
@@ -270,13 +268,17 @@ func update_animation() -> void:
 	if velocity.x != 0 or velocity.y != 0:
 		animated_sprite.flip_h = facing_direction == "left"
 		if is_on_floor():
+			movement_ghost.emitting = false
 			animated_sprite.play("run")
 		else:
 			if velocity.y < 0:
+				movement_ghost.emitting = true
 				animated_sprite.play("jump")
 			else:
+				movement_ghost.emitting = true
 				animated_sprite.play("fall")
 	else:
+		movement_ghost.emitting = false
 		animated_sprite.play("idle")
 
 func handle_death_animation() -> void:
@@ -286,18 +288,27 @@ func handle_death_animation() -> void:
 		animated_sprite.rotation_degrees = 90
 
 	death_timer -= 1
-	modulate = Color(1, 0, 0, 1)
-	
+	var tween = create_tween()
+	tween.tween_property(self, "modulate", Color(1, 0, 0, 1), 0.1)
+	emit_signal("player_died") 
 	if death_timer == 0:
-		modulate = Color(1, 1, 1, 1)
-		animated_sprite.rotation_degrees = 0
-		reset_hearts()  # Reset hearts on respawn
-		GameManager.respawn_player(self)
-		death_timer = -1
+		var respawn_timer = get_tree().create_timer(3.0)  
+		respawn_timer.timeout.connect(_on_respawn_timer_timeout)  
+		
+		
+func _on_respawn_timer_timeout():
+	var tween = create_tween()
+	tween.tween_property(self, "modulate", Color(1, 1, 1, 1), 1)
+	animated_sprite.rotation_degrees = 0
+	reset_hearts() 
+	GameManager.respawn_player(self)
+	death_timer = -1
+	emit_signal("player_respawned") 
 
 func handle_crouching() -> void:
 	if InputManager.is_crouch_pressed():
-		if not is_crouching:
+		if not is_crouching and not crouch_used:
+			crouch_used = true
 			is_crouching = true
 			speed *= crouch_speed_reduction
 			jump_speed *= crouch_speed_reduction
@@ -352,18 +363,18 @@ func take_damage(amount_damage: int) -> void:
 	
 	update_heart_display()
 	
-	# If no hearts remain, kill the player immediately.
-	if health <= 0:
-		GameManager.kill_player(self)
-		return
-	
 	# Play the hit animation and enforce a brief hurt state.
 	is_hurt = true
 	animated_sprite.play("hit")
 	sfx_hurt.play()
 	await animated_sprite.animation_finished
 	is_hurt = false
-
+	
+	# If no hearts remain, kill the player immediately.
+	if health <= 0:
+		GameManager.kill_player(self)
+		return
+	
 # Reset hearts back to full health (3 hearts) upon respawn,
 # allow damage again, and grant temporary invulnerability.
 

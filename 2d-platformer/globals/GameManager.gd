@@ -218,3 +218,4 @@ func handle_text_display() -> void:
 		CameraManager.display_display_text(true, display_text)
 		display_text_timer -= 1
 	
+	

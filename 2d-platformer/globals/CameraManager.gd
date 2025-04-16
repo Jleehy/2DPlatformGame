@@ -38,7 +38,21 @@ func _process(delta: float) -> void:
 	
 	# Set camera position
 	position = Vector2(clamped_x, clamped_y)
+	
+	if is_typing and display_label:
+		# Advance the typewriter effect
+		typewriter_progress += typewriter_speed * delta
+		display_label.visible_ratio = min(typewriter_progress / float(current_text.length()), 1.0)
+		
+		# Check if typing is complete
+		if display_label.visible_ratio >= 1.0:
+			is_typing = false
 
+
+var typewriter_speed: float = 40.0  # characters per second
+var typewriter_progress: float = 0.0
+var current_text: String = ""
+var is_typing: bool = false
 
 func display_display_text(display_active: bool, text: String) -> void:
 	# Called from gamemanager
@@ -46,6 +60,9 @@ func display_display_text(display_active: bool, text: String) -> void:
 		if display_label:
 			display_label.queue_free()
 			display_label = null
+		is_typing = false
+		current_text = ""
+		typewriter_progress = 0.0
 		return
 
 	# Create the label if it doesn't exist
@@ -66,6 +83,11 @@ func display_display_text(display_active: bool, text: String) -> void:
 		display_label.scale = Vector2(1, 1)
 		display_label.theme = theme_resource
 		display_label.z_index = 100
-		
-	# Update the label's properties
-	display_label.text = text
+	
+	# Check if text has changed
+	if text != current_text:
+		current_text = text
+		typewriter_progress = 0.0
+		is_typing = true
+		display_label.visible_ratio = 0.0
+		display_label.text = text  # Set full text immediately but only show portion based on visible_ratio
