@@ -61,9 +61,15 @@ var damage_cooldown_timer: float = 2.0   # starts at 2 seconds so damage is allo
 const DAMAGE_COOLDOWN: float = 2.0         # 2 seconds cooldown
 
 # Grapple Stuff
-@export var can_grapple: bool = false
-@export var grapple_length: int = 200
-var grapple_cooldown: int = -1
+@export var can_grapple: bool = true
+@export var grapple_length: int = 150
+var is_grappling: bool = false
+var grapple_line_exists: bool = false
+var grapple_progress: int = 0
+var found_grapple_hold: int = false
+var grapple_line: Line2D = null
+var raycast: RayCast2D = null
+
 
 signal player_died
 signal player_respawned
@@ -120,6 +126,11 @@ func _physics_process(delta: float) -> void:
 
 func apply_gravity(delta: float) -> void:
 	var gravity = GameManager.get_gravity()
+	
+	if is_grappling:
+		return
+		#dont mess with the grapple physics
+	
 	if not is_on_floor():
 		velocity.y += gravity * delta
 		
@@ -174,42 +185,131 @@ func handle_grapple() -> void:
 	if not can_grapple:
 		return
 	
-	if InputManager.is_grapple_pressed() and can_grapple and grapple_cooldown == -1:
-		#can_grapple = false
-		var x_dir
-		
-		if facing_direction == "left":
-			x_dir = grapple_length * -1
+	if InputManager.is_grapple_pressed() and not is_grappling:
+		#if the line does not exist, create it
+		if not grapple_line_exists:
+			create_grapple_line()
+			grapple_line_exists = true
 			
-		elif facing_direction == "right":
-			x_dir = grapple_length
-		
-		#check if the destination is inside a wall
-		#1. move to it.
-		#2. See if in wall, save the result
-		#3. move out
-		var old_collision_shape = collision_shape
-		collision_shape.translate(Vector2(x_dir, -1 * grapple_length))
-		
-		var is_in_wall: bool = is_on_wall() or is_on_floor()
-		
-		collision_shape.translate(Vector2(-1 * x_dir, grapple_length))
-		
-		if is_in_wall:
-			velocity.x = x_dir * 3
-			velocity.y = -1 * grapple_length * 3
-			grapple_cooldown = 10
+		#set up the grapple progress and other variables
+		grapple_progress = 0
+		is_grappling = true
+		found_grapple_hold = false
+		velocity = Vector2(0,-25)
+	
+	elif is_grappling and found_grapple_hold:
+		#grapple hold gotten, so now begin pulling player towards it.
+		#if the line does not exist, create it
+		if not grapple_line_exists:
+			create_grapple_line()
+			grapple_line_exists = true
 			
-		else:
-			#just pause in midair as you fail
-			velocity.x = 0
-			velocity.y = -5
-			
-	if grapple_cooldown != -1:
-		grapple_cooldown -= 1
-		velocity.x = grapple_length * [1, -1][int(facing_direction == "left")] * 3
-		velocity.y = -1 * grapple_length * 3
+		grapple_progress -= 6
+		if grapple_progress < 0:
+			#minimum progress check
+			grapple_progress = 0
 		
+		var facing_factor = int(facing_direction == "right") * 2 - 1
+		grapple_line.points = [Vector2(0,0), Vector2(grapple_progress * facing_factor, -1 * grapple_progress)]
+		
+		#hold the player in midair
+		velocity = Vector2(0,0)	
+		
+		#move the player with position, to ensure the grapple actually pulls them.
+		position = Vector2(position.x + 10 * facing_factor, position.y - 10)
+		
+		#if at 0, then stop the grapple
+		if grapple_progress == 0:
+			#give the player a little boost.
+			velocity = Vector2(0, jump_speed)
+			is_grappling = false
+	
+	elif is_grappling and grapple_progress >= 0:
+		#if the line does not exist, create it
+		if not grapple_line_exists:
+			create_grapple_line()
+			grapple_line_exists = true
+			
+		#increment the progress, then move the line to match up with the player
+		grapple_progress += 5
+		var facing_factor = int(facing_direction == "right") * 2 - 1
+		grapple_line.points = [Vector2(0,0), Vector2(grapple_progress * facing_factor, -1 * grapple_progress)]
+
+		#if enough time passed, grapple over, being fast retraction
+		if grapple_progress >= grapple_length:
+			grapple_progress = int(grapple_length * -0.15)		
+			
+		#hold the player in midair
+		velocity = Vector2(0,-25)	
+		#check if you hit a wall
+		raycast.target_position = grapple_line.points[1]
+		raycast.force_raycast_update()
+		if raycast.is_colliding():
+			#we hit a thing!
+			found_grapple_hold = true
+		
+	elif is_grappling:
+		#if the line does not exist, create it
+		if not grapple_line_exists:
+			create_grapple_line()
+			grapple_line_exists = true
+			
+		#use the negative value of progress as a mini fast timer to retreact the grapple
+		grapple_progress += 1
+		
+		#draw the line retracting
+		var facing_factor = int(facing_direction == "right") * 2 - 1
+		grapple_line.points = [Vector2(0,0), Vector2((grapple_progress / -0.15) * facing_factor, (grapple_progress / 0.15))]
+
+		#once the progress reaches 0, stop the grapple.
+		if grapple_progress == 0:
+			is_grappling = false
+
+		#hold the player in midair
+		velocity = Vector2(0,20)	
+		
+		#check if you hit a wall
+		raycast.target_position = grapple_line.points[1]
+		raycast.force_raycast_update()
+		if raycast.is_colliding():
+			#we hit a thing!
+			found_grapple_hold = true
+
+
+	else:
+		#if the grapple line exists, delete it
+		if grapple_line_exists:
+			grapple_line_exists = false
+			delete_grapple_line()
+		
+		
+func create_grapple_line() -> void:
+	if grapple_line == null:
+		grapple_line = Line2D.new()
+		grapple_line.width = 4
+		grapple_line.default_color = Color(1, 0.75, 0.8)
+		grapple_line.points = [GameManager.dead_position, Vector2(GameManager.dead_position.x - 1, GameManager.dead_position.y - 1)]
+		grapple_line.z_index = -1
+		grapple_line.visible = true
+		grapple_line.begin_cap_mode = Line2D.LineCapMode.LINE_CAP_ROUND
+		grapple_line.end_cap_mode = Line2D.LineCapMode.LINE_CAP_ROUND
+		add_child(grapple_line)
+		
+		#make the raycast too
+		raycast = RayCast2D.new()	
+		raycast.enabled = true
+		raycast.collide_with_areas = false
+		raycast.position = Vector2(0,0)
+		add_child(raycast)
+
+
+func delete_grapple_line() -> void:
+	if grapple_line != null:
+		grapple_line.queue_free()
+		grapple_line = null
+		
+		raycast.queue_free()
+		raycast = null
 
 func handle_dash() -> void:
 	if not dash_unlocked:
