@@ -165,6 +165,10 @@ func handle_air_movement() -> void:
 	apply_horizontal_movement(air_control_loss)
 
 func apply_horizontal_movement(control_factor: float) -> void:
+	if is_grappling:
+		return
+		#no facing change while grappling
+		
 	if InputManager.is_move_left_pressed():
 		velocity.x += -speed * control_factor * player_input_acceleration_percent
 		movement_ghost.scale.x = -1
@@ -210,7 +214,7 @@ func handle_grapple() -> void:
 			grapple_progress = 0
 		
 		var facing_factor = int(facing_direction == "right") * 2 - 1
-		grapple_line.points = [Vector2(0,0), Vector2(grapple_progress * facing_factor, -1 * grapple_progress)]
+		grapple_line.points = [Vector2(facing_factor * 3,-1), Vector2(grapple_progress * facing_factor, -1 * grapple_progress)]
 		
 		#hold the player in midair
 		velocity = Vector2(0,0)	
@@ -233,7 +237,7 @@ func handle_grapple() -> void:
 		#increment the progress, then move the line to match up with the player
 		grapple_progress += 5
 		var facing_factor = int(facing_direction == "right") * 2 - 1
-		grapple_line.points = [Vector2(0,0), Vector2(grapple_progress * facing_factor, -1 * grapple_progress)]
+		grapple_line.points = [Vector2(facing_factor * 3,-1), Vector2(grapple_progress * facing_factor, -1 * grapple_progress)]
 
 		#if enough time passed, grapple over, being fast retraction
 		if grapple_progress >= grapple_length:
@@ -259,7 +263,7 @@ func handle_grapple() -> void:
 		
 		#draw the line retracting
 		var facing_factor = int(facing_direction == "right") * 2 - 1
-		grapple_line.points = [Vector2(0,0), Vector2((grapple_progress / -0.15) * facing_factor, (grapple_progress / 0.15))]
+		grapple_line.points = [Vector2(facing_factor * 3,-1), Vector2((grapple_progress / -0.15) * facing_factor, (grapple_progress / 0.15))]
 
 		#once the progress reaches 0, stop the grapple.
 		if grapple_progress == 0:
@@ -286,10 +290,10 @@ func handle_grapple() -> void:
 func create_grapple_line() -> void:
 	if grapple_line == null:
 		grapple_line = Line2D.new()
-		grapple_line.width = 4
+		grapple_line.width = 3
 		grapple_line.default_color = Color(1, 0.75, 0.8)
 		grapple_line.points = [GameManager.dead_position, Vector2(GameManager.dead_position.x - 1, GameManager.dead_position.y - 1)]
-		grapple_line.z_index = -1
+		grapple_line.z_index = 1
 		grapple_line.visible = true
 		grapple_line.begin_cap_mode = Line2D.LineCapMode.LINE_CAP_ROUND
 		grapple_line.end_cap_mode = Line2D.LineCapMode.LINE_CAP_ROUND
