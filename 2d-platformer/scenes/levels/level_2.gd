@@ -7,6 +7,7 @@ func _ready() -> void:
 	CameraManager.set_player(player)
 	GameManager.initialize_level("level_2")
 	player.dash_unlocked = true
+	player.grapple_unlocked = false
 	GameManager.level2_unlocked = true
 	for child in get_children():
 		if is_instance_of(child, Skull):

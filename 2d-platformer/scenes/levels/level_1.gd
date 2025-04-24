@@ -8,6 +8,8 @@ func _ready() -> void:
 	var transition = $CanvasLayer2/Transition 
 	player.player_died.connect(transition.fade_in)
 	player.player_respawned.connect(transition.fade_out)
+	player.grapple_unlocked = false
+	player.dash_unlocked = false
 	CameraManager.set_player(player)
 	GameManager.initialize_level("level_1")
 

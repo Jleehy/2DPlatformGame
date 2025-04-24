@@ -69,7 +69,7 @@ var grapple_progress: int = 0
 var found_grapple_hold: int = false
 var grapple_line: Line2D = null
 var raycast: RayCast2D = null
-
+@export var grapple_unlocked: bool = false
 
 signal player_died
 signal player_respawned
@@ -109,11 +109,17 @@ func _physics_process(delta: float) -> void:
 	if death_timer == -1:
 		if not is_dashing:
 			apply_gravity(delta)
+		#reset the grapple/dash being allowed to be used
+		if (not can_grapple) and grapple_unlocked and is_on_floor():
+			can_grapple = true
+		if (not can_dash) and dash_unlocked and is_on_floor():
+			can_dash = true
 		handle_crouching()
 		handle_movement()
 		handle_grapple()
 		handle_jumping()
 		handle_dash()
+		handle_player_dash_and_grapple_coloration()
 		handle_level_bounds()
 		update_animation()
 		move_and_slide()
@@ -186,7 +192,13 @@ func handle_jumping() -> void:
 		velocity.y = jump_speed
 		
 func handle_grapple() -> void:
-	if not can_grapple:
+	if grapple_progress == 0:
+		#if the grapple line exists, delete it
+		if grapple_line_exists:
+			grapple_line_exists = false
+			delete_grapple_line()
+	
+	if ((not can_grapple) and (not is_grappling)) or (not grapple_unlocked) or (is_dashing):
 		return
 	
 	if InputManager.is_grapple_pressed() and not is_grappling:
@@ -227,6 +239,7 @@ func handle_grapple() -> void:
 			#give the player a little boost.
 			velocity = Vector2(0, jump_speed)
 			is_grappling = false
+			can_grapple = false
 	
 	elif is_grappling and grapple_progress >= 0:
 		#if the line does not exist, create it
@@ -245,6 +258,7 @@ func handle_grapple() -> void:
 			
 		#hold the player in midair
 		velocity = Vector2(0,-25)	
+		
 		#check if you hit a wall
 		raycast.target_position = grapple_line.points[1]
 		raycast.force_raycast_update()
@@ -268,6 +282,7 @@ func handle_grapple() -> void:
 		#once the progress reaches 0, stop the grapple.
 		if grapple_progress == 0:
 			is_grappling = false
+			can_grapple = false
 
 		#hold the player in midair
 		velocity = Vector2(0,20)	
@@ -278,14 +293,6 @@ func handle_grapple() -> void:
 		if raycast.is_colliding():
 			#we hit a thing!
 			found_grapple_hold = true
-
-
-	else:
-		#if the grapple line exists, delete it
-		if grapple_line_exists:
-			grapple_line_exists = false
-			delete_grapple_line()
-		
 		
 func create_grapple_line() -> void:
 	if grapple_line == null:
@@ -319,15 +326,66 @@ func handle_dash() -> void:
 	if not dash_unlocked:
 		return  # Prevent dashing if not unlocked
 	if not can_dash:
-		var tween = create_tween()
-		tween.tween_property(self, "modulate", Color(0.1, 0.1, 0.1, 0.5), 0.1)
+		pass
+		#code that was here moved to other function
+	if is_grappling:
+		#you are not allowed to start dashing while grappling.
+		return
 	else:
-		var tween = create_tween()
-		tween.tween_property(self, "modulate", Color(1, 1, 1, 1), 0.15)
+		pass
+		#code that was here moved to other function
 		
 	if InputManager.is_dash_pressed() and can_dash and not is_dashing:
 		sfx_dash.play()
 		start_dash()
+		
+func handle_player_dash_and_grapple_coloration() -> void:
+	#first, check if the player can either grapple or dash
+	#if not, just set the default color
+	#if only 1, then apply the filters only for that color
+	#if both, then apply both as needed.
+	if (not grapple_unlocked) and (not dash_unlocked):
+		var tween = create_tween()
+		tween.tween_property(self, "modulate", Color(1, 1, 1, 1), 0.15)
+		return
+		
+	elif (not grapple_unlocked) and dash_unlocked:
+		if not can_dash:
+			var tween = create_tween()
+			tween.tween_property(self, "modulate", Color(0.3, 0.3, 0.8, 1), 0.1)
+		else:
+			var tween = create_tween()
+			tween.tween_property(self, "modulate", Color(1, 1, 1, 1), 0.15)
+		return
+		
+	elif (not dash_unlocked) and grapple_unlocked:
+		if not can_grapple:
+			var tween = create_tween()
+			tween.tween_property(self, "modulate", Color(0.8, 0.3, 0.3, 1), 0.1)
+		else:
+			var tween = create_tween()
+			tween.tween_property(self, "modulate", Color(1, 1, 1, 1), 0.15)
+		
+		return
+		
+	elif grapple_unlocked and dash_unlocked:
+		if (not can_grapple) and (not can_dash):
+			var tween = create_tween()
+			tween.tween_property(self, "modulate", Color(0.9, 0.1, 0.9, 1), 0.1)
+		elif (not can_grapple) and can_dash:
+			var tween = create_tween()
+			tween.tween_property(self, "modulate", Color(0.8, 0.3, 0.3, 1), 0.1)
+		elif (not can_dash) and can_grapple:
+			var tween = create_tween()
+			tween.tween_property(self, "modulate", Color(0.3, 0.3, 0.8, 1), 0.1)
+		else:
+			var tween = create_tween()
+			tween.tween_property(self, "modulate", Color(1, 1, 1, 1), 0.15)
+			
+		return
+		
+	#you shouldn't ever get to this point
+	return
 
 func start_dash() -> void:
 	is_dashing = true
@@ -342,8 +400,7 @@ func start_dash() -> void:
 	end_dash()
 
 	# Start dash cooldown timer
-	await get_tree().create_timer(dash_cooldown).timeout
-	can_dash = true
+	#removed.
 
 func end_dash() -> void:
 	is_dashing = false
