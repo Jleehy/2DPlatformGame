@@ -150,11 +150,15 @@ func kill_player(player) -> void:
 		player.death_timer = 30
 		player.velocity = Vector2.ZERO
 		
+		player.health = 0
+		player.block_heart_display = true
+		player.update_heart_display()
+		
 		display_text_timer = 0
 		
 		#go through all bodies and call a reset on them if applicable.
 		#wait for fade to have happened to reset all of these things.
-		await get_tree().create_timer(1.4).timeout
+		await get_tree().create_timer(3.0).timeout
 		for node in get_tree().current_scene.get_children():
 			if node.has_method("reset_position"):
 				node.reset_position()

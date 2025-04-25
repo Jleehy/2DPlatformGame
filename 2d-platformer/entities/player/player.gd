@@ -54,7 +54,8 @@ var can_take_damage: bool = true  # Not used now since cooldown is via damage_co
 
 # --- Heart Damage System Variables ---
 var hearts_list: Array[TextureRect] = []
-var health: int = 3
+@export var health: int = 3
+@export var block_heart_display: bool = false
 
 # --- Damage Cooldown Tracking ---
 var damage_cooldown_timer: float = 2.0   # starts at 2 seconds so damage is allowed immediately
@@ -125,10 +126,10 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		climb_ledges()
 		handle_self_die()
+		update_heart_display()
 		dev_checkpoint_handle()
 	else:
 		handle_death_animation()
-
 
 func apply_gravity(delta: float) -> void:
 	var gravity = GameManager.get_gravity()
@@ -465,6 +466,8 @@ func _on_respawn_timer_timeout():
 	GameManager.respawn_player(self)
 	death_timer = -1
 	emit_signal("player_respawned") 
+	await get_tree().create_timer(2.3).timeout
+	block_heart_display = false
 
 func handle_crouching() -> void:
 	if InputManager.is_crouch_pressed():
@@ -521,6 +524,9 @@ func take_damage(amount_damage: int) -> void:
 	
 	if health < 0:
 		health = 0
+		
+	if health > 3:
+		health = 3
 	
 	update_heart_display()
 	
@@ -543,7 +549,7 @@ func take_damage(amount_damage: int) -> void:
 func update_heart_display() -> void:
 	# Update each heart's visibility based on current health
 	for i in range(hearts_list.size()):
-		hearts_list[i].visible = i < health
+		hearts_list[i].visible = (i < health) and (not block_heart_display)
 
 # Reset hearts back to full health (3 hearts) upon respawn and allow damage again
 func reset_hearts() -> void:

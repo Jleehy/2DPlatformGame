@@ -95,7 +95,8 @@ func flash_red_show_hp() -> void:
 	modulate = Color(1, temp_num, temp_num, 1)
 
 func _on_kill_zone_body_entered(body: Node):
-	if body.is_in_group("player") and not is_dead:
+	#extra condition is to make bat less damagey when player stomps it
+	if body.is_in_group("player") and not is_dead and body.position.y <= position.y:
 		sfx_hurt.play()
 		take_damage(body)
 		body.bounce()

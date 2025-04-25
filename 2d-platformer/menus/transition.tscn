@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://menus/transition.gd" id="1_jv7e5"]
 [ext_resource type="Texture2D" uid="uid://beqbqe2qdtv3k" path="res://art/other/Transition.png" id="2_ekbsc"]
-[ext_resource type="Theme" path="res://menus/title.tres" id="2_g44vf"]
+[ext_resource type="Theme" uid="uid://xpw2lu00w03p" path="res://menus/title.tres" id="2_g44vf"]
 
 [sub_resource type="Animation" id="Animation_4cevn"]
 length = 0.001
