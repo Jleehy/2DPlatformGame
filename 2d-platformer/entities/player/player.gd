@@ -506,8 +506,12 @@ func handle_crouching() -> void:
 			# Reset the sprite scale
 			animated_sprite.scale = Vector2(1, 1)
 
-func bounce() -> void:
-	velocity.y = -800 
+func bounce(super_bounce : bool = false) -> void:
+	if not super_bounce:
+		velocity.y = -800 
+	
+	else:
+		velocity.y = -1400
 
 func take_damage(amount_damage: int) -> void:
 	# Do not take damage if we're still in the invulnerability period.
