@@ -124,7 +124,7 @@ shape = SubResource("RectangleShape2D_478ci")
 [node name="KillZone" type="Area2D" parent="."]
 
 [node name="KillBox" type="CollisionShape2D" parent="KillZone"]
-position = Vector2(-0.5, -11.5)
+position = Vector2(-0.5, -16.5)
 scale = Vector2(1.25, 0.01)
 shape = SubResource("RectangleShape2D_25h83")
 debug_color = Color(0.905463, 0.215344, 0.54421, 0.42)

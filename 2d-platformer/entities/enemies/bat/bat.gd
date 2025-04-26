@@ -96,7 +96,7 @@ func flash_red_show_hp() -> void:
 
 func _on_kill_zone_body_entered(body: Node):
 	#extra condition is to make bat less damagey when player stomps it
-	if body.is_in_group("player") and not is_dead and body.position.y <= position.y:
+	if body.is_in_group("player") and not is_dead:
 		sfx_hurt.play()
 		take_damage(body)
 		body.bounce()
