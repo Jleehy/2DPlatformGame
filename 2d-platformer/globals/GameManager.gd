@@ -171,9 +171,15 @@ func kill_player(player) -> void:
 
 # Respawn the player
 func respawn_player(player) -> void:
+	if player_progress == dead_position:
+		#set the position to the start point position.
+		player_progress = [Vector2(210, -1689), Vector2(227, 713), Vector2(227, 713)][current_level_number]
+	
 	print("Respawning player at last checkpoint:", player_progress)
 	player.velocity = Vector2.ZERO
 	player.position = player_progress
+	print("Player current position: ", player.position)
+	print("Player current global position: ", player.global_position)
 
 func next_checkpoint_teleport(player) -> void:
 	#if invalid setup for current level, then do nothing.

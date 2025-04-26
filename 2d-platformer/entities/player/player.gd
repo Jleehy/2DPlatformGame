@@ -11,6 +11,7 @@ var was_on_floor: bool = false  # Track if the player was on the floor last fram
 @export var speed: int = 400
 @export var crouch_fall_speed: int = 400
 @export var jump_speed: int = -1050
+@export var player_gravity_enabled: bool = false
 
 # Sound effects
 @onready var sfx_dash = $sfx_dash
@@ -77,7 +78,9 @@ signal player_respawned
 
 func _ready() -> void:
 	animated_sprite.play()
-	GameManager.save_checkpoint(self.position)
+	#doing these 2 things will do a special functionality for respawn player to send player to the start point.
+	GameManager.save_checkpoint(GameManager.dead_position)
+	GameManager.respawn_player(self)
 	original_collision_size = collision_shape.shape.size
 	
 	# Initialize heart icons from a health bar (assumes a node at "$health_bar/HBoxContainer")
@@ -85,6 +88,9 @@ func _ready() -> void:
 	for child in hearts_parent.get_children():
 		hearts_list.append(child)
 	print("Hearts List:", hearts_list)
+	
+	#wait until after inital spawn to do gravity.
+	player_gravity_enabled = true
 
 # Damage cooldown and invulnerability variables
 var invuln_timer: float = 0.0              # additional invulnerability timer
@@ -108,7 +114,7 @@ func _physics_process(delta: float) -> void:
 	was_on_floor = is_on_floor()
 	
 	if death_timer == -1:
-		if not is_dashing:
+		if not is_dashing and player_gravity_enabled:
 			apply_gravity(delta)
 		#reset the grapple/dash being allowed to be used
 		if (not can_grapple) and grapple_unlocked and is_on_floor():
