@@ -1026,3 +1026,6 @@ position = Vector2(15504, 296)
 
 [node name="EndPoint" parent="." instance=ExtResource("19_g0ubm")]
 position = Vector2(20328, -2391)
+
+[node name="Sign4" parent="." instance=ExtResource("16_64ahm")]
+position = Vector2(346, 745)

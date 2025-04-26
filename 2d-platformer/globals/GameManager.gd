@@ -35,29 +35,37 @@ var level2_unlocked: bool = false
 
 #a list that contains start-of-level messages
 @export var start_level_messages: Array = [  
-	"FROG SEEKS TO EMBARK ON A QUEST TO DEFEAT THE EVIL ANIMAL KINGDOM IN THE NORTH",  
+	"WELCOME TO HOPPER! USE ARROWS OR WASD TO MOVE. SIGNS CONTAIN FURTHER INFORMATION.",  
 	"FROG DISCOVERS HE IS THE PRINCE OF HIS KINGDOM AND SHOULD NOT BE ADVENTURING",  
 	"TODO"  
 ]  
 #a list of lists that handle specific sign messages within levels
 @export var sign_messages_list: Array = [  
 	[  
-		"WELCOME TO THE NORTHERN ANIMAL KINGDOM\nTRESPASSERS WILL BE EXPELLED",  
-		"THE LEADERS HEADQUARTERS LIE STRAIGHT AHEAD",  
-		"THE SIGN IS SMUDGED BUT THAT WONT STOP YOUR QUEST",  
-		"4",  
-		"5",  
-		"6"  
+		"1",
+		"2",
+		"3",
+		"4",
+		"That is all for the tutorial! Jump down below to enter the level proper.".to_upper(),
+		"Use T to send yourself back to the most recent checkpoint. Maybe this is useful here...".to_upper(),
+		"Hold Down or S to crouch in smaller gaps.".to_upper(),
+		"Down-right, there is an new Checkpoint to get. Up-Left, there is an enemy. Stomp enemies to defeat!".to_upper(),
+		"The Spikes will send you back to the previous checkpoint.".to_upper(),
+		"Use space to Jump!".to_upper(),
+		"11",
+		"12"
 	],  
 	[  
 		"EVERY TADPOLE DREAMS OF GREATNESS WHEN THEY BECOME A FROG\nTHIS IS YOUR DESTINY",  
 		"THIS ROAD SIGN MARKS THE CITY CENTER\nTHE LEADER MUST BE NEAR",  
 		"THIS IS THE ROYAL ACADEMY\nSTRANGELY SIMILAR TO YOUR OWN",  
 		"THE ROYAL RESIDENCE IS AHEAD\nYOU ARE ON THE RIGHT PATH",  
-		"5",  
+		"Use the shift key to use your newly-unlocked dash!".to_upper(),  
 		"6"  
 	],  
-	[]  
+	[
+		"Use the Q key to use your newly-unlocked grapple!".to_upper()
+	]  
 ]  
 @export var sign_manager_counter: int = 0
 
@@ -173,7 +181,7 @@ func kill_player(player) -> void:
 func respawn_player(player) -> void:
 	if player_progress == dead_position:
 		#set the position to the start point position.
-		player_progress = [Vector2(210, -1689), Vector2(227, 713), Vector2(227, 713)][current_level_number]
+		player_progress = [Vector2(467, -1545), Vector2(227, 713), Vector2(227, 713)][current_level_number]
 	
 	print("Respawning player at last checkpoint:", player_progress)
 	player.velocity = Vector2.ZERO

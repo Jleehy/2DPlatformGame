@@ -1593,14 +1593,17 @@ position = Vector2(7309, -6218)
 [node name="Skull2" parent="." instance=ExtResource("17_y2qxw")]
 position = Vector2(6789, -6214)
 
+[node name="Sign4" parent="." instance=ExtResource("18_8o3i7")]
+position = Vector2(477, 746)
+
 [node name="Sign" parent="." instance=ExtResource("18_8o3i7")]
 position = Vector2(1877, 185)
-
-[node name="Sign" parent="Sign" instance=ExtResource("18_8o3i7")]
-position = Vector2(2495, 947)
 
 [node name="Sign2" parent="." instance=ExtResource("18_8o3i7")]
 position = Vector2(6656, 1322)
 
 [node name="Sign3" parent="." instance=ExtResource("18_8o3i7")]
 position = Vector2(15504, 296)
+
+[node name="Sign5" parent="." instance=ExtResource("18_8o3i7")]
+position = Vector2(4372, 1132)
