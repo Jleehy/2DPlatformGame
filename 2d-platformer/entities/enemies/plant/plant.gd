@@ -8,6 +8,8 @@ var bullet_scene: Resource = preload("res://entities/enemies/plant/plant_bullet.
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var hit_area: Area2D = $HitArea
 
+@onready var sfx_hurt = $sfx_hurt
+
 @export var max_health: int = 2  # Number of hits required to defeat the enemy
 var current_health: int
 var redval: float
@@ -62,6 +64,7 @@ func flash_red_show_hp() -> void:
 
 func _on_hit_area_body_entered(body: Node) -> void:
 	if body.is_in_group("player") and not is_dead:
+		sfx_hurt.play()
 		take_damage(body)
 		body.bounce()
 
@@ -115,7 +118,7 @@ func kill_plant() -> void:
 	animated_sprite.play("hit")
 	
 	#message
-	GameManager.display_text = "Defeated Plant!"
+	GameManager.display_text = "DEFEATED PLANT!"
 	GameManager.display_text_timer = 100
 	
 	await get_tree().create_timer(0.5).timeout

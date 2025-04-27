@@ -19,7 +19,8 @@ func _process(delta: float) -> void:
 	cycle_progress += 1
 	if cycle_progress == cycle_full_time:
 		cycle_progress = 0
-		
+
 func reset_position() -> void:
 	#resets the player's position upon the player's death.
 	position = start_position
+	

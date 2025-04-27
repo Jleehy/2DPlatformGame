@@ -1,14 +1,24 @@
 class_name Player
 extends CharacterBody2D
 
+@onready var jump_particles = $JumpParticles
+@onready var land_particles = $LandingParticles
+@onready var movement_ghost = $MovementGhost
+
+var was_on_floor: bool = false  # Track if the player was on the floor last frame
+
 # Player physics variables
 @export var speed: int = 400
+@export var crouch_fall_speed: int = 400
 @export var jump_speed: int = -1050
+@export var player_gravity_enabled: bool = false
 
 # Sound effects
 @onready var sfx_dash = $sfx_dash
 @onready var sfx_jump  = $sfx_jump
 @onready var sfx_death  = $sfx_death
+@onready var sfx_hurt  = $sfx_hurt
+@onready var sfx_land  = $sfx_land
 
 # Advanced physics variables
 @export var minimum_speed_percentage: float = 0.25
@@ -23,6 +33,7 @@ extends CharacterBody2D
 @export var is_crouching: bool = false
 @export var original_collision_size: Vector2
 @export var crouch_squish_amount: float = 0.75
+@export var crouch_used: bool = false
 
 # Dash and other Movement variables
 @export var dash_speed: float = 1500
@@ -37,7 +48,6 @@ var can_dash: bool = true
 # Animation variables
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
-@onready var dash_effect: Sprite2D = $DashEffect
 
 # Hurt state
 var is_hurt: bool = false
@@ -45,20 +55,32 @@ var can_take_damage: bool = true  # Not used now since cooldown is via damage_co
 
 # --- Heart Damage System Variables ---
 var hearts_list: Array[TextureRect] = []
-var health: int = 3
+@export var health: int = 3
+@export var block_heart_display: bool = false
 
 # --- Damage Cooldown Tracking ---
 var damage_cooldown_timer: float = 2.0   # starts at 2 seconds so damage is allowed immediately
 const DAMAGE_COOLDOWN: float = 2.0         # 2 seconds cooldown
 
 # Grapple Stuff
-@export var can_grapple: bool = false
-@export var grapple_length: int = 200
-var grapple_cooldown: int = -1
+@export var can_grapple: bool = true
+@export var grapple_length: int = 150
+var is_grappling: bool = false
+var grapple_line_exists: bool = false
+var grapple_progress: int = 0
+var found_grapple_hold: int = false
+var grapple_line: Line2D = null
+var raycast: RayCast2D = null
+@export var grapple_unlocked: bool = false
+
+signal player_died
+signal player_respawned
 
 func _ready() -> void:
 	animated_sprite.play()
-	GameManager.save_checkpoint(self.position)
+	#doing these 2 things will do a special functionality for respawn player to send player to the start point.
+	GameManager.save_checkpoint(GameManager.dead_position)
+	GameManager.respawn_player(self)
 	original_collision_size = collision_shape.shape.size
 	
 	# Initialize heart icons from a health bar (assumes a node at "$health_bar/HBoxContainer")
@@ -66,6 +88,9 @@ func _ready() -> void:
 	for child in hearts_parent.get_children():
 		hearts_list.append(child)
 	print("Hearts List:", hearts_list)
+	
+	#wait until after inital spawn to do gravity.
+	player_gravity_enabled = true
 
 # Damage cooldown and invulnerability variables
 var invuln_timer: float = 0.0              # additional invulnerability timer
@@ -79,26 +104,46 @@ func _physics_process(delta: float) -> void:
 	if invuln_timer > 0:
 		invuln_timer = max(invuln_timer - delta, 0)
 	
+	if is_on_floor() and not was_on_floor:
+		#sfx_land.play()
+		land_particles.restart()
+		land_particles.emitting = true
+		crouch_used = false
+	
+	# Update was_on_floor for next frame
+	was_on_floor = is_on_floor()
+	
 	if death_timer == -1:
-		if not is_dashing:
+		if not is_dashing and player_gravity_enabled:
 			apply_gravity(delta)
+		#reset the grapple/dash being allowed to be used
+		if (not can_grapple) and grapple_unlocked and is_on_floor():
+			can_grapple = true
+		if (not can_dash) and dash_unlocked and is_on_floor():
+			can_dash = true
 		handle_crouching()
 		handle_movement()
 		handle_grapple()
 		handle_jumping()
 		handle_dash()
+		handle_player_dash_and_grapple_coloration()
 		handle_level_bounds()
 		update_animation()
 		move_and_slide()
 		climb_ledges()
 		handle_self_die()
+		update_heart_display()
 		dev_checkpoint_handle()
 	else:
 		handle_death_animation()
 
-
 func apply_gravity(delta: float) -> void:
 	var gravity = GameManager.get_gravity()
+	
+	if is_grappling:
+		return
+		#dont mess with the grapple physics
+	
 	if not is_on_floor():
 		velocity.y += gravity * delta
 		
@@ -133,84 +178,225 @@ func handle_air_movement() -> void:
 	apply_horizontal_movement(air_control_loss)
 
 func apply_horizontal_movement(control_factor: float) -> void:
+	if is_grappling:
+		return
+		#no facing change while grappling
+		
 	if InputManager.is_move_left_pressed():
 		velocity.x += -speed * control_factor * player_input_acceleration_percent
+		movement_ghost.scale.x = -1
 		facing_direction = "left"
 	if InputManager.is_move_right_pressed():
 		velocity.x += speed * control_factor * player_input_acceleration_percent
+		movement_ghost.scale.x = 1
 		facing_direction = "right"
 
 func handle_jumping() -> void:
 	if InputManager.is_jump_pressed() and is_on_floor():
 		sfx_jump.play()
+		jump_particles.restart()
+		jump_particles.emitting = true
 		velocity.y = jump_speed
 		
 func handle_grapple() -> void:
-	if not can_grapple:
+	if grapple_progress == 0:
+		#if the grapple line exists, delete it
+		if grapple_line_exists:
+			grapple_line_exists = false
+			delete_grapple_line()
+	
+	if ((not can_grapple) and (not is_grappling)) or (not grapple_unlocked) or (is_dashing):
 		return
 	
-	if InputManager.is_grapple_pressed() and can_grapple and grapple_cooldown == -1:
-		#can_grapple = false
-		var x_dir
-		
-		if facing_direction == "left":
-			x_dir = grapple_length * -1
+	if InputManager.is_grapple_pressed() and not is_grappling:
+		#if the line does not exist, create it
+		if not grapple_line_exists:
+			create_grapple_line()
+			grapple_line_exists = true
 			
-		elif facing_direction == "right":
-			x_dir = grapple_length
-		
-		#check if the destination is inside a wall
-		#1. move to it.
-		#2. See if in wall, save the result
-		#3. move out
-		var old_collision_shape = collision_shape
-		collision_shape.translate(Vector2(x_dir, -1 * grapple_length))
-		
-		var is_in_wall: bool = is_on_wall() or is_on_floor()
-		
-		collision_shape.translate(Vector2(-1 * x_dir, grapple_length))
-		
-		if is_in_wall:
-			velocity.x = x_dir * 3
-			velocity.y = -1 * grapple_length * 3
-			grapple_cooldown = 10
+		#set up the grapple progress and other variables
+		grapple_progress = 0
+		is_grappling = true
+		found_grapple_hold = false
+		velocity = Vector2(0,-25)
+	
+	elif is_grappling and found_grapple_hold:
+		#grapple hold gotten, so now begin pulling player towards it.
+		#if the line does not exist, create it
+		if not grapple_line_exists:
+			create_grapple_line()
+			grapple_line_exists = true
 			
-		else:
-			#just pause in midair as you fail
-			velocity.x = 0
-			velocity.y = -5
-			
-	if grapple_cooldown != -1:
-		grapple_cooldown -= 1
-		velocity.x = grapple_length * [1, -1][int(facing_direction == "left")] * 3
-		velocity.y = -1 * grapple_length * 3
+		grapple_progress -= 6
+		if grapple_progress < 0:
+			#minimum progress check
+			grapple_progress = 0
 		
+		var facing_factor = int(facing_direction == "right") * 2 - 1
+		grapple_line.points = [Vector2(facing_factor * 3,-1), Vector2(grapple_progress * facing_factor, -1 * grapple_progress)]
+		
+		#hold the player in midair
+		velocity = Vector2(0,0)	
+		
+		#move the player with position, to ensure the grapple actually pulls them.
+		position = Vector2(position.x + 10 * facing_factor, position.y - 10)
+		
+		#if at 0, then stop the grapple
+		if grapple_progress == 0:
+			#give the player a little boost.
+			velocity = Vector2(0, jump_speed)
+			is_grappling = false
+			can_grapple = false
+	
+	elif is_grappling and grapple_progress >= 0:
+		#if the line does not exist, create it
+		if not grapple_line_exists:
+			create_grapple_line()
+			grapple_line_exists = true
+			
+		#increment the progress, then move the line to match up with the player
+		grapple_progress += 5
+		var facing_factor = int(facing_direction == "right") * 2 - 1
+		grapple_line.points = [Vector2(facing_factor * 3,-1), Vector2(grapple_progress * facing_factor, -1 * grapple_progress)]
+
+		#if enough time passed, grapple over, being fast retraction
+		if grapple_progress >= grapple_length:
+			grapple_progress = int(grapple_length * -0.15)		
+			
+		#hold the player in midair
+		velocity = Vector2(0,-25)	
+		
+		#check if you hit a wall
+		raycast.target_position = grapple_line.points[1]
+		raycast.force_raycast_update()
+		if raycast.is_colliding():
+			#we hit a thing!
+			found_grapple_hold = true
+		
+	elif is_grappling:
+		#if the line does not exist, create it
+		if not grapple_line_exists:
+			create_grapple_line()
+			grapple_line_exists = true
+			
+		#use the negative value of progress as a mini fast timer to retreact the grapple
+		grapple_progress += 1
+		
+		#draw the line retracting
+		var facing_factor = int(facing_direction == "right") * 2 - 1
+		grapple_line.points = [Vector2(facing_factor * 3,-1), Vector2((grapple_progress / -0.15) * facing_factor, (grapple_progress / 0.15))]
+
+		#once the progress reaches 0, stop the grapple.
+		if grapple_progress == 0:
+			is_grappling = false
+			can_grapple = false
+
+		#hold the player in midair
+		velocity = Vector2(0,20)	
+		
+		#check if you hit a wall
+		raycast.target_position = grapple_line.points[1]
+		raycast.force_raycast_update()
+		if raycast.is_colliding():
+			#we hit a thing!
+			found_grapple_hold = true
+		
+func create_grapple_line() -> void:
+	if grapple_line == null:
+		grapple_line = Line2D.new()
+		grapple_line.width = 3
+		grapple_line.default_color = Color(1, 0.75, 0.8)
+		grapple_line.points = [GameManager.dead_position, Vector2(GameManager.dead_position.x - 1, GameManager.dead_position.y - 1)]
+		grapple_line.z_index = 1
+		grapple_line.visible = true
+		grapple_line.begin_cap_mode = Line2D.LineCapMode.LINE_CAP_ROUND
+		grapple_line.end_cap_mode = Line2D.LineCapMode.LINE_CAP_ROUND
+		add_child(grapple_line)
+		
+		#make the raycast too
+		raycast = RayCast2D.new()	
+		raycast.enabled = true
+		raycast.collide_with_areas = false
+		raycast.position = Vector2(0,0)
+		add_child(raycast)
+
+
+func delete_grapple_line() -> void:
+	if grapple_line != null:
+		grapple_line.queue_free()
+		grapple_line = null
+		
+		raycast.queue_free()
+		raycast = null
 
 func handle_dash() -> void:
 	if not dash_unlocked:
 		return  # Prevent dashing if not unlocked
 	if not can_dash:
-		modulate = Color(0.5, 0.5, 1, 1)
+		pass
+		#code that was here moved to other function
+	if is_grappling:
+		#you are not allowed to start dashing while grappling.
+		return
 	else:
-		modulate = Color(1, 1, 1, 1)
+		pass
+		#code that was here moved to other function
 		
 	if InputManager.is_dash_pressed() and can_dash and not is_dashing:
 		sfx_dash.play()
 		start_dash()
+		
+func handle_player_dash_and_grapple_coloration() -> void:
+	#first, check if the player can either grapple or dash
+	#if not, just set the default color
+	#if only 1, then apply the filters only for that color
+	#if both, then apply both as needed.
+	if (not grapple_unlocked) and (not dash_unlocked):
+		var tween = create_tween()
+		tween.tween_property(self, "modulate", Color(1, 1, 1, 1), 0.15)
+		return
+		
+	elif (not grapple_unlocked) and dash_unlocked:
+		if not can_dash:
+			var tween = create_tween()
+			tween.tween_property(self, "modulate", Color(0.3, 0.3, 0.8, 1), 0.1)
+		else:
+			var tween = create_tween()
+			tween.tween_property(self, "modulate", Color(1, 1, 1, 1), 0.15)
+		return
+		
+	elif (not dash_unlocked) and grapple_unlocked:
+		if not can_grapple:
+			var tween = create_tween()
+			tween.tween_property(self, "modulate", Color(0.8, 0.3, 0.3, 1), 0.1)
+		else:
+			var tween = create_tween()
+			tween.tween_property(self, "modulate", Color(1, 1, 1, 1), 0.15)
+		
+		return
+		
+	elif grapple_unlocked and dash_unlocked:
+		if (not can_grapple) and (not can_dash):
+			var tween = create_tween()
+			tween.tween_property(self, "modulate", Color(0.9, 0.1, 0.9, 1), 0.1)
+		elif (not can_grapple) and can_dash:
+			var tween = create_tween()
+			tween.tween_property(self, "modulate", Color(0.8, 0.3, 0.3, 1), 0.1)
+		elif (not can_dash) and can_grapple:
+			var tween = create_tween()
+			tween.tween_property(self, "modulate", Color(0.3, 0.3, 0.8, 1), 0.1)
+		else:
+			var tween = create_tween()
+			tween.tween_property(self, "modulate", Color(1, 1, 1, 1), 0.15)
+			
+		return
+		
+	#you shouldn't ever get to this point
+	return
 
 func start_dash() -> void:
 	is_dashing = true
 	can_dash = false
-
-	# Copy the current frame of the player's animation to the dash effect
-	var frameIndex: int = animated_sprite.get_frame()
-	var animationName: String = animated_sprite.animation
-	var spriteFrames: SpriteFrames = animated_sprite.get_sprite_frames()
-	var currentTexture: Texture2D = spriteFrames.get_frame_texture(animationName, frameIndex)
-	
-	dash_effect.texture = currentTexture
-	dash_effect.flip_h = animated_sprite.flip_h
-	dash_effect.visible = true
 
 	# Set dash velocity based on facing direction
 	var dash_direction: Vector2 = Vector2.RIGHT if facing_direction == "right" else Vector2.LEFT
@@ -221,13 +407,11 @@ func start_dash() -> void:
 	end_dash()
 
 	# Start dash cooldown timer
-	await get_tree().create_timer(dash_cooldown).timeout
-	can_dash = true
+	#removed.
 
 func end_dash() -> void:
 	is_dashing = false
 	velocity.x = 0
-	dash_effect.visible = false
 
 func handle_level_bounds() -> void:
 	var level_bounds = GameManager.get_level_bounds()
@@ -252,13 +436,17 @@ func update_animation() -> void:
 	if velocity.x != 0 or velocity.y != 0:
 		animated_sprite.flip_h = facing_direction == "left"
 		if is_on_floor():
+			movement_ghost.emitting = false
 			animated_sprite.play("run")
 		else:
 			if velocity.y < 0:
+				movement_ghost.emitting = true
 				animated_sprite.play("jump")
 			else:
+				movement_ghost.emitting = true
 				animated_sprite.play("fall")
 	else:
+		movement_ghost.emitting = false
 		animated_sprite.play("idle")
 
 func handle_death_animation() -> void:
@@ -268,18 +456,29 @@ func handle_death_animation() -> void:
 		animated_sprite.rotation_degrees = 90
 
 	death_timer -= 1
-	modulate = Color(1, 0, 0, 1)
-	
+	var tween = create_tween()
+	tween.tween_property(self, "modulate", Color(1, 0, 0, 1), 0.1)
+	emit_signal("player_died") 
 	if death_timer == 0:
-		modulate = Color(1, 1, 1, 1)
-		animated_sprite.rotation_degrees = 0
-		reset_hearts()  # Reset hearts on respawn
-		GameManager.respawn_player(self)
-		death_timer = -1
+		var respawn_timer = get_tree().create_timer(3.0)  
+		respawn_timer.timeout.connect(_on_respawn_timer_timeout)  
+		
+		
+func _on_respawn_timer_timeout():
+	var tween = create_tween()
+	tween.tween_property(self, "modulate", Color(1, 1, 1, 1), 1)
+	animated_sprite.rotation_degrees = 0
+	reset_hearts() 
+	GameManager.respawn_player(self)
+	death_timer = -1
+	emit_signal("player_respawned") 
+	await get_tree().create_timer(2.3).timeout
+	block_heart_display = false
 
 func handle_crouching() -> void:
 	if InputManager.is_crouch_pressed():
-		if not is_crouching:
+		if not is_crouching and not crouch_used:
+			crouch_used = true
 			is_crouching = true
 			speed *= crouch_speed_reduction
 			jump_speed *= crouch_speed_reduction
@@ -294,6 +493,8 @@ func handle_crouching() -> void:
 			
 			# Scale the sprite
 			animated_sprite.scale = Vector2(1, crouch_squish_amount)
+			
+			velocity.y += crouch_fall_speed
 	else:
 		if is_crouching:
 			is_crouching = false
@@ -311,8 +512,12 @@ func handle_crouching() -> void:
 			# Reset the sprite scale
 			animated_sprite.scale = Vector2(1, 1)
 
-func bounce() -> void:
-	velocity.y = -800 
+func bounce(super_bounce : bool = false) -> void:
+	if not super_bounce:
+		velocity.y = -800 
+	
+	else:
+		velocity.y = -1400
 
 func take_damage(amount_damage: int) -> void:
 	# Do not take damage if we're still in the invulnerability period.
@@ -329,20 +534,24 @@ func take_damage(amount_damage: int) -> void:
 	
 	if health < 0:
 		health = 0
+		
+	if health > 3:
+		health = 3
 	
 	update_heart_display()
+	
+	# Play the hit animation and enforce a brief hurt state.
+	is_hurt = true
+	animated_sprite.play("hit")
+	sfx_hurt.play()
+	await animated_sprite.animation_finished
+	is_hurt = false
 	
 	# If no hearts remain, kill the player immediately.
 	if health <= 0:
 		GameManager.kill_player(self)
 		return
 	
-	# Play the hit animation and enforce a brief hurt state.
-	is_hurt = true
-	animated_sprite.play("hit")
-	await animated_sprite.animation_finished
-	is_hurt = false
-
 # Reset hearts back to full health (3 hearts) upon respawn,
 # allow damage again, and grant temporary invulnerability.
 
@@ -350,7 +559,7 @@ func take_damage(amount_damage: int) -> void:
 func update_heart_display() -> void:
 	# Update each heart's visibility based on current health
 	for i in range(hearts_list.size()):
-		hearts_list[i].visible = i < health
+		hearts_list[i].visible = (i < health) and (not block_heart_display)
 
 # Reset hearts back to full health (3 hearts) upon respawn and allow damage again
 func reset_hearts() -> void:
@@ -401,6 +610,14 @@ func climb_ledges() -> void:
 	if (velocity.x == 0 and is_on_wall() and is_on_floor() and damage_cooldown_timer >= DAMAGE_COOLDOWN):
 		#for right
 		if ((InputManager.is_move_left_pressed() or InputManager.is_move_right_pressed())) and (not InputManager.is_jump_pressed()):
-			velocity.y += jump_speed * step_height
-			apply_horizontal_movement(1.0)
+			var climbable = is_wall_climbable()
+			if climbable:
+				sfx_jump.play()
+				jump_particles.restart()
+				jump_particles.emitting = true
+				velocity.y += jump_speed * step_height
+				apply_horizontal_movement(1.0)
+			
+func is_wall_climbable() -> bool:
+	return $ClimbCheckArea.get_overlapping_bodies().size() == 0
 			

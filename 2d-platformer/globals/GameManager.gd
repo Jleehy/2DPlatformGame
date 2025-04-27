@@ -34,13 +34,39 @@ var level2_unlocked: bool = false
 @export var display_text = ""
 
 #a list that contains start-of-level messages
-@export var start_level_messages: Array = ["[TODO] Frog wants to go on a quest to defeat\nthe evil animal kingdom to the north.", "[TODO] Frog is revealed to be the prince\nof his kingdom, and isn't supposed to quest.", "[TODO]"]
+@export var start_level_messages: Array = [  
+	"WELCOME TO HOPPER! USE ARROWS OR WASD TO MOVE. SIGNS CONTAIN FURTHER INFORMATION.",  
+	"FROG DISCOVERS HE IS THE PRINCE OF HIS KINGDOM AND SHOULD NOT BE ADVENTURING",  
+	"TODO"  
+]  
 #a list of lists that handle specific sign messages within levels
-@export var sign_messages_list: Array = [
-	["Welcome to the Northern Animal\nKingdom! Visitors Unallowed.", "[leader's] headquarters, straight ahead.", "It seems smudged out. That will not\nstop your quest, however.", "4", "5", "6"],
-	["Every tadpole has an inspiration to do something\nwhen they become a frog. This is yours.", "This is a road-sign. You must be deep in the city\nnow. The leader must be close.", "It says this is the royal academy. Odd, that's\nquite similar to the one you went to.", "The royal residence, straight ahead.\nGood, this is the right way.", "5", "6"],
-	[]
-]
+@export var sign_messages_list: Array = [  
+	[  
+		"1",
+		"2",
+		"3",
+		"4",
+		"That is all for the tutorial! Jump down below to enter the level proper.".to_upper(),
+		"Use T to send yourself back to the most recent checkpoint. Maybe this is useful here...".to_upper(),
+		"Hold Down or S to crouch in smaller gaps.".to_upper(),
+		"Down-right, there is an new Checkpoint to get. Up-Left, there is an enemy. Stomp enemies to defeat!".to_upper(),
+		"The Spikes will send you back to the previous checkpoint.".to_upper(),
+		"Use space to Jump!".to_upper(),
+		"11",
+		"12"
+	],  
+	[  
+		"EVERY TADPOLE DREAMS OF GREATNESS WHEN THEY BECOME A FROG\nTHIS IS YOUR DESTINY",  
+		"THIS ROAD SIGN MARKS THE CITY CENTER\nTHE LEADER MUST BE NEAR",  
+		"THIS IS THE ROYAL ACADEMY\nSTRANGELY SIMILAR TO YOUR OWN",  
+		"THE ROYAL RESIDENCE IS AHEAD\nYOU ARE ON THE RIGHT PATH",  
+		"Use the shift key to use your newly-unlocked dash!".to_upper(),  
+		"6"  
+	],  
+	[
+		"Use the Q key to use your newly-unlocked grapple!".to_upper()
+	]  
+]  
 @export var sign_manager_counter: int = 0
 
 func _ready() -> void:
@@ -81,7 +107,7 @@ func initialize_level(level_id: String) -> void:
 			camera_manager.set_level_bounds(level_bounds)
 
 	#display start text
-	display_text_timer = 225
+	display_text_timer = 350
 	display_text = start_level_messages[current_level_number]
 
 	# Play music
@@ -132,24 +158,36 @@ func kill_player(player) -> void:
 		player.death_timer = 30
 		player.velocity = Vector2.ZERO
 		
+		player.health = 0
+		player.block_heart_display = true
+		player.update_heart_display()
+		
 		display_text_timer = 0
 		
 		#go through all bodies and call a reset on them if applicable.
+		#wait for fade to have happened to reset all of these things.
+		await get_tree().create_timer(3.0).timeout
 		for node in get_tree().current_scene.get_children():
-			if node.has_method("heal_and_respawn"):
-				node.heal_and_respawn()
-			
 			if node.has_method("reset_position"):
 				node.reset_position()
+			
+			if node.has_method("heal_and_respawn"):
+				node.heal_and_respawn()
 			
 			if node.has_method("despawn"):
 				node.despawn()
 
 # Respawn the player
 func respawn_player(player) -> void:
+	if player_progress == dead_position:
+		#set the position to the start point position.
+		player_progress = [Vector2(467, -1545), Vector2(227, 713), Vector2(227, 713)][current_level_number]
+	
 	print("Respawning player at last checkpoint:", player_progress)
 	player.velocity = Vector2.ZERO
 	player.position = player_progress
+	print("Player current position: ", player.position)
+	print("Player current global position: ", player.global_position)
 
 func next_checkpoint_teleport(player) -> void:
 	#if invalid setup for current level, then do nothing.
@@ -199,4 +237,5 @@ func handle_text_display() -> void:
 	else:
 		CameraManager.display_display_text(true, display_text)
 		display_text_timer -= 1
+	
 	

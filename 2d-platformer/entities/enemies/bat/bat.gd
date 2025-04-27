@@ -9,7 +9,9 @@ var redval: float
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
-@onready var hit_area: Area2D = $HitArea
+@onready var kill_zone: Area2D = $KillZone
+
+@onready var sfx_hurt = $sfx_hurt
 
 var is_dead: bool = false
 var starting_position: Vector2
@@ -20,7 +22,7 @@ func _ready() -> void:
 	current_health = max_health
 	redval = 0
 	animated_sprite.play("flying")
-	hit_area.body_entered.connect(_on_hit_area_body_entered)
+	kill_zone.body_entered.connect(_on_kill_zone_body_entered)
 
 func _process(delta: float) -> void:
 	if is_dead:
@@ -92,8 +94,10 @@ func flash_red_show_hp() -> void:
 		
 	modulate = Color(1, temp_num, temp_num, 1)
 
-func _on_hit_area_body_entered(body: Node):
+func _on_kill_zone_body_entered(body: Node):
+	#extra condition is to make bat less damagey when player stomps it
 	if body.is_in_group("player") and not is_dead:
+		sfx_hurt.play()
 		take_damage(body)
 		body.bounce()
 
@@ -119,7 +123,7 @@ func kill_bat() -> void:
 	animated_sprite.play("hit")
 	
 	#message
-	GameManager.display_text = "Defeated Bat!"
+	GameManager.display_text = "DEFEATED BAT!"
 	GameManager.display_text_timer = 100
 	
 	await get_tree().create_timer(0.5).timeout

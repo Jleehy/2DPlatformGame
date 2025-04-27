@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://cc07ivmdau2xd"]
+
+[ext_resource type="Script" path="res://entities/enemies/stoneman/stoneman.gd" id="1_5q58t"]
+[ext_resource type="Texture2D" uid="uid://c8vtlee0jj666" path="res://art/enemies/stoneman/Idle.png" id="2_6ptcd"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xdd88"]
+size = Vector2(88, 82.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_73l6e"]
+size = Vector2(88.8125, 7.625)
+
+[node name="Stoneman" type="CharacterBody2D"]
+script = ExtResource("1_5q58t")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(1.90735e-06, 1.90735e-06)
+scale = Vector2(2.7381, 2.76191)
+texture = ExtResource("2_6ptcd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 3.25)
+shape = SubResource("RectangleShape2D_xdd88")
+
+[node name="KillZone" type="Area2D" parent="."]
+position = Vector2(33, 4)
+
+[node name="KillBox" type="CollisionShape2D" parent="KillZone"]
+position = Vector2(-32.4063, -46.1875)
+shape = SubResource("RectangleShape2D_73l6e")
+debug_color = Color(0.949174, 0.202554, 0.265165, 0.42)

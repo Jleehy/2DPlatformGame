@@ -15,6 +15,8 @@ var redval: float
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var kill_zone: Area2D = $KillZone  # Reference to the Area2D node
 
+@onready var sfx_hurt = $sfx_hurt
+
 # State variables
 var is_dead: bool = false
 var direction: int = -1  # -1 for left, 1 for right
@@ -109,6 +111,7 @@ func check_player_collision() -> void:
 
 func _on_kill_zone_body_entered(body: Node) -> void:
 	if body.is_in_group("player") and not is_dead:
+		sfx_hurt.play()
 		take_damage(body)  # Pass the player to the take_damage function
 		body.bounce()  # Make the player bounce after hitting the enemy
 
@@ -136,7 +139,7 @@ func kill_chicken() -> void:
 	animated_sprite.play("hit")
 	
 	#message
-	GameManager.display_text = "Defeated Chicken!"
+	GameManager.display_text = "DEFEATED CHICKEN!"
 	GameManager.display_text_timer = 100
 	
 	await get_tree().create_timer(0.5).timeout  # Wait for animation to finish

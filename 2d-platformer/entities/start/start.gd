@@ -14,8 +14,9 @@ func _on_Area2D_body_entered(body: Node) -> void:
 		
 		GameManager.save_checkpoint(Vector2(global_position.x, global_position.y))
 		
-	if body.has_method("reset_hearts"):
-		body.reset_hearts()
+	if body.has_method("reset_hearts") and body.name == "Player":
+		if body.health != 0:
+			body.reset_hearts()
 		
 # Plays the flag animation sequence
 func play_flag_animation() -> void:
@@ -36,7 +37,7 @@ func _process(delta: float) -> void:
 	if not checkpoint_saved:
 		GameManager.checkpoints_list.append(Vector2(self.global_position.x, self.global_position.y))
 		checkpoint_saved = true
-		GameManager.player_progress = global_position
+		
 	
 func ret_pos() -> Vector2:
 	return self.global_position

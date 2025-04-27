@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/Text (White) (8x10).png-9a731b8c8f095b36666bc
 
 [params]
 
-character_ranges=PackedStringArray("65-90", "48-57", "32-33", "40-41", "43-46", "58", "63")
+character_ranges=PackedStringArray("65-90", "0x20", "0x20", "0x20", "0x20", "48-57", "46", "44", "58", "63", "33", "40", "41", "43", "45", "0x20")
 kerning_pairs=PackedStringArray()
 columns=10
 rows=5
@@ -21,5 +21,5 @@ character_margin=Rect2i(0, 0, 0, 0)
 ascent=0
 descent=0
 fallbacks=[]
-compress=true
+compress=false
 scaling_mode=2
