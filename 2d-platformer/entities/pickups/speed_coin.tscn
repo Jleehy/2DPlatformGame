@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://d4hf3h0bk5t6a"]
+[gd_scene load_steps=7 format=3 uid="uid://d4hf3h0bk5t6a"]
 
 [ext_resource type="Script" path="res://entities/pickups/speed_coin.gd" id="1_583q2"]
 [ext_resource type="Texture2D" uid="uid://byjrvofdd1uxn" path="res://art/pickups/GreenCoinSMB.png" id="2_2anyy"]
@@ -7,6 +7,14 @@
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_7qagh"]
 radius = 17.0
 height = 56.0
+
+[sub_resource type="Gradient" id="Gradient_0rbss"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_pxrh0"]
+gradient = SubResource("Gradient_0rbss")
+width = 32
+fill = 1
+fill_from = Vector2(0.487179, 0.525641)
 
 [node name="speed_coin" type="Area2D"]
 script = ExtResource("1_583q2")
@@ -23,5 +31,9 @@ shape = SubResource("CapsuleShape2D_7qagh")
 stream = ExtResource("3_vp6io")
 max_distance = 1e+16
 attenuation = 1e-05
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+shadow_enabled = true
+texture = SubResource("GradientTexture2D_pxrh0")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

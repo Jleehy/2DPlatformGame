@@ -11,9 +11,9 @@ func _ready() -> void:
 	player.player_respawned.connect(transition.fade_out)
 	player.grapple_unlocked = false
 	player.dash_unlocked = false
-	CameraManager.set_player(player)
 	GameManager.current_level_number = 1
 	GameManager.initialize_level("level_1")
+	CameraManager.set_player(player)
 
 #func _process(delta):
 #	if Input.is_action_just_pressed("pause"):  # Check for pause input

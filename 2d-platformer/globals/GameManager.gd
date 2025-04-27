@@ -90,6 +90,15 @@ func _physics_process(delta: float) -> void:
 func initialize_level(level_id: String) -> void:
 	#set up for dev tool automation thing
 	
+	var transition = get_node("/root/" + level_id + "/CanvasLayer2/Transition")
+	if transition:
+		print("LEVEL ID: " + level_id)
+		transition.fade_in("LEVEL " + str(current_level_number))
+		
+		await get_tree().create_timer(3).timeout
+		
+		transition.fade_out()
+
 	# Calculate level bounds
 	current_level = get_node("/root/" + level_id)
 	var tilemap_layer = current_level.get_node("TileMapLayer")
@@ -112,7 +121,7 @@ func initialize_level(level_id: String) -> void:
 
 	#display start text
 	display_text_timer = 350
-	display_text = start_level_messages[current_level_number]
+	display_text = start_level_messages[current_level_number-1]
 
 	# Play music
 	#AudioManager.play_sound(main_node.get_node("Music"))

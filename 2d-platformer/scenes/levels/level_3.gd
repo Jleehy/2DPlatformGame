@@ -4,8 +4,6 @@ extends Node
 
 func _ready() -> void:
 	# Initialize the GameManager with the current level
-	CameraManager.set_player(player)
-	GameManager.initialize_level("level_3")
 	var transition = $CanvasLayer2/Transition 
 	player.player_died.connect(transition.fade_in)
 	player.player_respawned.connect(transition.fade_out)
@@ -16,6 +14,9 @@ func _ready() -> void:
 	for child in get_children():
 		if is_instance_of(child, Skull):
 			child.attach_player(player)
+	GameManager.initialize_level("level_3")
+	CameraManager.set_player(player)
+
 
 func _process(delta: float) -> void:
 	for child in get_children():
