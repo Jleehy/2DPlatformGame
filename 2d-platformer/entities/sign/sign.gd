@@ -1,7 +1,7 @@
 extends Area2D
 
 var is_player_inside: bool = false
-var my_text: String = ""
+var my_text: String = "STRING FETCH FAILURE."
 
 func _ready() -> void:
 	# Connect signals

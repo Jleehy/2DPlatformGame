@@ -68,6 +68,10 @@ var is_transitioning: bool = false
 		"6"  
 	],  
 	[
+		"1",
+		"2",
+		"3",
+		"4",
 		"Use the Q key to use your newly-unlocked grapple!".to_upper()
 	]  
 ]  
