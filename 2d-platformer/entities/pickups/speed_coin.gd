@@ -3,6 +3,9 @@ extends Area2D
 @export var speed_boost: int = 500  # Extra speed boost
 @export var boost_duration: float = 10.0  # Duration of speed boost in seconds
 
+# Sound effects
+@onready var sfx_pickup = $sfx_pickup
+
 var start_position
 
 func _ready() -> void:
@@ -15,6 +18,7 @@ func _on_body_entered(body: Node) -> void:
 		#message
 		GameManager.display_text = "SUPER SPEED ACTIVATED!"
 		GameManager.display_text_timer = 100
+		sfx_pickup.play()
 		
 		#allow respawns, so these can be used in puzzles
 		position = GameManager.dead_position

@@ -3,6 +3,8 @@ extends Area2D
 @export var duration: float = 10.0  # Time in seconds for the double damage to last
 
 @onready var sprite: Sprite2D = $Sprite  # Assuming you have a Sprite2D node for the pickup
+# Sound effects
+@onready var sfx_pickup = $sfx_pickup
 
 var start_position
 
@@ -20,6 +22,8 @@ func _on_body_entered(body: Node) -> void:
 		#message
 		GameManager.display_text = "DOUBLE DAMAGE ACTIVATED!"
 		GameManager.display_text_timer = 100
+		print(sfx_pickup)
+		sfx_pickup.play()
 		
 		#allow respawns, so these can be used in puzzles
 		position = GameManager.dead_position
