@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=4 uid="uid://ch70qeudcu3a"]
+[gd_scene load_steps=24 format=4 uid="uid://ch70qeudcu3a"]
 
 [ext_resource type="Script" path="res://scenes/levels/level_2.gd" id="1_gn46l"]
 [ext_resource type="PackedScene" uid="uid://cuxwbdbw6vgtd" path="res://entities/player/player.tscn" id="2_bx6t5"]
@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://coskoq2jla2rx" path="res://entities/moving_platform/moving_platform.tscn" id="14_amqj5"]
 [ext_resource type="PackedScene" uid="uid://13fnbqyoirum" path="res://entities/sign/sign.tscn" id="16_64ahm"]
 [ext_resource type="PackedScene" uid="uid://ch70k0iiqpoxu" path="res://entities/end/end.tscn" id="19_g0ubm"]
+[ext_resource type="PackedScene" uid="uid://cvqsp2mxomk62" path="res://menus/transition.tscn" id="19_l4tk1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gx65u"]
 texture = ExtResource("3_24mc2")
@@ -818,6 +819,7 @@ volume_db = -20.0
 autoplay = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 2
 
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("8_hygfu")]
 
@@ -1029,3 +1031,7 @@ position = Vector2(20328, -2391)
 
 [node name="Sign4" parent="." instance=ExtResource("16_64ahm")]
 position = Vector2(346, 745)
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+
+[node name="Transition" parent="CanvasLayer2" instance=ExtResource("19_l4tk1")]

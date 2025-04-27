@@ -25,10 +25,12 @@ func _input(event):
 
 
 func _on_resume_pressed() -> void:
+	print("resume pressed")
 	hide()
 	get_tree().paused = false
 
 
 func _on_main_menu_pressed() -> void:
+	print("main menu pressed")
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://menus/main_menu.tscn")

@@ -13,6 +13,7 @@ static var instance: GameManager
 
 # Levels Unlocked
 var level2_unlocked: bool = false
+var level3_unlocked: bool = false
 
 #Some variables that are used internally to handle the dev teleportation
 @export var current_level_number: int = 0
@@ -32,6 +33,9 @@ var level2_unlocked: bool = false
 #variables related to the displayed text
 @export var display_text_timer: int = 500
 @export var display_text = ""
+
+#variable related to whether or not death transition is playing
+var is_transitioning: bool = false
 
 #a list that contains start-of-level messages
 @export var start_level_messages: Array = [  

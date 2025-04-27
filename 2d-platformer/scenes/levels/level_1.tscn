@@ -187,9 +187,9 @@ sources/0 = SubResource("TileSetAtlasSource_iir4c")
 script = ExtResource("1_4fcmp")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 2
 
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("13_xhitp")]
-visible = false
 
 [node name="CanvasLayer2" type="CanvasLayer" parent="."]
 

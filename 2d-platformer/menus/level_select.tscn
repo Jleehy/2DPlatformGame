@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://tnoaa2ktceu3"]
+[gd_scene load_steps=9 format=3 uid="uid://tnoaa2ktceu3"]
 
 [ext_resource type="Script" path="res://menus/level_select.gd" id="1_folko"]
 [ext_resource type="Theme" path="res://menus/title.tres" id="2_hehf2"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://c0ji1sh25eyiy" path="res://art/menu/levels/01.png" id="4_jvb2c"]
 [ext_resource type="Texture2D" uid="uid://0ap65vhd1s1j" path="res://art/menu/levels/02.png" id="5_kfgch"]
 [ext_resource type="Texture2D" uid="uid://c52elq6oy8fjs" path="res://art/menu/buttons/Back.png" id="6_eikek"]
+[ext_resource type="Texture2D" uid="uid://cqekykq3rd00u" path="res://art/menu/levels/03.png" id="6_ix1rx"]
 [ext_resource type="AudioStream" uid="uid://d0xiyyvgna8v0" path="res://sounds/menu_theme.mp3" id="7_x7fxl"]
 
 [node name="LevelSelect" type="Control"]
@@ -61,10 +62,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -165.5
-offset_top = -15.5
-offset_right = 165.5
-offset_bottom = 79.5
+offset_left = -200.0
+offset_top = -15.0
+offset_right = 211.0
+offset_bottom = 80.0
 grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
@@ -113,6 +114,28 @@ grow_vertical = 2
 texture = ExtResource("5_kfgch")
 stretch_mode = 5
 
+[node name="Level 3" type="Button" parent="Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+flat = true
+icon_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Buttons/Level 3"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_ix1rx")
+stretch_mode = 5
+
 [node name="Back" type="Button" parent="Buttons"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -145,5 +168,6 @@ autoplay = true
 [connection signal="pressed" from="Buttons/Level 1" to="." method="_on_level_1_pressed"]
 [connection signal="pressed" from="Buttons/Level 2" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="Buttons/Level 2" to="." method="_on_level_2_pressed"]
+[connection signal="pressed" from="Buttons/Level 3" to="." method="_on_level_3_pressed"]
 [connection signal="pressed" from="Buttons/Back" to="." method="_on_levels_pressed"]
 [connection signal="pressed" from="Buttons/Back" to="." method="_on_back_pressed"]

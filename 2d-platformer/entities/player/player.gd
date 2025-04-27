@@ -97,6 +97,11 @@ var invuln_timer: float = 0.0              # additional invulnerability timer
 const INVULNERABILITY_DURATION: float = 0.5  # 0.5 seconds of invulnerability after respawn
 
 func _physics_process(delta: float) -> void:
+	if death_timer != -1:
+		handle_death_animation()
+		return
+	if GameManager.is_transitioning:
+		return
 	# Update the damage cooldown timer each frame.
 	damage_cooldown_timer = min(damage_cooldown_timer + delta, DAMAGE_COOLDOWN)
 	
