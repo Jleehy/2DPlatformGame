@@ -19,6 +19,9 @@ func _on_body_entered(body: Node2D) -> void:
 	if is_instance_of(body, Player):
 		body.take_damage(1)
 		queue_free()
+	if is_instance_of(body, Skull) or is_instance_of(body, Plant):
+		pass
+		#do nothing and just pass through the bullet-shooters themselves.
 	else:
 		queue_free()
 		
