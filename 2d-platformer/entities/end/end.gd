@@ -4,7 +4,6 @@ extends Area2D
 func _on_Area2D_body_entered(body: Node) -> void:
 	if body.name == "Player":
 		GameManager.player_progress = Vector2.ZERO
-		GameManager.current_level_number += 1
 		GameManager.respawn_player(body)
 		get_tree().change_scene_to_file("res://scenes/levels/level_" + str(GameManager.current_level_number + 1) + ".tscn")
 

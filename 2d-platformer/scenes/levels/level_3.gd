@@ -8,6 +8,7 @@ func _ready() -> void:
 	GameManager.initialize_level("level_3")
 	player.dash_unlocked = true
 	player.grapple_unlocked = true
+	GameManager.current_level_number = 3
 	GameManager.level3_unlocked = true
 	for child in get_children():
 		if is_instance_of(child, Skull):

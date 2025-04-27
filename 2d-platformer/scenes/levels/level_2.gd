@@ -11,6 +11,7 @@ func _ready() -> void:
 	player.player_respawned.connect(transition.fade_out)
 	player.dash_unlocked = true
 	player.grapple_unlocked = false
+	GameManager.current_level_number = 2
 	GameManager.level2_unlocked = true
 	for child in get_children():
 		if is_instance_of(child, Skull):
