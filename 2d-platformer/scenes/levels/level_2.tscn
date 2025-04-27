@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=4 uid="uid://ch70qeudcu3a"]
+[gd_scene load_steps=32 format=4 uid="uid://ch70qeudcu3a"]
 
 [ext_resource type="Script" path="res://scenes/levels/level_2.gd" id="1_gn46l"]
 [ext_resource type="PackedScene" uid="uid://cuxwbdbw6vgtd" path="res://entities/player/player.tscn" id="2_bx6t5"]
@@ -25,6 +25,7 @@
 [ext_resource type="Texture2D" uid="uid://c2wddnnmnn8me" path="res://art/background/parallax/gray/parallax-01.png" id="22_1high"]
 [ext_resource type="Texture2D" uid="uid://bh716feymfvmw" path="res://art/background/parallax/gray/parallax-02.png" id="23_gltif"]
 [ext_resource type="Texture2D" uid="uid://c0sn5wwtjqwwv" path="res://art/background/parallax/gray/parallax-03.png" id="24_4rxkx"]
+[ext_resource type="PackedScene" uid="uid://cc07ivmdau2xd" path="res://entities/enemies/stoneman/stoneman.tscn" id="26_qrsts"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gx65u"]
 texture = ExtResource("3_24mc2")
@@ -960,7 +961,6 @@ autoplay = true
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("8_hygfu")]
-visible = false
 
 [node name="CanvasLayer2" type="CanvasLayer" parent="."]
 
@@ -1079,18 +1079,6 @@ patrol_distance = 50
 position = Vector2(15458, 263)
 patrol_distance = 50
 
-[node name="Bat" parent="." instance=ExtResource("11_wrpmt")]
-position = Vector2(4665, 1113)
-motion_mode = 1
-patrol = Vector2(100, 0)
-metadata/_edit_group_ = true
-
-[node name="Bat7" parent="." instance=ExtResource("11_wrpmt")]
-position = Vector2(6242, 1252)
-motion_mode = 1
-patrol = Vector2(200, 0)
-metadata/_edit_group_ = true
-
 [node name="Bat8" parent="." instance=ExtResource("11_wrpmt")]
 position = Vector2(7816, 1270)
 motion_mode = 1
@@ -1123,12 +1111,6 @@ metadata/_edit_group_ = true
 
 [node name="Bat3" parent="." instance=ExtResource("11_wrpmt")]
 position = Vector2(2128, -687)
-motion_mode = 1
-patrol = Vector2(200, 0)
-metadata/_edit_group_ = true
-
-[node name="Bat4" parent="." instance=ExtResource("11_wrpmt")]
-position = Vector2(1470, -198)
 motion_mode = 1
 patrol = Vector2(200, 0)
 metadata/_edit_group_ = true
@@ -1250,3 +1232,18 @@ scale = Vector2(10, 10)
 texture = ExtResource("24_4rxkx")
 centered = false
 offset = Vector2(0, -265)
+
+[node name="Stoneman" parent="." instance=ExtResource("26_qrsts")]
+position = Vector2(4696.2, 640.017)
+
+[node name="Stoneman2" parent="." instance=ExtResource("26_qrsts")]
+position = Vector2(6450.38, 862.433)
+
+[node name="Stoneman3" parent="." instance=ExtResource("26_qrsts")]
+position = Vector2(1298.04, -390.359)
+
+[node name="Stoneman4" parent="." instance=ExtResource("26_qrsts")]
+position = Vector2(12520.3, 1151.99)
+
+[node name="Stoneman5" parent="." instance=ExtResource("26_qrsts")]
+position = Vector2(17730.8, -247.558)

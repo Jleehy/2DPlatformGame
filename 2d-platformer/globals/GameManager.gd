@@ -1,7 +1,7 @@
 extends Node
 
 # Game state variables
-var current_level: Node
+@export var current_level: Node = null
 var player_progress: Vector2
 var level_bounds: Rect2
 var death_height_offset: float = 100  # How far below the level bounds the player can fall before dying
@@ -93,7 +93,7 @@ func initialize_level(level_id: String) -> void:
 	var transition = get_node("/root/" + level_id + "/CanvasLayer2/Transition")
 	if transition:
 		print("LEVEL ID: " + level_id)
-		transition.fade_in("LEVEL " + str(current_level_number))
+		transition.show_instant("LEVEL " + str(current_level_number))
 		
 		await get_tree().create_timer(3).timeout
 		

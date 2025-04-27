@@ -15,6 +15,12 @@ func fade_in(custom_text: String = "YOU DIED") -> void:
 	GameManager.is_transitioning = true
 	animation_player.play("fade_in")
 
+func show_instant(custom_text: String = "YOU DIED") -> void:
+	set_title_text("[center]" + custom_text + "[/center]")
+	show()
+	GameManager.is_transitioning = true
+	animation_player.play("fade_in", -1, 999999)
+
 # Function to play fade_out animation
 func fade_out() -> void:
 	print("Starting fade_out animation, setting is_transitioning = true")
