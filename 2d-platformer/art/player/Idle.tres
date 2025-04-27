@@ -1,0 +1,11 @@
+[gd_resource type="CanvasTexture" load_steps=4 format=3 uid="uid://cyu1cit67dwc6"]
+
+[ext_resource type="Texture2D" uid="uid://cgh23b8b7bxeg" path="res://art/player/Idle (32x32).png" id="1_6tfnb"]
+[ext_resource type="Texture2D" uid="uid://di4g0fawo5uh8" path="res://art/player/Idle (32x32)_normal.png" id="2_y46oi"]
+[ext_resource type="Texture2D" uid="uid://hypuadxpg314" path="res://art/player/Idle (32x32)_specular.png" id="3_ai7md"]
+
+[resource]
+diffuse_texture = ExtResource("1_6tfnb")
+normal_texture = ExtResource("2_y46oi")
+specular_texture = ExtResource("3_ai7md")
+specular_shininess = 0.5

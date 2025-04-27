@@ -6,6 +6,9 @@ func _ready() -> void:
 	# Initialize the GameManager with the current level
 	CameraManager.set_player(player)
 	GameManager.initialize_level("level_3")
+	var transition = $CanvasLayer2/Transition 
+	player.player_died.connect(transition.fade_in)
+	player.player_respawned.connect(transition.fade_out)
 	player.dash_unlocked = true
 	player.grapple_unlocked = true
 	GameManager.current_level_number = 3

@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=4 uid="uid://3h4xos8cef0n"]
+[gd_scene load_steps=35 format=4 uid="uid://3h4xos8cef0n"]
 
 [ext_resource type="Script" path="res://scenes/levels/level_3.gd" id="1_7s22v"]
 [ext_resource type="PackedScene" uid="uid://cuxwbdbw6vgtd" path="res://entities/player/player.tscn" id="2_wd8ps"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://bhkbamrvp2xcu" path="res://entities/start/start.tscn" id="7_kqxtl"]
 [ext_resource type="AudioStream" uid="uid://dybkwrn8ieb0v" path="res://sounds/level_theme.mp3" id="9_85xod"]
 [ext_resource type="PackedScene" uid="uid://c4xufs5sto4u3" path="res://menus/pause_menu.tscn" id="10_2atxg"]
+[ext_resource type="PackedScene" uid="uid://cvqsp2mxomk62" path="res://menus/transition.tscn" id="11_vr3w3"]
 [ext_resource type="PackedScene" uid="uid://wgdumoploxxj" path="res://entities/enemies/plant/plant.tscn" id="11_x4ye8"]
 [ext_resource type="PackedScene" uid="uid://v117ln176i3e" path="res://entities/enemies/chicken/chicken.tscn" id="12_15d7f"]
 [ext_resource type="PackedScene" uid="uid://du15uquucp0tg" path="res://entities/enemies/bat/bat.tscn" id="13_bag0b"]
@@ -1722,6 +1723,10 @@ autoplay = true
 visible = false
 
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("10_2atxg")]
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+
+[node name="Transition" parent="CanvasLayer2" instance=ExtResource("11_vr3w3")]
 
 [node name="Plant" parent="." instance=ExtResource("11_x4ye8")]
 position = Vector2(6155, -3263)

@@ -118,9 +118,10 @@ func _physics_process(delta: float) -> void:
 	# Update was_on_floor for next frame
 	was_on_floor = is_on_floor()
 	
+	if not is_dashing and player_gravity_enabled:
+		apply_gravity(delta)
+	
 	if death_timer == -1:
-		if not is_dashing and player_gravity_enabled:
-			apply_gravity(delta)
 		#reset the grapple/dash being allowed to be used
 		if (not can_grapple) and grapple_unlocked and is_on_floor():
 			can_grapple = true
@@ -463,6 +464,7 @@ func handle_death_animation() -> void:
 	death_timer -= 1
 	var tween = create_tween()
 	tween.tween_property(self, "modulate", Color(1, 0, 0, 1), 0.1)
+	animated_sprite.play("idle")
 	emit_signal("player_died") 
 	if death_timer == 0:
 		var respawn_timer = get_tree().create_timer(3.0)  

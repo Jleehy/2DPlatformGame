@@ -1,0 +1,6 @@
+[gd_resource type="CanvasTexture" load_steps=2 format=3 uid="uid://drt40535a10sa"]
+
+[ext_resource type="Texture2D" uid="uid://bl8wm26ii6o71" path="res://art/player/Jump (32x32).png" id="1_tir84"]
+
+[resource]
+diffuse_texture = ExtResource("1_tir84")

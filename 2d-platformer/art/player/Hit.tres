@@ -1,0 +1,6 @@
+[gd_resource type="CanvasTexture" load_steps=2 format=3 uid="uid://ckn4e8cai0wot"]
+
+[ext_resource type="Texture2D" uid="uid://cxvjjhktdjh7r" path="res://art/player/Hit (32x32).png" id="1_yxbjv"]
+
+[resource]
+diffuse_texture = ExtResource("1_yxbjv")

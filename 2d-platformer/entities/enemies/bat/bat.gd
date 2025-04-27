@@ -135,6 +135,7 @@ func kill_bat() -> void:
 
 func heal_and_respawn() -> void:
 	#does what it says. caLLed by gamemanager on player death.
+	animated_sprite.play("flying")
 	current_health = max_health
 	position = starting_position
 	is_dead = false
