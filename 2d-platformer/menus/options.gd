@@ -8,7 +8,7 @@ var WASD: bool
 var sound_on_icon = preload("res://art/menu/buttons/Volume.png")
 var sound_off_icon = preload("res://art/menu/buttons/VolumeMuted.png")
 
-# Called when the node enters the scene tree for the first time.
+# Map the movement controls on initial load
 func _ready() -> void:
 	var events = InputMap.action_get_events("move_left")
 	for event in events:
@@ -20,14 +20,14 @@ func _ready() -> void:
 	#WASD = is_using_wasd()
 	#print(WASD)
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+#text timer reduction and remove text once time runs out
 func _process(delta: float) -> void:
 	if GameManager.display_text_timer > 0:
 		GameManager.display_text_timer -= 1
 		if GameManager.display_text_timer <= 0:
 			GameManager.display_text = ""
 
+#set the used keys to wasd
 func is_using_wasd() -> bool:
 	var events = InputMap.action_get_events("move_left")
 	for event in events:
@@ -35,10 +35,11 @@ func is_using_wasd() -> bool:
 			return true
 	return false
 
+#exit the menu
 func _on_back_pressed() -> void:
 	get_tree().change_scene_to_file("res://menus/main_menu.tscn")
 
-
+#sound controls
 func _on_sound_pressed() -> void:
 	if muted:
 		icon.texture = sound_on_icon
@@ -47,16 +48,17 @@ func _on_sound_pressed() -> void:
 		icon.texture = sound_off_icon
 		muted = true
 
-
+#load help menu
 func _on_help_pressed() -> void:
 	get_tree().change_scene_to_file("res://menus/help.tscn")
 
-
+#manages the kybinding
 func _on_keybind_pressed() -> void:
 	InputMap.action_erase_events("move_left")
 	InputMap.action_erase_events("move_right")
 	InputMap.action_erase_events("crouch")
 	if WASD:
+		#set to wasd mode
 		var left_event = InputEventKey.new()
 		left_event.keycode = KEY_LEFT
 		InputMap.action_add_event("move_left", left_event)
@@ -74,6 +76,7 @@ func _on_keybind_pressed() -> void:
 		print("wasd off")
 		GameManager.display_text = "WASD is OFF"
 	else:
+		#set to arrows mode
 		var left_event = InputEventKey.new()
 		left_event.keycode = KEY_A
 		InputMap.action_add_event("move_left", left_event)

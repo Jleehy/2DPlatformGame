@@ -73,6 +73,7 @@ func _process(delta:float) -> void:
 
 
 func _on_hit_area_body_entered(body: Node2D) -> void:
+	#handle when the player enters this
 	if body.is_in_group("player") and not is_dead:
 		current_health -= 1
 		body.bounce()
@@ -138,6 +139,7 @@ func _on_animated_sprite_2d_animation_looped() -> void:
 
 
 func attach_player(player:CharacterBody2D) -> void:
+	#set up the player this is targeting when they see the player
 	player_reference = player
 
 func heal_and_respawn() -> void:

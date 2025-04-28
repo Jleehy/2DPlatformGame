@@ -21,6 +21,7 @@ var should_shoot: bool = false
 @export var starting_position: Vector2
 
 func _ready() -> void:
+	#prep variables and data for this plant
 	animated_sprite.play("idle")
 	current_health = max_health
 	starting_position = position
@@ -63,6 +64,7 @@ func flash_red_show_hp() -> void:
 	modulate = Color(1, temp_num, temp_num, 1)
 
 func _on_hit_area_body_entered(body: Node) -> void:
+	#deal damage to player if they run into this
 	if body.is_in_group("player") and not is_dead:
 		sfx_hurt.play()
 		take_damage(body)
@@ -99,6 +101,7 @@ func set_direction(new_direction: int) -> void:
 		animated_sprite.flip_h = true
 
 func set_shoot(shoot: bool) -> void:
+	#shoot the bullets periodically using this
 	if should_shoot != shoot:
 		should_shoot = shoot
 		if should_shoot and not is_dead:
@@ -107,6 +110,7 @@ func set_shoot(shoot: bool) -> void:
 			animated_sprite.play("idle")
 
 func shoot_bullet() -> void:
+	#actually shoot when it is time
 	var bullet = bullet_scene.instantiate()
 	bullet.set_direction(Vector2(direction, 0))
 	add_child(bullet)

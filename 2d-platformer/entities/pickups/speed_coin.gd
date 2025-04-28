@@ -9,10 +9,12 @@ extends Area2D
 var start_position
 
 func _ready() -> void:
+	#set up the data and trigger for this entity
 	start_position = global_position
 	connect("body_entered", Callable(self, "_on_body_entered"))
 
 func _on_body_entered(body: Node) -> void:
+	#activate double damage when this is entered, then remove this.
 	if body is CharacterBody2D and body.has_method("apply_speed_boost"):
 		body.apply_speed_boost(speed_boost, boost_duration)
 		#message
@@ -21,6 +23,7 @@ func _on_body_entered(body: Node) -> void:
 		sfx_pickup.play()
 		
 		#allow respawns, so these can be used in puzzles
+		#as compared to queue.free
 		position = GameManager.dead_position
 
 func reset_position() -> void:

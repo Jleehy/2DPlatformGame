@@ -26,18 +26,18 @@ func play_flag_animation() -> void:
 	animated_sprite.animation = "idle"
 	animated_sprite.play()
 
-# Example usage
 func _ready() -> void:
+	#set up data and connect triggers.
 	animated_sprite.animation = "idle"
 	animated_sprite.play()
 	connect("body_entered", Callable(self, "_on_Area2D_body_entered"))
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	#set up the teleport-y dev tool system.
 	if not checkpoint_saved:
 		GameManager.checkpoints_list.append(Vector2(self.global_position.x, self.global_position.y))
 		checkpoint_saved = true
 		
-	
 func ret_pos() -> Vector2:
+	#return the position
 	return self.global_position

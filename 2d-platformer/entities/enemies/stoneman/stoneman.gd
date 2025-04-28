@@ -22,6 +22,7 @@ var starting_position: Vector2
 var can_hurt_player: bool = true  # Cooldown to prevent rapid damage to the player
 
 func _ready() -> void:
+	#set up initial data about this enemy
 	starting_position = position
 	current_health = max_health  # Set health to max
 	redval = 0
@@ -31,6 +32,7 @@ func _physics_process(delta: float) -> void:
 	if is_dead:
 		return  # Stop processing if the enemy is dead
 
+	#apply normal functions each frame.
 	apply_gravity(delta)
 	handle_movement()
 	move_and_slide()
@@ -62,6 +64,7 @@ func handle_movement() -> void:
 		pass
 
 func check_player_collision() -> void:
+	#damage the player as is needed
 	for i in get_slide_collision_count():
 		var collision = get_slide_collision(i)
 		if collision.get_collider().is_in_group("player") and can_hurt_player:

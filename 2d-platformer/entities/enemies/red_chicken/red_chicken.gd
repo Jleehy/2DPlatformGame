@@ -24,6 +24,7 @@ var starting_position: Vector2
 var can_hurt_player: bool = true  # Cooldown to prevent rapid damage to the player
 
 func _ready() -> void:
+	#set up data used by this enemy later.
 	starting_position = position
 	current_health = max_health  # Set health to max
 	redval = 0
@@ -95,6 +96,7 @@ func handle_movement() -> void:
 		velocity.x = 0  # Stop moving if dead or in the air
 
 func handle_animation() -> void:
+	#handle animation based on state
 	if is_dead:
 		animated_sprite.play("hit")
 	elif velocity.x != 0:
@@ -104,10 +106,10 @@ func handle_animation() -> void:
 		animated_sprite.play("idle")
 
 func check_player_collision() -> void:
+	#deal damage to player if they touch this.
 	for i in get_slide_collision_count():
 		var collision = get_slide_collision(i)
 		if collision.get_collider().is_in_group("player") and can_hurt_player:
-			hurt_player(collision.get_collider())
 			hurt_player(collision.get_collider())
 
 func _on_kill_zone_body_entered(body: Node) -> void:

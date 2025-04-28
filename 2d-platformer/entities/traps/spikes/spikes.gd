@@ -8,10 +8,6 @@ func _on_Area2D_body_entered(body):
 		sfx_hurt.play()
 		GameManager.kill_player(body)
 
-# Example usage
 func _ready():
+	#connect the trigger
 	connect("body_entered", Callable(self, "_on_Area2D_body_entered"))
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass

@@ -19,6 +19,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	#set up plants and allow them to shoot.
 	for child in get_children():
 		if is_instance_of(child, Plant):
 			child.set_direction(player.position.x - child.position.x)

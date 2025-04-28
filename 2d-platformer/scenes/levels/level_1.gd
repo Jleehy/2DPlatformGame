@@ -14,8 +14,3 @@ func _ready() -> void:
 	GameManager.current_level_number = 1
 	GameManager.initialize_level("level_1")
 	CameraManager.set_player(player)
-
-#func _process(delta):
-#	if Input.is_action_just_pressed("pause"):  # Check for pause input
-#		process_mode = PROCESS_MODE_DISABLED  # Pause the game
-		

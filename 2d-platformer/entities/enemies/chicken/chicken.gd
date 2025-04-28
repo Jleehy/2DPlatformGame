@@ -24,6 +24,7 @@ var starting_position: Vector2
 var can_hurt_player: bool = true  # Cooldown to prevent rapid damage to the player
 
 func _ready() -> void:
+	#set up rules for chicken to follow and initialize data
 	starting_position = position
 	current_health = max_health  # Set health to max
 	redval = 0
@@ -95,6 +96,7 @@ func handle_movement() -> void:
 		velocity.x = 0  # Stop moving if dead or in the air
 
 func handle_animation() -> void:
+	#do animations based upon state
 	if is_dead:
 		animated_sprite.play("hit")
 	elif velocity.x != 0:

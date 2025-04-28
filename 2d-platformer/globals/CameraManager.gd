@@ -54,6 +54,7 @@ var typewriter_progress: float = 0.0
 var current_text: String = ""
 var is_typing: bool = false
 
+#used to manage the text being printed onto screen
 func display_display_text(display_active: bool, text: String) -> void:
 	# Called from gamemanager
 	if not display_active:

@@ -17,6 +17,7 @@ var is_dead: bool = false
 var starting_position: Vector2
 
 func _ready() -> void:
+	#initialize movement rules and initial data on-spawn.
 	starting_position = position
 	velocity = Vector2(-speed, 0)
 	current_health = max_health
@@ -55,11 +56,13 @@ func _process(delta: float) -> void:
 
 	move_and_slide()
 
+	#deal damage
 	for i in get_slide_collision_count():
 		var collider = get_slide_collision(i)
 		if collider.get_collider().is_in_group("player"):
 			collider.get_collider().take_damage(1)
 			
+	#show damage amount
 	flash_red_show_hp()
 	
 func flash_red_show_hp() -> void:

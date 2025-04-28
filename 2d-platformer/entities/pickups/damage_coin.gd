@@ -12,11 +12,12 @@ var start_position
 signal double_damage_activated
 
 func _ready() -> void:
+	#set up data and trigger
 	start_position = global_position
 	connect("body_entered", Callable(self, "_on_body_entered"))
 
-# Called when another body enters the area
 func _on_body_entered(body: Node) -> void:
+	#activate double damage when this is entered, then remove this.
 	if body is CharacterBody2D and body.has_method("activate_double_damage"):
 		body.activate_double_damage(duration)
 		#message
@@ -26,6 +27,7 @@ func _on_body_entered(body: Node) -> void:
 		sfx_pickup.play()
 		
 		#allow respawns, so these can be used in puzzles
+		#as compared to queue.free
 		position = GameManager.dead_position
 
 func reset_position() -> void:

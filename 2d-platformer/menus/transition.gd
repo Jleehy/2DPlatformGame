@@ -3,9 +3,9 @@ extends Control
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var title_label: RichTextLabel = $AnimationPlayer/UI/Title 
 
-# Called when the node enters the scene tree for the first time.
+# Connect to triggers
 func _ready() -> void:
-	hide()
+	#hide()
 	animation_player.animation_finished.connect(_on_animation_player_animation_finished)
 
 # Function to play fade_in animation with optional custom text
@@ -15,6 +15,7 @@ func fade_in(custom_text: String = "YOU DIED") -> void:
 	GameManager.is_transitioning = true
 	animation_player.play("fade_in")
 
+#fade in "instantly"
 func show_instant(custom_text: String = "YOU DIED") -> void:
 	set_title_text("[center]" + custom_text + "[/center]")
 	show()
@@ -25,8 +26,7 @@ func show_instant(custom_text: String = "YOU DIED") -> void:
 func fade_out() -> void:
 	print("Starting fade_out animation, setting is_transitioning = true")
 	animation_player.play("fade_out")
-	#GameManager.is_transitioning = false
-
+	
 # Function to change the title text
 func set_title_text(new_text: String) -> void:
 	title_label.text = new_text
