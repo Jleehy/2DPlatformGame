@@ -212,6 +212,7 @@ func respawn_player(player) -> void:
 	print("Player current position: ", player.position)
 	print("Player current global position: ", player.global_position)
 
+#dev tool that skips checkpoints
 func next_checkpoint_teleport(player) -> void:
 	#if invalid setup for current level, then do nothing.
 	if current_level_number < 0 or len(checkpoints_list) == 0:
@@ -224,6 +225,7 @@ func next_checkpoint_teleport(player) -> void:
 	player.global_position = checkpoints_list[current_checkpoint_number + 1]
 	current_checkpoint_number += 1
 	
+#dev tool that skips checkpoints
 func prev_checkpoint_teleport(player) -> void:
 	#if invalid setup for current level, then do nothing.
 	if current_level_number < 0 or len(checkpoints_list) == 0:
@@ -237,9 +239,11 @@ func prev_checkpoint_teleport(player) -> void:
 	player.global_position = checkpoints_list[current_checkpoint_number - 1]
 	current_checkpoint_number -= 1
 
+#enable player deaths
 func enable_deaths() -> void:
 	enabled_deaths = true
 	
+#disable player deaths
 func disable_deaths() -> void:
 	enabled_deaths = false
 	

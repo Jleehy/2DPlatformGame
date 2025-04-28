@@ -97,6 +97,7 @@ func _ready() -> void:
 var invuln_timer: float = 0.0              # additional invulnerability timer
 const INVULNERABILITY_DURATION: float = 0.5  # 0.5 seconds of invulnerability after respawn
 
+#handle the many things that need to happen each frame
 func _physics_process(delta: float) -> void:
 	if death_timer != -1:
 		handle_death_animation()
@@ -307,7 +308,8 @@ func handle_grapple() -> void:
 		if raycast.is_colliding():
 			#we hit a thing!
 			found_grapple_hold = true
-		
+	
+#create the grapple line object as needed. Also make the collision checker.	
 func create_grapple_line() -> void:
 	if grapple_line == null:
 		grapple_line = Line2D.new()
@@ -327,7 +329,7 @@ func create_grapple_line() -> void:
 		raycast.position = Vector2(0,0)
 		add_child(raycast)
 
-
+#delete the line and the collition checker
 func delete_grapple_line() -> void:
 	if grapple_line != null:
 		grapple_line.queue_free()
@@ -420,6 +422,7 @@ func end_dash() -> void:
 	is_dashing = false
 	velocity.x = 0
 
+#certian edges kill the player, certian ones stop them. Handle that here.
 func handle_level_bounds() -> void:
 	var level_bounds = GameManager.get_level_bounds()
 	var death_height_offset = GameManager.get_death_height_offset()
@@ -437,6 +440,7 @@ func handle_level_bounds() -> void:
 		sfx_death.play()
 		GameManager.kill_player(self)
 
+#control what animation the player is doing based on the circumstance.
 func update_animation() -> void:
 	if is_hurt:
 		return  # Do not change animation if hurt
@@ -456,6 +460,7 @@ func update_animation() -> void:
 		movement_ghost.emitting = false
 		animated_sprite.play("idle")
 
+#play a little animation and teleport player back, do other triggers related to death.
 func handle_death_animation() -> void:
 	if animated_sprite.rotation_degrees < 90:
 		animated_sprite.rotation_degrees += 5
@@ -471,7 +476,7 @@ func handle_death_animation() -> void:
 		var respawn_timer = get_tree().create_timer(3.0)  
 		respawn_timer.timeout.connect(_on_respawn_timer_timeout)  
 		
-		
+#called when the player respawns to set them up for player control again
 func _on_respawn_timer_timeout():
 	var tween = create_tween()
 	tween.tween_property(self, "modulate", Color(1, 1, 1, 1), 1)
@@ -520,6 +525,7 @@ func handle_crouching() -> void:
 			# Reset the sprite scale
 			animated_sprite.scale = Vector2(1, 1)
 
+#used when stomping enemies to boost player upwards
 func bounce(super_bounce : bool = false) -> void:
 	if not super_bounce:
 		velocity.y = -800 
@@ -577,10 +583,12 @@ func reset_hearts() -> void:
 	is_hurt = false
 	invuln_timer = INVULNERABILITY_DURATION
 
+#allow player to send themselves back to the previous checkpoint.
 func handle_self_die() -> void:
 	if InputManager.is_self_death_pressed():
 		GameManager.kill_player(self)
 
+#handle dev-tool usage.
 func dev_checkpoint_handle() -> void:
 	if InputManager.is_dev_teleport_backwards_pressed():
 		GameManager.prev_checkpoint_teleport(self)
@@ -594,6 +602,7 @@ func dev_checkpoint_handle() -> void:
 				position = node.position
 				break
 
+#while under a speed boost, go faster
 func apply_speed_boost(amount: int, duration: float) -> void:
 	speed += amount
 	await get_tree().create_timer(duration).timeout
@@ -626,6 +635,7 @@ func climb_ledges() -> void:
 				velocity.y += jump_speed * step_height
 				apply_horizontal_movement(1.0)
 			
+#a helper to tell if a wall is climbable or not.
 func is_wall_climbable() -> bool:
 	return $ClimbCheckArea.get_overlapping_bodies().size() == 0
 			
