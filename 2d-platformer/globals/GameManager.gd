@@ -39,40 +39,46 @@ var is_transitioning: bool = false
 
 #a list that contains start-of-level messages
 @export var start_level_messages: Array = [  
-	"WELCOME TO HOPPER! USE ARROWS OR WASD TO MOVE. SIGNS CONTAIN FURTHER INFORMATION.",  
-	"FROG DISCOVERS HE IS THE PRINCE OF HIS KINGDOM AND SHOULD NOT BE ADVENTURING",  
-	"TODO"  
+	"WELCOME TO HOPPER! USE ARROWS OR WASD TO MOVE. SIGNS CONTAIN FURTHER INFORMATION.".to_upper(),  
+	"This is the animal-kingdom capital. In the city-center, past the park is the palace.".to_upper(),  
+	"This is it! The Skull King and Queen's Lair. They lie deep within...".to_upper()  
 ]  
 #a list of lists that handle specific sign messages within levels
 @export var sign_messages_list: Array = [  
 	[  
-		"1",
-		"2",
-		"3",
-		"4",
+		"The evil skull king and queen lead their kindgdom.".to_upper(),
+		"This tree used to be part of the frog kingdom, but the land was taken.".to_upper(),
+		"It seems smudged, but that will not stop frogs journey.".to_upper(),
+		"One day, Frog sets out to defeat the evil northern animal kingdom.".to_upper(),
 		"That is all for the tutorial! Jump down below to enter the level proper.".to_upper(),
 		"Use T to send yourself back to the most recent checkpoint. Maybe this is useful here...".to_upper(),
 		"Hold Down or S to crouch in smaller gaps.".to_upper(),
 		"Down-right, there is an new Checkpoint to get. Up-Left, there is an enemy. Stomp enemies to defeat!".to_upper(),
 		"The Spikes will send you back to the previous checkpoint.".to_upper(),
 		"Use space to Jump!".to_upper(),
-		"11",
-		"12"
+		"It seems to be a punishement pit for the animals who rebel.".to_upper(),
+		"Quite the veiw from up here.".to_upper(),
+		"This road leads down towards the animal-king capital.".to_upper()
 	],  
 	[  
-		"EVERY TADPOLE DREAMS OF GREATNESS WHEN THEY BECOME A FROG\nTHIS IS YOUR DESTINY",  
-		"THIS ROAD SIGN MARKS THE CITY CENTER\nTHE LEADER MUST BE NEAR",  
-		"THIS IS THE ROYAL ACADEMY\nSTRANGELY SIMILAR TO YOUR OWN",  
-		"THE ROYAL RESIDENCE IS AHEAD\nYOU ARE ON THE RIGHT PATH",  
+		"Park St. straight ahead".to_upper(),
+		"The palace contains the skull king and queen, your targets.".to_upper(),
+		"This is the capital central park. Fittingly with the animal kingdom, it is dangerous.".to_upper(),
+		"Palace is off-limits to commoners.".to_upper(),
 		"Use the shift key to use your newly-unlocked dash!".to_upper(),  
-		"6"  
+		"There is a park to pass through. You can see the valley it contains from up here.".to_upper(),
+		"You seem to be nearing the large spikes used to protect the palace entrance.".to_upper(),
+		"This is the entrance to the palace.".to_upper()
 	],  
 	[
-		"1",
-		"2",
-		"3",
-		"4",
-		"Use the Q key to use your newly-unlocked grapple!".to_upper()
+		"Use the Q key to use your newly-unlocked grapple!".to_upper(),
+		"The chickens here seem enhanced with evil magic.".to_upper(),
+		"Maybe this place used to be for something else. The windows are quite nice-looking.".to_upper(),
+		"The air is colder here. You must be getting close.".to_upper(),
+		"This is it! There are the Skull King and Queen!".to_upper(),
+		"The skulls can fly, so the palace is not built with walkers in-mind.".to_upper(),
+		"As they fall, frog can tell the evil sway over the animals in the kingdom is lessened.".to_upper(),
+		"IF you have defeated both skulls, you win! Game over. Thanks for playing!".to_upper()
 	]  
 ]  
 @export var sign_manager_counter: int = 0

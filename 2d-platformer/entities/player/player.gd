@@ -72,6 +72,7 @@ var found_grapple_hold: int = false
 var grapple_line: Line2D = null
 var raycast: RayCast2D = null
 @export var grapple_unlocked: bool = false
+var grapple_dev_inf: bool = false
 
 signal player_died
 signal player_respawned
@@ -211,7 +212,7 @@ func handle_grapple() -> void:
 			grapple_line_exists = false
 			delete_grapple_line()
 	
-	if ((not can_grapple) and (not is_grappling)) or (not grapple_unlocked) or (is_dashing):
+	if (((not can_grapple) and (not is_grappling)) or (not grapple_unlocked) or (is_dashing)) and (not grapple_dev_inf):
 		return
 	
 	if InputManager.is_grapple_pressed() and not is_grappling:

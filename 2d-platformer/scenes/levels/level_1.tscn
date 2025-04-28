@@ -604,7 +604,7 @@ metadata/_edit_group_ = true
 position = Vector2(5064, 900)
 
 [node name="damage_coin" parent="." instance=ExtResource("16_lrg46")]
-position = Vector2(7255, -1530)
+position = Vector2(7237, -1531)
 
 [node name="Sign" parent="." instance=ExtResource("17_im8l8")]
 position = Vector2(1491, 485)
@@ -660,8 +660,7 @@ position = Vector2(5451, -1534)
 position = Vector2(6338, -1723)
 
 [node name="Checkpoint8" parent="." instance=ExtResource("4_kjmom")]
-position = Vector2(5721, -1818)
-scale = Vector2(2, 2)
+position = Vector2(5725, -1784)
 
 [node name="ParallaxBackground2" type="ParallaxBackground" parent="."]
 
@@ -706,3 +705,12 @@ scale = Vector2(10, 10)
 texture = ExtResource("23_hfj8l")
 centered = false
 offset = Vector2(0, -265)
+
+[node name="Sign11" parent="." instance=ExtResource("17_im8l8")]
+position = Vector2(3620, 1159)
+
+[node name="Sign12" parent="." instance=ExtResource("17_im8l8")]
+position = Vector2(4683, -1563)
+
+[node name="Sign13" parent="." instance=ExtResource("17_im8l8")]
+position = Vector2(7310, -1496)

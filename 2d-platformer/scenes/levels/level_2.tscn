@@ -1250,3 +1250,12 @@ position = Vector2(17730.8, -247.558)
 
 [node name="Sign4" parent="." instance=ExtResource("16_64ahm")]
 position = Vector2(545, 746)
+
+[node name="Sign5" parent="." instance=ExtResource("16_64ahm")]
+position = Vector2(3628, -504)
+
+[node name="Sign6" parent="." instance=ExtResource("16_64ahm")]
+position = Vector2(12192, 1767)
+
+[node name="Sign7" parent="." instance=ExtResource("16_64ahm")]
+position = Vector2(18976, -1623)
